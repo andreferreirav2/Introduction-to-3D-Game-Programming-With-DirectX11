@@ -7,7 +7,7 @@
 //***************************************************************************************
 
 #include "d3dApp.h"
- 
+
 class InitDirect3DApp : public D3DApp
 {
 public:
@@ -17,27 +17,27 @@ public:
 	bool Init();
 	void OnResize();
 	void UpdateScene(float dt);
-	void DrawScene(); 
+	void DrawScene();
 };
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance,
-				   PSTR cmdLine, int showCmd)
+	PSTR cmdLine, int showCmd)
 {
 	// Enable run-time memory check for debug builds.
 #if defined(DEBUG) | defined(_DEBUG)
-	_CrtSetDbgFlag( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 #endif
 
 	InitDirect3DApp theApp(hInstance);
-	
-	if( !theApp.Init() )
+
+	if (!theApp.Init())
 		return 0;
-	
+
 	return theApp.Run();
 }
 
 InitDirect3DApp::InitDirect3DApp(HINSTANCE hInstance)
-: D3DApp(hInstance) 
+	: D3DApp(hInstance)
 {
 }
 
@@ -47,7 +47,7 @@ InitDirect3DApp::~InitDirect3DApp()
 
 bool InitDirect3DApp::Init()
 {
-	if(!D3DApp::Init())
+	if (!D3DApp::Init())
 		return false;
 
 	return true;
@@ -69,7 +69,7 @@ void InitDirect3DApp::DrawScene()
 	assert(mSwapChain);
 
 	md3dImmediateContext->ClearRenderTargetView(mRenderTargetView, reinterpret_cast<const float*>(&Colors::Blue));
-	md3dImmediateContext->ClearDepthStencilView(mDepthStencilView, D3D11_CLEAR_DEPTH|D3D11_CLEAR_STENCIL, 1.0f, 0);
+	md3dImmediateContext->ClearDepthStencilView(mDepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
 	HR(mSwapChain->Present(0, 0));
 }
