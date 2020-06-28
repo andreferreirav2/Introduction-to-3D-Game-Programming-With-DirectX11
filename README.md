@@ -5,6 +5,11 @@ Book Example Code in [Introduction to 3D Game Programming With DirectX11 by Fran
 http://www.d3dcoder.net/
 
 
+VS2019 / Win10 adaptation:
+==================
+
+Followed the indications from Frank Luna: http://www.d3dcoder.net/Data/Book4/d3d11Win10.htm
+
 
 New Project setup:
 ==================
