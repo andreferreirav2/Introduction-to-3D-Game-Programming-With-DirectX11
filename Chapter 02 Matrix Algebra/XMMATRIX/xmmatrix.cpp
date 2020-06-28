@@ -1,5 +1,6 @@
 #include <windows.h> // for FLOAT definition
-#include <xnamath.h>
+#include <DirectXMath.h>
+#include <DirectXPackedVector.h>
 #include <iostream>
 using namespace std;
 
