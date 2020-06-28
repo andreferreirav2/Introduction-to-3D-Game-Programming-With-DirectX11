@@ -7,12 +7,12 @@ project sample, the Common folder must be obtained from it via "../../Common".
 Debug libraries:
 ----------------
 
-d3d11.lib;D3DCompiler.lib;Effects11d.lib;dxerr.lib;dxgi.lib;dxguid.lib;%(AdditionalDependencies)
+d3d11.lib;D3DCompiler.lib;Effects11d.lib;dxgi.lib;dxguid.lib;%(AdditionalDependencies)
 
 Release libraries:
 ------------------
 
-d3d11.lib;D3DCompiler.lib;Effects11.lib;dxerr.lib;dxgi.lib;dxguid.lib;%(AdditionalDependencies)
+d3d11.lib;D3DCompiler.lib;Effects11.lib;dxgi.lib;dxguid.lib;%(AdditionalDependencies)
 
 C/C++ Additional Include Directories:
 -------------------------------------
