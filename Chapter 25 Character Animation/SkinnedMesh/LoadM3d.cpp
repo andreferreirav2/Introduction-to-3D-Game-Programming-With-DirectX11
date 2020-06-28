@@ -61,7 +61,7 @@ bool M3DLoader::LoadM3d(const std::string& filename,
 		fin >> ignore >> numBones;
 		fin >> ignore >> numAnimationClips;
  
-		std::vector<XMFLOAT4X4> boneOffsets;
+		std::vector<DirectX::XMFLOAT4X4> boneOffsets;
 		std::vector<int> boneIndexToParentIndex;
 		std::map<std::string, AnimationClip> animations;
 
@@ -179,7 +179,7 @@ void M3DLoader::ReadTriangles(std::ifstream& fin, UINT numTriangles, std::vector
     }
 }
  
-void M3DLoader::ReadBoneOffsets(std::ifstream& fin, UINT numBones, std::vector<XMFLOAT4X4>& boneOffsets)
+void M3DLoader::ReadBoneOffsets(std::ifstream& fin, UINT numBones, std::vector<DirectX::XMFLOAT4X4>& boneOffsets)
 {
 	std::string ignore;
     boneOffsets.resize(numBones);
@@ -242,9 +242,9 @@ void M3DLoader::ReadBoneKeyframes(std::ifstream& fin, UINT numBones, BoneAnimati
     for(UINT i = 0; i < numKeyframes; ++i)
     {
         float t    = 0.0f;
-        XMFLOAT3 p(0.0f, 0.0f, 0.0f);
-        XMFLOAT3 s(1.0f, 1.0f, 1.0f);
-        XMFLOAT4 q(0.0f, 0.0f, 0.0f, 1.0f);
+        DirectX::XMFLOAT3 p(0.0f, 0.0f, 0.0f);
+        DirectX::XMFLOAT3 s(1.0f, 1.0f, 1.0f);
+        DirectX::XMFLOAT4 q(0.0f, 0.0f, 0.0f, 1.0f);
         fin >> ignore >> t;
         fin >> ignore >> p.x >> p.y >> p.z;
         fin >> ignore >> s.x >> s.y >> s.z;

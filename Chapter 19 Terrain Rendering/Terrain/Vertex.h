@@ -14,16 +14,16 @@ namespace Vertex
 	// Basic 32-byte vertex structure.
 	struct Basic32
 	{
-		XMFLOAT3 Pos;
-		XMFLOAT3 Normal;
-		XMFLOAT2 Tex;
+		DirectX::XMFLOAT3 Pos;
+		DirectX::XMFLOAT3 Normal;
+		DirectX::XMFLOAT2 Tex;
 	};
 
 	struct Terrain
 	{
-		XMFLOAT3 Pos;
-		XMFLOAT2 Tex;
-		XMFLOAT2 BoundsY;
+		DirectX::XMFLOAT3 Pos;
+		DirectX::XMFLOAT2 Tex;
+		DirectX::XMFLOAT2 BoundsY;
 	};
 }
 

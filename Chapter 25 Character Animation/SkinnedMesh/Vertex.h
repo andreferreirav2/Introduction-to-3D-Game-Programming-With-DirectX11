@@ -14,26 +14,26 @@ namespace Vertex
 	// Basic 32-byte vertex structure.
 	struct Basic32
 	{
-		XMFLOAT3 Pos;
-		XMFLOAT3 Normal;
-		XMFLOAT2 Tex;
+		DirectX::XMFLOAT3 Pos;
+		DirectX::XMFLOAT3 Normal;
+		DirectX::XMFLOAT2 Tex;
 	};
 
 	struct PosNormalTexTan
 	{
-		XMFLOAT3 Pos;
-		XMFLOAT3 Normal;
-		XMFLOAT2 Tex;
-		XMFLOAT4 TangentU;
+		DirectX::XMFLOAT3 Pos;
+		DirectX::XMFLOAT3 Normal;
+		DirectX::XMFLOAT2 Tex;
+		DirectX::XMFLOAT4 TangentU;
 	};
 
 	struct PosNormalTexTanSkinned
 	{
-		XMFLOAT3 Pos;
-		XMFLOAT3 Normal;
-		XMFLOAT2 Tex;
-		XMFLOAT4 TangentU;
-		XMFLOAT3 Weights;
+		DirectX::XMFLOAT3 Pos;
+		DirectX::XMFLOAT3 Normal;
+		DirectX::XMFLOAT2 Tex;
+		DirectX::XMFLOAT4 TangentU;
+		DirectX::XMFLOAT3 Weights;
 		BYTE BoneIndices[4];
 	};
 }

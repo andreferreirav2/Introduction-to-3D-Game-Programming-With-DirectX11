@@ -52,14 +52,14 @@ private:
 	Material mSkullMat;
 
 	// Define transformations from local spaces to world space.
-	XMFLOAT4X4 mSphereWorld[10];
-	XMFLOAT4X4 mCylWorld[10];
-	XMFLOAT4X4 mBoxWorld;
-	XMFLOAT4X4 mGridWorld;
-	XMFLOAT4X4 mSkullWorld;
+	DirectX::XMFLOAT4X4 mSphereWorld[10];
+	DirectX::XMFLOAT4X4 mCylWorld[10];
+	DirectX::XMFLOAT4X4 mBoxWorld;
+	DirectX::XMFLOAT4X4 mGridWorld;
+	DirectX::XMFLOAT4X4 mSkullWorld;
 
-	XMFLOAT4X4 mView;
-	XMFLOAT4X4 mProj;
+	DirectX::XMFLOAT4X4 mView;
+	DirectX::XMFLOAT4X4 mProj;
 
 	int mBoxVertexOffset;
 	int mGridVertexOffset;
@@ -80,7 +80,7 @@ private:
 
 	UINT mLightCount;
 
-	XMFLOAT3 mEyePosW;
+	DirectX::XMFLOAT3 mEyePosW;
 
 	float mTheta;
 	float mPhi;
@@ -115,62 +115,62 @@ LitSkullApp::LitSkullApp(HINSTANCE hInstance)
 	mLastMousePos.x = 0;
 	mLastMousePos.y = 0;
 
-	XMMATRIX I = XMMatrixIdentity();
+	DirectX::XMMATRIX I = DirectX::XMMatrixIdentity();
 	XMStoreFloat4x4(&mGridWorld, I);
 	XMStoreFloat4x4(&mView, I);
 	XMStoreFloat4x4(&mProj, I);
 
-	XMMATRIX boxScale = XMMatrixScaling(3.0f, 1.0f, 3.0f);
-	XMMATRIX boxOffset = XMMatrixTranslation(0.0f, 0.5f, 0.0f);
-	XMStoreFloat4x4(&mBoxWorld, XMMatrixMultiply(boxScale, boxOffset));
+	DirectX::XMMATRIX boxScale = DirectX::XMMatrixScaling(3.0f, 1.0f, 3.0f);
+	DirectX::XMMATRIX boxOffset = DirectX::XMMatrixTranslation(0.0f, 0.5f, 0.0f);
+	XMStoreFloat4x4(&mBoxWorld, DirectX::XMMatrixMultiply(boxScale, boxOffset));
 
-	XMMATRIX skullScale = XMMatrixScaling(0.5f, 0.5f, 0.5f);
-	XMMATRIX skullOffset = XMMatrixTranslation(0.0f, 1.0f, 0.0f);
-	XMStoreFloat4x4(&mSkullWorld, XMMatrixMultiply(skullScale, skullOffset));
+	DirectX::XMMATRIX skullScale = DirectX::XMMatrixScaling(0.5f, 0.5f, 0.5f);
+	DirectX::XMMATRIX skullOffset = DirectX::XMMatrixTranslation(0.0f, 1.0f, 0.0f);
+	XMStoreFloat4x4(&mSkullWorld, DirectX::XMMatrixMultiply(skullScale, skullOffset));
 
 	for(int i = 0; i < 5; ++i)
 	{
-		XMStoreFloat4x4(&mCylWorld[i*2+0], XMMatrixTranslation(-5.0f, 1.5f, -10.0f + i*5.0f));
-		XMStoreFloat4x4(&mCylWorld[i*2+1], XMMatrixTranslation(+5.0f, 1.5f, -10.0f + i*5.0f));
+		XMStoreFloat4x4(&mCylWorld[i*2+0], DirectX::XMMatrixTranslation(-5.0f, 1.5f, -10.0f + i*5.0f));
+		XMStoreFloat4x4(&mCylWorld[i*2+1], DirectX::XMMatrixTranslation(+5.0f, 1.5f, -10.0f + i*5.0f));
 
-		XMStoreFloat4x4(&mSphereWorld[i*2+0], XMMatrixTranslation(-5.0f, 3.5f, -10.0f + i*5.0f));
-		XMStoreFloat4x4(&mSphereWorld[i*2+1], XMMatrixTranslation(+5.0f, 3.5f, -10.0f + i*5.0f));
+		XMStoreFloat4x4(&mSphereWorld[i*2+0], DirectX::XMMatrixTranslation(-5.0f, 3.5f, -10.0f + i*5.0f));
+		XMStoreFloat4x4(&mSphereWorld[i*2+1], DirectX::XMMatrixTranslation(+5.0f, 3.5f, -10.0f + i*5.0f));
 	}
 
-	mDirLights[0].Ambient  = XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
-	mDirLights[0].Diffuse  = XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
-	mDirLights[0].Specular = XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
-	mDirLights[0].Direction = XMFLOAT3(0.57735f, -0.57735f, 0.57735f);
+	mDirLights[0].Ambient  = DirectX::XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
+	mDirLights[0].Diffuse  = DirectX::XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
+	mDirLights[0].Specular = DirectX::XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
+	mDirLights[0].Direction = DirectX::XMFLOAT3(0.57735f, -0.57735f, 0.57735f);
 
-	mDirLights[1].Ambient  = XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
-	mDirLights[1].Diffuse  = XMFLOAT4(0.20f, 0.20f, 0.20f, 1.0f);
-	mDirLights[1].Specular = XMFLOAT4(0.25f, 0.25f, 0.25f, 1.0f);
-	mDirLights[1].Direction = XMFLOAT3(-0.57735f, -0.57735f, 0.57735f);
+	mDirLights[1].Ambient  = DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
+	mDirLights[1].Diffuse  = DirectX::XMFLOAT4(0.20f, 0.20f, 0.20f, 1.0f);
+	mDirLights[1].Specular = DirectX::XMFLOAT4(0.25f, 0.25f, 0.25f, 1.0f);
+	mDirLights[1].Direction = DirectX::XMFLOAT3(-0.57735f, -0.57735f, 0.57735f);
 
-	mDirLights[2].Ambient  = XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
-	mDirLights[2].Diffuse  = XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
-	mDirLights[2].Specular = XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
-	mDirLights[2].Direction = XMFLOAT3(0.0f, -0.707f, -0.707f);
+	mDirLights[2].Ambient  = DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
+	mDirLights[2].Diffuse  = DirectX::XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
+	mDirLights[2].Specular = DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
+	mDirLights[2].Direction = DirectX::XMFLOAT3(0.0f, -0.707f, -0.707f);
 
-	mGridMat.Ambient  = XMFLOAT4(0.48f, 0.77f, 0.46f, 1.0f);
-	mGridMat.Diffuse  = XMFLOAT4(0.48f, 0.77f, 0.46f, 1.0f);
-	mGridMat.Specular = XMFLOAT4(0.2f, 0.2f, 0.2f, 16.0f);
+	mGridMat.Ambient  = DirectX::XMFLOAT4(0.48f, 0.77f, 0.46f, 1.0f);
+	mGridMat.Diffuse  = DirectX::XMFLOAT4(0.48f, 0.77f, 0.46f, 1.0f);
+	mGridMat.Specular = DirectX::XMFLOAT4(0.2f, 0.2f, 0.2f, 16.0f);
 
-	mCylinderMat.Ambient  = XMFLOAT4(0.7f, 0.85f, 0.7f, 1.0f);
-	mCylinderMat.Diffuse  = XMFLOAT4(0.7f, 0.85f, 0.7f, 1.0f);
-	mCylinderMat.Specular = XMFLOAT4(0.8f, 0.8f, 0.8f, 16.0f);
+	mCylinderMat.Ambient  = DirectX::XMFLOAT4(0.7f, 0.85f, 0.7f, 1.0f);
+	mCylinderMat.Diffuse  = DirectX::XMFLOAT4(0.7f, 0.85f, 0.7f, 1.0f);
+	mCylinderMat.Specular = DirectX::XMFLOAT4(0.8f, 0.8f, 0.8f, 16.0f);
 
-	mSphereMat.Ambient  = XMFLOAT4(0.1f, 0.2f, 0.3f, 1.0f);
-	mSphereMat.Diffuse  = XMFLOAT4(0.2f, 0.4f, 0.6f, 1.0f);
-	mSphereMat.Specular = XMFLOAT4(0.9f, 0.9f, 0.9f, 16.0f);
+	mSphereMat.Ambient  = DirectX::XMFLOAT4(0.1f, 0.2f, 0.3f, 1.0f);
+	mSphereMat.Diffuse  = DirectX::XMFLOAT4(0.2f, 0.4f, 0.6f, 1.0f);
+	mSphereMat.Specular = DirectX::XMFLOAT4(0.9f, 0.9f, 0.9f, 16.0f);
 
-	mBoxMat.Ambient  = XMFLOAT4(0.651f, 0.5f, 0.392f, 1.0f);
-	mBoxMat.Diffuse  = XMFLOAT4(0.651f, 0.5f, 0.392f, 1.0f);
-	mBoxMat.Specular = XMFLOAT4(0.2f, 0.2f, 0.2f, 16.0f);
+	mBoxMat.Ambient  = DirectX::XMFLOAT4(0.651f, 0.5f, 0.392f, 1.0f);
+	mBoxMat.Diffuse  = DirectX::XMFLOAT4(0.651f, 0.5f, 0.392f, 1.0f);
+	mBoxMat.Specular = DirectX::XMFLOAT4(0.2f, 0.2f, 0.2f, 16.0f);
 
-	mSkullMat.Ambient  = XMFLOAT4(0.8f, 0.8f, 0.8f, 1.0f);
-	mSkullMat.Diffuse  = XMFLOAT4(0.8f, 0.8f, 0.8f, 1.0f);
-	mSkullMat.Specular = XMFLOAT4(0.8f, 0.8f, 0.8f, 16.0f);
+	mSkullMat.Ambient  = DirectX::XMFLOAT4(0.8f, 0.8f, 0.8f, 1.0f);
+	mSkullMat.Diffuse  = DirectX::XMFLOAT4(0.8f, 0.8f, 0.8f, 1.0f);
+	mSkullMat.Specular = DirectX::XMFLOAT4(0.8f, 0.8f, 0.8f, 16.0f);
 }
 
 LitSkullApp::~LitSkullApp()
@@ -203,7 +203,7 @@ void LitSkullApp::OnResize()
 {
 	D3DApp::OnResize();
 
-	XMMATRIX P = XMMatrixPerspectiveFovLH(0.25f*MathHelper::Pi, AspectRatio(), 1.0f, 1000.0f);
+	DirectX::XMMATRIX P = DirectX::XMMatrixPerspectiveFovLH(0.25f*MathHelper::Pi, AspectRatio(), 1.0f, 1000.0f);
 	XMStoreFloat4x4(&mProj, P);
 }
 
@@ -214,14 +214,14 @@ void LitSkullApp::UpdateScene(float dt)
 	float z = mRadius*sinf(mPhi)*sinf(mTheta);
 	float y = mRadius*cosf(mPhi);
 
-	mEyePosW = XMFLOAT3(x, y, z);
+	mEyePosW = DirectX::XMFLOAT3(x, y, z);
 
 	// Build the view matrix.
-	XMVECTOR pos    = XMVectorSet(x, y, z, 1.0f);
-	XMVECTOR target = XMVectorZero();
-	XMVECTOR up     = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+	DirectX::XMVECTOR pos    = DirectX::XMVectorSet(x, y, z, 1.0f);
+	DirectX::XMVECTOR target = DirectX::XMVectorZero();
+	DirectX::XMVECTOR up     = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 
-	XMMATRIX V = XMMatrixLookAtLH(pos, target, up);
+	DirectX::XMMATRIX V = DirectX::XMMatrixLookAtLH(pos, target, up);
 	XMStoreFloat4x4(&mView, V);
 
 	//
@@ -251,9 +251,9 @@ void LitSkullApp::DrawScene()
 	UINT stride = sizeof(Vertex::PosNormal);
     UINT offset = 0;
  
-	XMMATRIX view  = XMLoadFloat4x4(&mView);
-	XMMATRIX proj  = XMLoadFloat4x4(&mProj);
-	XMMATRIX viewProj = view*proj;
+	DirectX::XMMATRIX view  = XMLoadFloat4x4(&mView);
+	DirectX::XMMATRIX proj  = XMLoadFloat4x4(&mProj);
+	DirectX::XMMATRIX viewProj = view*proj;
 
 	// Set per frame constants.
 	Effects::BasicFX->SetDirLights(mDirLights);
@@ -282,9 +282,9 @@ void LitSkullApp::DrawScene()
 		md3dImmediateContext->IASetIndexBuffer(mShapesIB, DXGI_FORMAT_R32_UINT, 0);
 
 		// Draw the grid.
-		XMMATRIX world = XMLoadFloat4x4(&mGridWorld);
-		XMMATRIX worldInvTranspose = MathHelper::InverseTranspose(world);
-		XMMATRIX worldViewProj = world*view*proj;
+		DirectX::XMMATRIX world = XMLoadFloat4x4(&mGridWorld);
+		DirectX::XMMATRIX worldInvTranspose = MathHelper::InverseTranspose(world);
+		DirectX::XMMATRIX worldViewProj = world*view*proj;
 
 		Effects::BasicFX->SetWorld(world);
 		Effects::BasicFX->SetWorldInvTranspose(worldInvTranspose);

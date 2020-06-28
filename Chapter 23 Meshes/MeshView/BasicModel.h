@@ -28,7 +28,7 @@ public:
 struct BasicModelInstance
 {
 	BasicModel* Model;
-	XMFLOAT4X4 World;
+	DirectX::XMFLOAT4X4 World;
 };
 
 #endif // SKINNEDMODEL_H

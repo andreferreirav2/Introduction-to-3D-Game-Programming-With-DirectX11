@@ -68,18 +68,18 @@ private:
 	Material mMirrorMat;
 	Material mShadowMat;
 
-	XMFLOAT4X4 mRoomWorld;
-	XMFLOAT4X4 mSkullWorld;
+	DirectX::XMFLOAT4X4 mRoomWorld;
+	DirectX::XMFLOAT4X4 mSkullWorld;
 
 	UINT mSkullIndexCount;
-	XMFLOAT3 mSkullTranslation;
+	DirectX::XMFLOAT3 mSkullTranslation;
 
-	XMFLOAT4X4 mView;
-	XMFLOAT4X4 mProj;
+	DirectX::XMFLOAT4X4 mView;
+	DirectX::XMFLOAT4X4 mProj;
 
 	RenderOptions mRenderOptions;
 	
-	XMFLOAT3 mEyePosW;
+	DirectX::XMFLOAT3 mEyePosW;
 
 	float mTheta;
 	float mPhi;
@@ -116,42 +116,42 @@ MirrorApp::MirrorApp(HINSTANCE hInstance)
 	mLastMousePos.x = 0;
 	mLastMousePos.y = 0;
 
-	XMMATRIX I = XMMatrixIdentity();
+	DirectX::XMMATRIX I = DirectX::XMMatrixIdentity();
 	XMStoreFloat4x4(&mRoomWorld, I);
 	XMStoreFloat4x4(&mView, I);
 	XMStoreFloat4x4(&mProj, I);
 
-	mDirLights[0].Ambient  = XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
-	mDirLights[0].Diffuse  = XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
-	mDirLights[0].Specular = XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
-	mDirLights[0].Direction = XMFLOAT3(0.57735f, -0.57735f, 0.57735f);
+	mDirLights[0].Ambient  = DirectX::XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
+	mDirLights[0].Diffuse  = DirectX::XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
+	mDirLights[0].Specular = DirectX::XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
+	mDirLights[0].Direction = DirectX::XMFLOAT3(0.57735f, -0.57735f, 0.57735f);
 
-	mDirLights[1].Ambient  = XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
-	mDirLights[1].Diffuse  = XMFLOAT4(0.20f, 0.20f, 0.20f, 1.0f);
-	mDirLights[1].Specular = XMFLOAT4(0.25f, 0.25f, 0.25f, 1.0f);
-	mDirLights[1].Direction = XMFLOAT3(-0.57735f, -0.57735f, 0.57735f);
+	mDirLights[1].Ambient  = DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
+	mDirLights[1].Diffuse  = DirectX::XMFLOAT4(0.20f, 0.20f, 0.20f, 1.0f);
+	mDirLights[1].Specular = DirectX::XMFLOAT4(0.25f, 0.25f, 0.25f, 1.0f);
+	mDirLights[1].Direction = DirectX::XMFLOAT3(-0.57735f, -0.57735f, 0.57735f);
 
-	mDirLights[2].Ambient  = XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
-	mDirLights[2].Diffuse  = XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
-	mDirLights[2].Specular = XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
-	mDirLights[2].Direction = XMFLOAT3(0.0f, -0.707f, -0.707f);
+	mDirLights[2].Ambient  = DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
+	mDirLights[2].Diffuse  = DirectX::XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
+	mDirLights[2].Specular = DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
+	mDirLights[2].Direction = DirectX::XMFLOAT3(0.0f, -0.707f, -0.707f);
 
-	mRoomMat.Ambient  = XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
-	mRoomMat.Diffuse  = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-	mRoomMat.Specular = XMFLOAT4(0.4f, 0.4f, 0.4f, 16.0f);
+	mRoomMat.Ambient  = DirectX::XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
+	mRoomMat.Diffuse  = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+	mRoomMat.Specular = DirectX::XMFLOAT4(0.4f, 0.4f, 0.4f, 16.0f);
 
-	mSkullMat.Ambient  = XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
-	mSkullMat.Diffuse  = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-	mSkullMat.Specular = XMFLOAT4(0.4f, 0.4f, 0.4f, 16.0f);
+	mSkullMat.Ambient  = DirectX::XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
+	mSkullMat.Diffuse  = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+	mSkullMat.Specular = DirectX::XMFLOAT4(0.4f, 0.4f, 0.4f, 16.0f);
 
 	// Reflected material is transparent so it blends into mirror.
-	mMirrorMat.Ambient  = XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
-	mMirrorMat.Diffuse  = XMFLOAT4(1.0f, 1.0f, 1.0f, 0.5f);
-	mMirrorMat.Specular = XMFLOAT4(0.4f, 0.4f, 0.4f, 16.0f);
+	mMirrorMat.Ambient  = DirectX::XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
+	mMirrorMat.Diffuse  = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 0.5f);
+	mMirrorMat.Specular = DirectX::XMFLOAT4(0.4f, 0.4f, 0.4f, 16.0f);
 
-	mShadowMat.Ambient  = XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
-	mShadowMat.Diffuse  = XMFLOAT4(0.0f, 0.0f, 0.0f, 0.5f);
-	mShadowMat.Specular = XMFLOAT4(0.0f, 0.0f, 0.0f, 16.0f);
+	mShadowMat.Ambient  = DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
+	mShadowMat.Diffuse  = DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 0.5f);
+	mShadowMat.Specular = DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 16.0f);
 }
 
 MirrorApp::~MirrorApp()
@@ -198,7 +198,7 @@ void MirrorApp::OnResize()
 {
 	D3DApp::OnResize();
 
-	XMMATRIX P = XMMatrixPerspectiveFovLH(0.25f*MathHelper::Pi, AspectRatio(), 1.0f, 1000.0f);
+	DirectX::XMMATRIX P = DirectX::XMMatrixPerspectiveFovLH(0.25f*MathHelper::Pi, AspectRatio(), 1.0f, 1000.0f);
 	XMStoreFloat4x4(&mProj, P);
 }
 
@@ -209,14 +209,14 @@ void MirrorApp::UpdateScene(float dt)
 	float z = mRadius*sinf(mPhi)*sinf(mTheta);
 	float y = mRadius*cosf(mPhi);
 
-	mEyePosW = XMFLOAT3(x, y, z);
+	mEyePosW = DirectX::XMFLOAT3(x, y, z);
 
 	// Build the view matrix.
-	XMVECTOR pos    = XMVectorSet(x, y, z, 1.0f);
-	XMVECTOR target = XMVectorZero();
-	XMVECTOR up     = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+	DirectX::XMVECTOR pos    = DirectX::XMVectorSet(x, y, z, 1.0f);
+	DirectX::XMVECTOR target = DirectX::XMVectorZero();
+	DirectX::XMVECTOR up     = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 
-	XMMATRIX V = XMMatrixLookAtLH(pos, target, up);
+	DirectX::XMMATRIX V = DirectX::XMMatrixLookAtLH(pos, target, up);
 	XMStoreFloat4x4(&mView, V);
 
 	//
@@ -251,9 +251,9 @@ void MirrorApp::UpdateScene(float dt)
 	mSkullTranslation.y = MathHelper::Max(mSkullTranslation.y, 0.0f);
 
 	// Update the new world matrix.
-	XMMATRIX skullRotate = XMMatrixRotationY(0.5f*MathHelper::Pi);
-	XMMATRIX skullScale = XMMatrixScaling(0.45f, 0.45f, 0.45f);
-	XMMATRIX skullOffset = XMMatrixTranslation(mSkullTranslation.x, mSkullTranslation.y, mSkullTranslation.z);
+	DirectX::XMMATRIX skullRotate = DirectX::XMMatrixRotationY(0.5f*MathHelper::Pi);
+	DirectX::XMMATRIX skullScale = DirectX::XMMatrixScaling(0.45f, 0.45f, 0.45f);
+	DirectX::XMMATRIX skullOffset = DirectX::XMMatrixTranslation(mSkullTranslation.x, mSkullTranslation.y, mSkullTranslation.z);
 	XMStoreFloat4x4(&mSkullWorld, skullRotate*skullScale*skullOffset);
 }
 
@@ -270,9 +270,9 @@ void MirrorApp::DrawScene()
 	UINT stride = sizeof(Vertex::Basic32);
     UINT offset = 0;
  
-	XMMATRIX view  = XMLoadFloat4x4(&mView);
-	XMMATRIX proj  = XMLoadFloat4x4(&mProj);
-	XMMATRIX viewProj = view*proj;
+	DirectX::XMMATRIX view  = XMLoadFloat4x4(&mView);
+	DirectX::XMMATRIX proj  = XMLoadFloat4x4(&mProj);
+	DirectX::XMMATRIX viewProj = view*proj;
 
 	// Set per frame constants.
 	Effects::BasicFX->SetDirLights(mDirLights);
@@ -315,14 +315,14 @@ void MirrorApp::DrawScene()
 		md3dImmediateContext->IASetVertexBuffers(0, 1, &mRoomVB, &stride, &offset);
 
 		// Set per object constants.
-		XMMATRIX world = XMLoadFloat4x4(&mRoomWorld);
-		XMMATRIX worldInvTranspose = MathHelper::InverseTranspose(world);
-		XMMATRIX worldViewProj = world*view*proj;
+		DirectX::XMMATRIX world = XMLoadFloat4x4(&mRoomWorld);
+		DirectX::XMMATRIX worldInvTranspose = MathHelper::InverseTranspose(world);
+		DirectX::XMMATRIX worldViewProj = world*view*proj;
 		
 		Effects::BasicFX->SetWorld(world);
 		Effects::BasicFX->SetWorldInvTranspose(worldInvTranspose);
 		Effects::BasicFX->SetWorldViewProj(worldViewProj);
-		Effects::BasicFX->SetTexTransform(XMMatrixIdentity());
+		Effects::BasicFX->SetTexTransform(DirectX::XMMatrixIdentity());
 		Effects::BasicFX->SetMaterial(mRoomMat);
 
 		// Floor
@@ -348,9 +348,9 @@ void MirrorApp::DrawScene()
 		md3dImmediateContext->IASetVertexBuffers(0, 1, &mSkullVB, &stride, &offset);
 		md3dImmediateContext->IASetIndexBuffer(mSkullIB, DXGI_FORMAT_R32_UINT, 0);
 
-		XMMATRIX world = XMLoadFloat4x4(&mSkullWorld);
-		XMMATRIX worldInvTranspose = MathHelper::InverseTranspose(world);
-		XMMATRIX worldViewProj = world*view*proj;
+		DirectX::XMMATRIX world = XMLoadFloat4x4(&mSkullWorld);
+		DirectX::XMMATRIX worldInvTranspose = MathHelper::InverseTranspose(world);
+		DirectX::XMMATRIX worldViewProj = world*view*proj;
 
 		Effects::BasicFX->SetWorld(world);
 		Effects::BasicFX->SetWorldInvTranspose(worldInvTranspose);
@@ -373,14 +373,14 @@ void MirrorApp::DrawScene()
 		md3dImmediateContext->IASetVertexBuffers(0, 1, &mRoomVB, &stride, &offset);
 
 		// Set per object constants.
-		XMMATRIX world = XMLoadFloat4x4(&mRoomWorld);
-		XMMATRIX worldInvTranspose = MathHelper::InverseTranspose(world);
-		XMMATRIX worldViewProj = world*view*proj;
+		DirectX::XMMATRIX world = XMLoadFloat4x4(&mRoomWorld);
+		DirectX::XMMATRIX worldInvTranspose = MathHelper::InverseTranspose(world);
+		DirectX::XMMATRIX worldViewProj = world*view*proj;
 		
 		Effects::BasicFX->SetWorld(world);
 		Effects::BasicFX->SetWorldInvTranspose(worldInvTranspose);
 		Effects::BasicFX->SetWorldViewProj(worldViewProj);
-		Effects::BasicFX->SetTexTransform(XMMatrixIdentity());
+		Effects::BasicFX->SetTexTransform(DirectX::XMMatrixIdentity());
 
 		// Do not write to render target.
 		md3dImmediateContext->OMSetBlendState(RenderStates::NoRenderTargetWritesBS, blendFactor, 0xffffffff);
@@ -409,11 +409,11 @@ void MirrorApp::DrawScene()
 		md3dImmediateContext->IASetVertexBuffers(0, 1, &mSkullVB, &stride, &offset);
 		md3dImmediateContext->IASetIndexBuffer(mSkullIB, DXGI_FORMAT_R32_UINT, 0);
 
-		XMVECTOR mirrorPlane = XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f); // xy plane
-		XMMATRIX R = XMMatrixReflect(mirrorPlane);
-		XMMATRIX world = XMLoadFloat4x4(&mSkullWorld) * R;
-		XMMATRIX worldInvTranspose = MathHelper::InverseTranspose(world);
-		XMMATRIX worldViewProj = world*view*proj;
+		DirectX::XMVECTOR mirrorPlane = DirectX::XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f); // xy plane
+		DirectX::XMMATRIX R = DirectX::XMMatrixReflect(mirrorPlane);
+		DirectX::XMMATRIX world = XMLoadFloat4x4(&mSkullWorld) * R;
+		DirectX::XMMATRIX worldInvTranspose = MathHelper::InverseTranspose(world);
+		DirectX::XMMATRIX worldViewProj = world*view*proj;
 
 		Effects::BasicFX->SetWorld(world);
 		Effects::BasicFX->SetWorldInvTranspose(worldInvTranspose);
@@ -421,13 +421,13 @@ void MirrorApp::DrawScene()
 		Effects::BasicFX->SetMaterial(mSkullMat);
 
 		// Cache the old light directions, and reflect the light directions.
-		XMFLOAT3 oldLightDirections[3];
+		DirectX::XMFLOAT3 oldLightDirections[3];
 		for(int i = 0; i < 3; ++i)
 		{
 			oldLightDirections[i] = mDirLights[i].Direction;
 
-			XMVECTOR lightDir = XMLoadFloat3(&mDirLights[i].Direction);
-			XMVECTOR reflectedLightDir = XMVector3TransformNormal(lightDir, R);
+			DirectX::XMVECTOR lightDir = XMLoadFloat3(&mDirLights[i].Direction);
+			DirectX::XMVECTOR reflectedLightDir = DirectX::XMVector3TransformNormal(lightDir, R);
 			XMStoreFloat3(&mDirLights[i].Direction, reflectedLightDir);
 		}
 
@@ -467,14 +467,14 @@ void MirrorApp::DrawScene()
 		md3dImmediateContext->IASetVertexBuffers(0, 1, &mRoomVB, &stride, &offset);
 
 		// Set per object constants.
-		XMMATRIX world = XMLoadFloat4x4(&mRoomWorld);
-		XMMATRIX worldInvTranspose = MathHelper::InverseTranspose(world);
-		XMMATRIX worldViewProj = world*view*proj;
+		DirectX::XMMATRIX world = XMLoadFloat4x4(&mRoomWorld);
+		DirectX::XMMATRIX worldInvTranspose = MathHelper::InverseTranspose(world);
+		DirectX::XMMATRIX worldViewProj = world*view*proj;
 		
 		Effects::BasicFX->SetWorld(world);
 		Effects::BasicFX->SetWorldInvTranspose(worldInvTranspose);
 		Effects::BasicFX->SetWorldViewProj(worldViewProj);
-		Effects::BasicFX->SetTexTransform(XMMatrixIdentity());
+		Effects::BasicFX->SetTexTransform(DirectX::XMMatrixIdentity());
 		Effects::BasicFX->SetMaterial(mMirrorMat);
 		Effects::BasicFX->SetDiffuseMap(mMirrorDiffuseMapSRV);
 
@@ -495,15 +495,15 @@ void MirrorApp::DrawScene()
 		md3dImmediateContext->IASetVertexBuffers(0, 1, &mSkullVB, &stride, &offset);
 		md3dImmediateContext->IASetIndexBuffer(mSkullIB, DXGI_FORMAT_R32_UINT, 0);
 
-		XMVECTOR shadowPlane = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f); // xz plane
-		XMVECTOR toMainLight = -XMLoadFloat3(&mDirLights[0].Direction);
-		XMMATRIX S =  XMMatrixShadow(shadowPlane, toMainLight);
-		XMMATRIX shadowOffsetY = XMMatrixTranslation(0.0f, 0.001f, 0.0f);
+		DirectX::XMVECTOR shadowPlane = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f); // xz plane
+		DirectX::XMVECTOR toMainLight = -XMLoadFloat3(&mDirLights[0].Direction);
+		DirectX::XMMATRIX S =  DirectX::XMMatrixShadow(shadowPlane, toMainLight);
+		DirectX::XMMATRIX shadowOffsetY = DirectX::XMMatrixTranslation(0.0f, 0.001f, 0.0f);
 
 		// Set per object constants.
-		XMMATRIX world = XMLoadFloat4x4(&mSkullWorld)*S*shadowOffsetY;
-		XMMATRIX worldInvTranspose = MathHelper::InverseTranspose(world);
-		XMMATRIX worldViewProj = world*view*proj;
+		DirectX::XMMATRIX world = XMLoadFloat4x4(&mSkullWorld)*S*shadowOffsetY;
+		DirectX::XMMATRIX worldInvTranspose = MathHelper::InverseTranspose(world);
+		DirectX::XMMATRIX worldViewProj = world*view*proj;
 		
 		Effects::BasicFX->SetWorld(world);
 		Effects::BasicFX->SetWorldInvTranspose(worldInvTranspose);

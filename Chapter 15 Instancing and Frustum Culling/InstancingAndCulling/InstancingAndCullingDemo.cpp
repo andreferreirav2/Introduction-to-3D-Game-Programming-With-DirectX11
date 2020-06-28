@@ -24,8 +24,8 @@
 
 struct InstancedData
 {
-	XMFLOAT4X4 World;
-	XMFLOAT4 Color;
+	DirectX::XMFLOAT4X4 World;
+	DirectX::XMFLOAT4 Color;
 };
 
 class InstancingAndCullingApp : public D3DApp 
@@ -67,7 +67,7 @@ private:
 	Material mSkullMat;
 
 	// Define transformations from local spaces to world space.
-	XMFLOAT4X4 mSkullWorld;
+	DirectX::XMFLOAT4X4 mSkullWorld;
 
 	UINT mSkullIndexCount;
 
@@ -106,31 +106,31 @@ InstancingAndCullingApp::InstancingAndCullingApp(HINSTANCE hInstance)
 
 	mCam.SetPosition(0.0f, 2.0f, -15.0f);
 
-	XMMATRIX I = XMMatrixIdentity();
+	DirectX::XMMATRIX I = DirectX::XMMatrixIdentity();
 
-	XMMATRIX skullScale = XMMatrixScaling(0.5f, 0.5f, 0.5f);
-	XMMATRIX skullOffset = XMMatrixTranslation(0.0f, 1.0f, 0.0f);
-	XMStoreFloat4x4(&mSkullWorld, XMMatrixMultiply(skullScale, skullOffset));
+	DirectX::XMMATRIX skullScale = DirectX::XMMatrixScaling(0.5f, 0.5f, 0.5f);
+	DirectX::XMMATRIX skullOffset = DirectX::XMMatrixTranslation(0.0f, 1.0f, 0.0f);
+	XMStoreFloat4x4(&mSkullWorld, DirectX::XMMatrixMultiply(skullScale, skullOffset));
 
 
-	mDirLights[0].Ambient  = XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
-	mDirLights[0].Diffuse  = XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
-	mDirLights[0].Specular = XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
-	mDirLights[0].Direction = XMFLOAT3(0.57735f, -0.57735f, 0.57735f);
+	mDirLights[0].Ambient  = DirectX::XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
+	mDirLights[0].Diffuse  = DirectX::XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
+	mDirLights[0].Specular = DirectX::XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
+	mDirLights[0].Direction = DirectX::XMFLOAT3(0.57735f, -0.57735f, 0.57735f);
 
-	mDirLights[1].Ambient  = XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
-	mDirLights[1].Diffuse  = XMFLOAT4(0.20f, 0.20f, 0.20f, 1.0f);
-	mDirLights[1].Specular = XMFLOAT4(0.25f, 0.25f, 0.25f, 1.0f);
-	mDirLights[1].Direction = XMFLOAT3(-0.57735f, -0.57735f, 0.57735f);
+	mDirLights[1].Ambient  = DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
+	mDirLights[1].Diffuse  = DirectX::XMFLOAT4(0.20f, 0.20f, 0.20f, 1.0f);
+	mDirLights[1].Specular = DirectX::XMFLOAT4(0.25f, 0.25f, 0.25f, 1.0f);
+	mDirLights[1].Direction = DirectX::XMFLOAT3(-0.57735f, -0.57735f, 0.57735f);
 
-	mDirLights[2].Ambient  = XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
-	mDirLights[2].Diffuse  = XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
-	mDirLights[2].Specular = XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
-	mDirLights[2].Direction = XMFLOAT3(0.0f, -0.707f, -0.707f);
+	mDirLights[2].Ambient  = DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
+	mDirLights[2].Diffuse  = DirectX::XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
+	mDirLights[2].Specular = DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
+	mDirLights[2].Direction = DirectX::XMFLOAT3(0.0f, -0.707f, -0.707f);
 
-	mSkullMat.Ambient  = XMFLOAT4(0.4f, 0.4f, 0.4f, 1.0f);
-	mSkullMat.Diffuse  = XMFLOAT4(0.8f, 0.8f, 0.8f, 1.0f);
-	mSkullMat.Specular = XMFLOAT4(0.8f, 0.8f, 0.8f, 16.0f);
+	mSkullMat.Ambient  = DirectX::XMFLOAT4(0.4f, 0.4f, 0.4f, 1.0f);
+	mSkullMat.Diffuse  = DirectX::XMFLOAT4(0.8f, 0.8f, 0.8f, 1.0f);
+	mSkullMat.Specular = DirectX::XMFLOAT4(0.8f, 0.8f, 0.8f, 16.0f);
 }
 
 InstancingAndCullingApp::~InstancingAndCullingApp()
@@ -200,8 +200,8 @@ void InstancingAndCullingApp::UpdateScene(float dt)
 
 	if(mFrustumCullingEnabled)
 	{
-		XMVECTOR detView = XMMatrixDeterminant(mCam.View());
-		XMMATRIX invView = XMMatrixInverse(&detView, mCam.View());
+		DirectX::XMVECTOR detView = DirectX::XMMatrixDeterminant(mCam.View());
+		DirectX::XMMATRIX invView = DirectX::XMMatrixInverse(&detView, mCam.View());
 	
 		D3D11_MAPPED_SUBRESOURCE mappedData; 
 		md3dImmediateContext->Map(mInstancedBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedData);
@@ -210,21 +210,21 @@ void InstancingAndCullingApp::UpdateScene(float dt)
 
 		for(UINT i = 0; i < mInstancedData.size(); ++i)
 		{
-			XMMATRIX W = XMLoadFloat4x4(&mInstancedData[i].World);
-			XMMATRIX invWorld = XMMatrixInverse(&XMMatrixDeterminant(W), W);
+			DirectX::XMMATRIX W = XMLoadFloat4x4(&mInstancedData[i].World);
+			DirectX::XMMATRIX invWorld = DirectX::XMMatrixInverse(&DirectX::XMMatrixDeterminant(W), W);
 
 			// View space to the object's local space.
-			XMMATRIX toLocal = XMMatrixMultiply(invView, invWorld);
+			DirectX::XMMATRIX toLocal = DirectX::XMMatrixMultiply(invView, invWorld);
 		
 			// Decompose the matrix into its individual parts.
-			XMVECTOR scale;
-			XMVECTOR rotQuat;
-			XMVECTOR translation;
-			XMMatrixDecompose(&scale, &rotQuat, &translation, toLocal);
+			DirectX::XMVECTOR scale;
+			DirectX::XMVECTOR rotQuat;
+			DirectX::XMVECTOR translation;
+			DirectX::XMMatrixDecompose(&scale, &rotQuat, &translation, toLocal);
 
 			// Transform the camera frustum from view space to the object's local space.
 			XNA::Frustum localspaceFrustum;
-			XNA::TransformFrustum(&localspaceFrustum, &mCamFrustum, XMVectorGetX(scale), rotQuat, translation);
+			XNA::TransformFrustum(&localspaceFrustum, &mCamFrustum, DirectX::XMVectorGetX(scale), rotQuat, translation);
 
 			// Perform the box/frustum intersection test in local space.
 			if(XNA::IntersectAxisAlignedBoxFrustum(&mSkullBox, &localspaceFrustum) != 0)
@@ -272,9 +272,9 @@ void InstancingAndCullingApp::DrawScene()
 
 	ID3D11Buffer* vbs[2] = {mSkullVB, mInstancedBuffer};
  
-	XMMATRIX view     = mCam.View();
-	XMMATRIX proj     = mCam.Proj();
-	XMMATRIX viewProj = mCam.ViewProj();
+	DirectX::XMMATRIX view     = mCam.View();
+	DirectX::XMMATRIX proj     = mCam.Proj();
+	DirectX::XMMATRIX viewProj = mCam.ViewProj();
 
 	// Set per frame constants.
 	Effects::InstancedBasicFX->SetDirLights(mDirLights);
@@ -291,8 +291,8 @@ void InstancingAndCullingApp::DrawScene()
 		md3dImmediateContext->IASetVertexBuffers(0, 2, vbs, stride, offset);
 		md3dImmediateContext->IASetIndexBuffer(mSkullIB, DXGI_FORMAT_R32_UINT, 0);
 
-		XMMATRIX world = XMLoadFloat4x4(&mSkullWorld);
-		XMMATRIX worldInvTranspose = MathHelper::InverseTranspose(world);
+		DirectX::XMMATRIX world = XMLoadFloat4x4(&mSkullWorld);
+		DirectX::XMMATRIX worldInvTranspose = MathHelper::InverseTranspose(world);
 
 		Effects::InstancedBasicFX->SetWorld(world);
 		Effects::InstancedBasicFX->SetWorldInvTranspose(worldInvTranspose);
@@ -353,21 +353,21 @@ void InstancingAndCullingApp::BuildSkullGeometryBuffers()
 	fin >> ignore >> tcount;
 	fin >> ignore >> ignore >> ignore >> ignore;
 	
-	XMFLOAT3 vMinf3(+MathHelper::Infinity, +MathHelper::Infinity, +MathHelper::Infinity);
-	XMFLOAT3 vMaxf3(-MathHelper::Infinity, -MathHelper::Infinity, -MathHelper::Infinity);
+	DirectX::XMFLOAT3 vMinf3(+MathHelper::Infinity, +MathHelper::Infinity, +MathHelper::Infinity);
+	DirectX::XMFLOAT3 vMaxf3(-MathHelper::Infinity, -MathHelper::Infinity, -MathHelper::Infinity);
 	
-	XMVECTOR vMin = XMLoadFloat3(&vMinf3);
-	XMVECTOR vMax = XMLoadFloat3(&vMaxf3);
+	DirectX::XMVECTOR vMin = XMLoadFloat3(&vMinf3);
+	DirectX::XMVECTOR vMax = XMLoadFloat3(&vMaxf3);
 	std::vector<Vertex::Basic32> vertices(vcount);
 	for(UINT i = 0; i < vcount; ++i)
 	{
 		fin >> vertices[i].Pos.x >> vertices[i].Pos.y >> vertices[i].Pos.z;
 		fin >> vertices[i].Normal.x >> vertices[i].Normal.y >> vertices[i].Normal.z;
 		
-		XMVECTOR P = XMLoadFloat3(&vertices[i].Pos);
+		DirectX::XMVECTOR P = XMLoadFloat3(&vertices[i].Pos);
 		
-		vMin = XMVectorMin(vMin, P);
-		vMax = XMVectorMax(vMax, P);
+		vMin = DirectX::XMVectorMin(vMin, P);
+		vMax = DirectX::XMVectorMax(vMax, P);
 	}
 	
 	XMStoreFloat3(&mSkullBox.Center, 0.5f*(vMin+vMax));
@@ -433,7 +433,7 @@ void InstancingAndCullingApp::BuildInstancedBuffer()
 			for(int j = 0; j < n; ++j)
 			{
 				// Position instanced along a 3D grid.
-				mInstancedData[k*n*n + i*n + j].World = XMFLOAT4X4(
+				mInstancedData[k*n*n + i*n + j].World = DirectX::XMFLOAT4X4(
 					1.0f, 0.0f, 0.0f, 0.0f,
 					0.0f, 1.0f, 0.0f, 0.0f,
 					0.0f, 0.0f, 1.0f, 0.0f,

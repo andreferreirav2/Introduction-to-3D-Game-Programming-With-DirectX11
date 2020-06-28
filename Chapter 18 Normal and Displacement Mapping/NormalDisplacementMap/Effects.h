@@ -33,11 +33,11 @@ public:
 	BasicEffect(ID3D11Device* device, const std::wstring& filename);
 	~BasicEffect();
 
-	void SetWorldViewProj(CXMMATRIX M)                  { WorldViewProj->SetMatrix(reinterpret_cast<const float*>(&M)); }
-	void SetWorld(CXMMATRIX M)                          { World->SetMatrix(reinterpret_cast<const float*>(&M)); }
-	void SetWorldInvTranspose(CXMMATRIX M)              { WorldInvTranspose->SetMatrix(reinterpret_cast<const float*>(&M)); }
-	void SetTexTransform(CXMMATRIX M)                   { TexTransform->SetMatrix(reinterpret_cast<const float*>(&M)); }
-	void SetEyePosW(const XMFLOAT3& v)                  { EyePosW->SetRawValue(&v, 0, sizeof(XMFLOAT3)); }
+	void SetWorldViewProj(DirectX::CXMMATRIX M)                  { WorldViewProj->SetMatrix(reinterpret_cast<const float*>(&M)); }
+	void SetWorld(DirectX::CXMMATRIX M)                          { World->SetMatrix(reinterpret_cast<const float*>(&M)); }
+	void SetWorldInvTranspose(DirectX::CXMMATRIX M)              { WorldInvTranspose->SetMatrix(reinterpret_cast<const float*>(&M)); }
+	void SetTexTransform(DirectX::CXMMATRIX M)                   { TexTransform->SetMatrix(reinterpret_cast<const float*>(&M)); }
+	void SetEyePosW(const DirectX::XMFLOAT3& v)                  { EyePosW->SetRawValue(&v, 0, sizeof(DirectX::XMFLOAT3)); }
 	void SetFogColor(const FXMVECTOR v)                 { FogColor->SetFloatVector(reinterpret_cast<const float*>(&v)); }
 	void SetFogStart(float f)                           { FogStart->SetFloat(f); }
 	void SetFogRange(float f)                           { FogRange->SetFloat(f); }
@@ -125,11 +125,11 @@ public:
 	NormalMapEffect(ID3D11Device* device, const std::wstring& filename);
 	~NormalMapEffect();
 
-	void SetWorldViewProj(CXMMATRIX M)                  { WorldViewProj->SetMatrix(reinterpret_cast<const float*>(&M)); }
-	void SetWorld(CXMMATRIX M)                          { World->SetMatrix(reinterpret_cast<const float*>(&M)); }
-	void SetWorldInvTranspose(CXMMATRIX M)              { WorldInvTranspose->SetMatrix(reinterpret_cast<const float*>(&M)); }
-	void SetTexTransform(CXMMATRIX M)                   { TexTransform->SetMatrix(reinterpret_cast<const float*>(&M)); }
-	void SetEyePosW(const XMFLOAT3& v)                  { EyePosW->SetRawValue(&v, 0, sizeof(XMFLOAT3)); }
+	void SetWorldViewProj(DirectX::CXMMATRIX M)                  { WorldViewProj->SetMatrix(reinterpret_cast<const float*>(&M)); }
+	void SetWorld(DirectX::CXMMATRIX M)                          { World->SetMatrix(reinterpret_cast<const float*>(&M)); }
+	void SetWorldInvTranspose(DirectX::CXMMATRIX M)              { WorldInvTranspose->SetMatrix(reinterpret_cast<const float*>(&M)); }
+	void SetTexTransform(DirectX::CXMMATRIX M)                   { TexTransform->SetMatrix(reinterpret_cast<const float*>(&M)); }
+	void SetEyePosW(const DirectX::XMFLOAT3& v)                  { EyePosW->SetRawValue(&v, 0, sizeof(DirectX::XMFLOAT3)); }
 	void SetFogColor(const FXMVECTOR v)                 { FogColor->SetFloatVector(reinterpret_cast<const float*>(&v)); }
 	void SetFogStart(float f)                           { FogStart->SetFloat(f); }
 	void SetFogRange(float f)                           { FogRange->SetFloat(f); }
@@ -219,12 +219,12 @@ public:
 	DisplacementMapEffect(ID3D11Device* device, const std::wstring& filename);
 	~DisplacementMapEffect();
 
-	void SetViewProj(CXMMATRIX M)                       { ViewProj->SetMatrix(reinterpret_cast<const float*>(&M)); }
-	void SetWorldViewProj(CXMMATRIX M)                  { WorldViewProj->SetMatrix(reinterpret_cast<const float*>(&M)); }
-	void SetWorld(CXMMATRIX M)                          { World->SetMatrix(reinterpret_cast<const float*>(&M)); }
-	void SetWorldInvTranspose(CXMMATRIX M)              { WorldInvTranspose->SetMatrix(reinterpret_cast<const float*>(&M)); }
-	void SetTexTransform(CXMMATRIX M)                   { TexTransform->SetMatrix(reinterpret_cast<const float*>(&M)); }
-	void SetEyePosW(const XMFLOAT3& v)                  { EyePosW->SetRawValue(&v, 0, sizeof(XMFLOAT3)); }
+	void SetViewProj(DirectX::CXMMATRIX M)                       { ViewProj->SetMatrix(reinterpret_cast<const float*>(&M)); }
+	void SetWorldViewProj(DirectX::CXMMATRIX M)                  { WorldViewProj->SetMatrix(reinterpret_cast<const float*>(&M)); }
+	void SetWorld(DirectX::CXMMATRIX M)                          { World->SetMatrix(reinterpret_cast<const float*>(&M)); }
+	void SetWorldInvTranspose(DirectX::CXMMATRIX M)              { WorldInvTranspose->SetMatrix(reinterpret_cast<const float*>(&M)); }
+	void SetTexTransform(DirectX::CXMMATRIX M)                   { TexTransform->SetMatrix(reinterpret_cast<const float*>(&M)); }
+	void SetEyePosW(const DirectX::XMFLOAT3& v)                  { EyePosW->SetRawValue(&v, 0, sizeof(DirectX::XMFLOAT3)); }
 	void SetFogColor(const FXMVECTOR v)                 { FogColor->SetFloatVector(reinterpret_cast<const float*>(&v)); }
 	void SetFogStart(float f)                           { FogStart->SetFloat(f); }
 	void SetFogRange(float f)                           { FogRange->SetFloat(f); }
@@ -326,7 +326,7 @@ public:
 	SkyEffect(ID3D11Device* device, const std::wstring& filename);
 	~SkyEffect();
 
-	void SetWorldViewProj(CXMMATRIX M)                  { WorldViewProj->SetMatrix(reinterpret_cast<const float*>(&M)); }
+	void SetWorldViewProj(DirectX::CXMMATRIX M)                  { WorldViewProj->SetMatrix(reinterpret_cast<const float*>(&M)); }
 	void SetCubeMap(ID3D11ShaderResourceView* cubemap)  { CubeMap->SetResource(cubemap); }
 
 	ID3DX11EffectTechnique* SkyTech;

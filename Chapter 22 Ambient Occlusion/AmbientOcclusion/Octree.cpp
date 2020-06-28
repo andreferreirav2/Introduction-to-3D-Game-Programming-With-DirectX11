@@ -15,7 +15,7 @@ Octree::~Octree()
 	SafeDelete(mRoot);
 }
 
-void Octree::Build(const std::vector<XMFLOAT3>& vertices, const std::vector<UINT>& indices)
+void Octree::Build(const std::vector<DirectX::XMFLOAT3>& vertices, const std::vector<UINT>& indices)
 {
 	// Cache a copy of the vertices.
 	mVertices = vertices;
@@ -30,26 +30,26 @@ void Octree::Build(const std::vector<XMFLOAT3>& vertices, const std::vector<UINT
 	BuildOctree(mRoot, indices);
 }
 
-bool Octree::RayOctreeIntersect(FXMVECTOR rayPos, FXMVECTOR rayDir)
+bool Octree::RayOctreeIntersect(FXMVECTOR rayPos, DirectX::FXMVECTOR rayDir)
 {
 	return RayOctreeIntersect(mRoot, rayPos, rayDir);
 }
 
 XNA::AxisAlignedBox Octree::BuildAABB()
 {
-	XMVECTOR vmin = XMVectorReplicate(+MathHelper::Infinity);
-	XMVECTOR vmax = XMVectorReplicate(-MathHelper::Infinity);
+	DirectX::XMVECTOR vmin = DirectX::XMVectorReplicate(+MathHelper::Infinity);
+	DirectX::XMVECTOR vmax = DirectX::XMVectorReplicate(-MathHelper::Infinity);
 	for(size_t i = 0; i < mVertices.size(); ++i)
 	{
-		XMVECTOR P = XMLoadFloat3(&mVertices[i]);
+		DirectX::XMVECTOR P = XMLoadFloat3(&mVertices[i]);
 
-		vmin = XMVectorMin(vmin, P);
-		vmax = XMVectorMax(vmax, P);
+		vmin = DirectX::XMVectorMin(vmin, P);
+		vmax = DirectX::XMVectorMax(vmax, P);
 	}
 
 	XNA::AxisAlignedBox bounds;
-	XMVECTOR C = 0.5f*(vmin + vmax);
-	XMVECTOR E = 0.5f*(vmax - vmin); 
+	DirectX::XMVECTOR C = 0.5f*(vmin + vmax);
+	DirectX::XMVECTOR E = 0.5f*(vmax - vmin); 
 
 	XMStoreFloat3(&bounds.Center, C); 
 	XMStoreFloat3(&bounds.Extents, E); 
@@ -87,9 +87,9 @@ void Octree::BuildOctree(OctreeNode* parent, const std::vector<UINT>& indices)
 				UINT i1 = indices[j*3+1];
 				UINT i2 = indices[j*3+2];
 
-				XMVECTOR v0 = XMLoadFloat3(&mVertices[i0]);
-				XMVECTOR v1 = XMLoadFloat3(&mVertices[i1]);
-				XMVECTOR v2 = XMLoadFloat3(&mVertices[i2]);
+				DirectX::XMVECTOR v0 = XMLoadFloat3(&mVertices[i0]);
+				DirectX::XMVECTOR v1 = XMLoadFloat3(&mVertices[i1]);
+				DirectX::XMVECTOR v2 = XMLoadFloat3(&mVertices[i2]);
 
 				if(XNA::IntersectTriangleAxisAlignedBox(v0, v1, v2, &subbox[i]))
 				{
@@ -105,7 +105,7 @@ void Octree::BuildOctree(OctreeNode* parent, const std::vector<UINT>& indices)
 	}
 }
 
-bool Octree::RayOctreeIntersect(OctreeNode* parent, FXMVECTOR rayPos, FXMVECTOR rayDir)
+bool Octree::RayOctreeIntersect(OctreeNode* parent, DirectX::FXMVECTOR rayPos, DirectX::FXMVECTOR rayDir)
 {
 	// Recurs until we find a leaf node (all the triangles are in the leaves).
 	if( !parent->IsLeaf )
@@ -135,9 +135,9 @@ bool Octree::RayOctreeIntersect(OctreeNode* parent, FXMVECTOR rayPos, FXMVECTOR 
 			UINT i1 = parent->Indices[i*3+1];
 			UINT i2 = parent->Indices[i*3+2];
 
-			XMVECTOR v0 = XMLoadFloat3(&mVertices[i0]);
-			XMVECTOR v1 = XMLoadFloat3(&mVertices[i1]);
-			XMVECTOR v2 = XMLoadFloat3(&mVertices[i2]);
+			DirectX::XMVECTOR v0 = XMLoadFloat3(&mVertices[i0]);
+			DirectX::XMVECTOR v1 = XMLoadFloat3(&mVertices[i1]);
+			DirectX::XMVECTOR v2 = XMLoadFloat3(&mVertices[i2]);
 
 			float t;
 			if( XNA::IntersectRayTriangle(rayPos, rayDir, v0, v1, v2, &t) )

@@ -61,8 +61,8 @@ void Waves::Init(UINT m, UINT n, float dx, float dt, float speed, float damping)
 	delete[] mPrevSolution;
 	delete[] mCurrSolution;
 
-	mPrevSolution = new XMFLOAT3[m*n];
-	mCurrSolution = new XMFLOAT3[m*n];
+	mPrevSolution = new DirectX::XMFLOAT3[m*n];
+	mCurrSolution = new DirectX::XMFLOAT3[m*n];
 
 	// Generate grid vertices in system memory.
 
@@ -75,8 +75,8 @@ void Waves::Init(UINT m, UINT n, float dx, float dt, float speed, float damping)
 		{
 			float x = -halfWidth + j*dx;
 
-			mPrevSolution[i*n+j] = XMFLOAT3(x, 0.0f, z);
-			mCurrSolution[i*n+j] = XMFLOAT3(x, 0.0f, z);
+			mPrevSolution[i*n+j] = DirectX::XMFLOAT3(x, 0.0f, z);
+			mCurrSolution[i*n+j] = DirectX::XMFLOAT3(x, 0.0f, z);
 		}
 	}
 }

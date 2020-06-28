@@ -59,14 +59,14 @@ private:
 	DirectionalLight mDirLights[3];
 	Material mSphereMat;
 
-	XMFLOAT4X4 mSphereWorld;
+	DirectX::XMFLOAT4X4 mSphereWorld;
 
-	XMFLOAT4X4 mView;
-	XMFLOAT4X4 mProj;
+	DirectX::XMFLOAT4X4 mView;
+	DirectX::XMFLOAT4X4 mProj;
 
 	RenderOptions mRenderOptions;
 
-	XMFLOAT3 mEyePosW;
+	DirectX::XMFLOAT3 mEyePosW;
 
 	float mTheta;
 	float mPhi;
@@ -101,31 +101,31 @@ SubdivisionApp::SubdivisionApp(HINSTANCE hInstance)
 	mLastMousePos.x = 0;
 	mLastMousePos.y = 0;
 
-	XMMATRIX I = XMMatrixIdentity();
+	DirectX::XMMATRIX I = DirectX::XMMatrixIdentity();
 	XMStoreFloat4x4(&mView, I);
 	XMStoreFloat4x4(&mProj, I);
 
-	XMMATRIX sphereScale = XMMatrixScaling(2.0f, 2.0f, 2.0f);
+	DirectX::XMMATRIX sphereScale = DirectX::XMMatrixScaling(2.0f, 2.0f, 2.0f);
 	XMStoreFloat4x4(&mSphereWorld, sphereScale);
 
-	mDirLights[0].Ambient  = XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
-	mDirLights[0].Diffuse  = XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
-	mDirLights[0].Specular = XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
-	mDirLights[0].Direction = XMFLOAT3(0.57735f, -0.57735f, 0.57735f);
+	mDirLights[0].Ambient  = DirectX::XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
+	mDirLights[0].Diffuse  = DirectX::XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
+	mDirLights[0].Specular = DirectX::XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
+	mDirLights[0].Direction = DirectX::XMFLOAT3(0.57735f, -0.57735f, 0.57735f);
 
-	mDirLights[1].Ambient  = XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
-	mDirLights[1].Diffuse  = XMFLOAT4(0.20f, 0.20f, 0.20f, 1.0f);
-	mDirLights[1].Specular = XMFLOAT4(0.25f, 0.25f, 0.25f, 1.0f);
-	mDirLights[1].Direction = XMFLOAT3(-0.57735f, -0.57735f, 0.57735f);
+	mDirLights[1].Ambient  = DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
+	mDirLights[1].Diffuse  = DirectX::XMFLOAT4(0.20f, 0.20f, 0.20f, 1.0f);
+	mDirLights[1].Specular = DirectX::XMFLOAT4(0.25f, 0.25f, 0.25f, 1.0f);
+	mDirLights[1].Direction = DirectX::XMFLOAT3(-0.57735f, -0.57735f, 0.57735f);
 
-	mDirLights[2].Ambient  = XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
-	mDirLights[2].Diffuse  = XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
-	mDirLights[2].Specular = XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
-	mDirLights[2].Direction = XMFLOAT3(0.0f, -0.707f, -0.707f);
+	mDirLights[2].Ambient  = DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
+	mDirLights[2].Diffuse  = DirectX::XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
+	mDirLights[2].Specular = DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
+	mDirLights[2].Direction = DirectX::XMFLOAT3(0.0f, -0.707f, -0.707f);
 
-	mSphereMat.Ambient  = XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
-	mSphereMat.Diffuse  = XMFLOAT4(1.0f, 1.0f, 1.0f, 0.5f);
-	mSphereMat.Specular = XMFLOAT4(0.8f, 0.8f, 0.8f, 32.0f);
+	mSphereMat.Ambient  = DirectX::XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
+	mSphereMat.Diffuse  = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 0.5f);
+	mSphereMat.Specular = DirectX::XMFLOAT4(0.8f, 0.8f, 0.8f, 32.0f);
 }
 
 SubdivisionApp::~SubdivisionApp()
@@ -162,7 +162,7 @@ void SubdivisionApp::OnResize()
 {
 	D3DApp::OnResize();
 
-	XMMATRIX P = XMMatrixPerspectiveFovLH(0.25f*MathHelper::Pi, AspectRatio(), 1.0f, 1000.0f);
+	DirectX::XMMATRIX P = DirectX::XMMatrixPerspectiveFovLH(0.25f*MathHelper::Pi, AspectRatio(), 1.0f, 1000.0f);
 	XMStoreFloat4x4(&mProj, P);
 }
 
@@ -173,14 +173,14 @@ void SubdivisionApp::UpdateScene(float dt)
 	float z = mRadius*sinf(mPhi)*sinf(mTheta);
 	float y = mRadius*cosf(mPhi);
 
-	mEyePosW = XMFLOAT3(x, y, z);
+	mEyePosW = DirectX::XMFLOAT3(x, y, z);
 
 	// Build the view matrix.
-	XMVECTOR pos    = XMVectorSet(x, y, z, 1.0f);
-	XMVECTOR target = XMVectorZero();
-	XMVECTOR up     = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+	DirectX::XMVECTOR pos    = DirectX::XMVectorSet(x, y, z, 1.0f);
+	DirectX::XMVECTOR target = DirectX::XMVectorZero();
+	DirectX::XMVECTOR up     = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 
-	XMMATRIX V = XMMatrixLookAtLH(pos, target, up);
+	DirectX::XMMATRIX V = DirectX::XMMatrixLookAtLH(pos, target, up);
 	XMStoreFloat4x4(&mView, V);
 
 	//
@@ -203,9 +203,9 @@ void SubdivisionApp::DrawScene()
  
 	float blendFactor[] = {0.0f, 0.0f, 0.0f, 0.0f};
  
-	XMMATRIX view  = XMLoadFloat4x4(&mView);
-	XMMATRIX proj  = XMLoadFloat4x4(&mProj);
-	XMMATRIX viewProj = view*proj;
+	DirectX::XMMATRIX view  = XMLoadFloat4x4(&mView);
+	DirectX::XMMATRIX proj  = XMLoadFloat4x4(&mProj);
+	DirectX::XMMATRIX viewProj = view*proj;
 
 	md3dImmediateContext->IASetInputLayout(InputLayouts::Basic32);
     md3dImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -252,14 +252,14 @@ void SubdivisionApp::DrawScene()
 		md3dImmediateContext->IASetIndexBuffer(mSphereIB, DXGI_FORMAT_R32_UINT, 0);
 
 		// Set per object constants.
-		XMMATRIX world = XMLoadFloat4x4(&mSphereWorld);
-		XMMATRIX worldInvTranspose = MathHelper::InverseTranspose(world);
-		XMMATRIX worldViewProj = world*view*proj;
+		DirectX::XMMATRIX world = XMLoadFloat4x4(&mSphereWorld);
+		DirectX::XMMATRIX worldInvTranspose = MathHelper::InverseTranspose(world);
+		DirectX::XMMATRIX worldViewProj = world*view*proj;
 		
 		Effects::SubdivisionFX->SetWorld(world);
 		Effects::SubdivisionFX->SetWorldInvTranspose(worldInvTranspose);
 		Effects::SubdivisionFX->SetWorldViewProj(worldViewProj);
-		Effects::SubdivisionFX->SetTexTransform(XMMatrixIdentity());
+		Effects::SubdivisionFX->SetTexTransform(DirectX::XMMatrixIdentity());
 		Effects::SubdivisionFX->SetMaterial(mSphereMat);
 		Effects::SubdivisionFX->SetDiffuseMap(mSphereMapSRV);
 

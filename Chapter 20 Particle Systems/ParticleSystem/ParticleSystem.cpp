@@ -16,9 +16,9 @@ ParticleSystem::ParticleSystem()
 	mTimeStep = 0.0f;
 	mAge      = 0.0f;
 
-	mEyePosW  = XMFLOAT3(0.0f, 0.0f, 0.0f);
-	mEmitPosW = XMFLOAT3(0.0f, 0.0f, 0.0f);
-	mEmitDirW = XMFLOAT3(0.0f, 1.0f, 0.0f);
+	mEyePosW  = DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f);
+	mEmitPosW = DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f);
+	mEmitDirW = DirectX::XMFLOAT3(0.0f, 1.0f, 0.0f);
 }
 
 ParticleSystem::~ParticleSystem()
@@ -33,17 +33,17 @@ float ParticleSystem::GetAge()const
 	return mAge;
 }
 
-void ParticleSystem::SetEyePos(const XMFLOAT3& eyePosW)
+void ParticleSystem::SetEyePos(const DirectX::XMFLOAT3& eyePosW)
 {
 	mEyePosW = eyePosW;
 }
 
-void ParticleSystem::SetEmitPos(const XMFLOAT3& emitPosW)
+void ParticleSystem::SetEmitPos(const DirectX::XMFLOAT3& emitPosW)
 {
 	mEmitPosW = emitPosW;
 }
 
-void ParticleSystem::SetEmitDir(const XMFLOAT3& emitDirW)
+void ParticleSystem::SetEmitDir(const DirectX::XMFLOAT3& emitDirW)
 {
 	mEmitDirW = emitDirW;
 }
@@ -77,7 +77,7 @@ void ParticleSystem::Update(float dt, float gameTime)
 
 void ParticleSystem::Draw(ID3D11DeviceContext* dc, const Camera& cam)
 {
-	XMMATRIX VP = cam.ViewProj();
+	DirectX::XMMATRIX VP = cam.ViewProj();
 
 	//
 	// Set constants.

@@ -92,9 +92,9 @@ private:
 	UINT mRenderTargetWidth;
 	UINT mRenderTargetHeight;
 
-	XMFLOAT4 mFrustumFarCorner[4];
+	DirectX::XMFLOAT4 mFrustumFarCorner[4];
 
-	XMFLOAT4 mOffsets[14];
+	DirectX::XMFLOAT4 mOffsets[14];
 
 	D3D11_VIEWPORT mAmbientMapViewport;
 };

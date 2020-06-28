@@ -57,7 +57,7 @@ private:
 	Material mPickedTriangleMat;
 
 	// Define transformations from local spaces to world space.
-	XMFLOAT4X4 mMeshWorld;
+	DirectX::XMFLOAT4X4 mMeshWorld;
 
 	UINT mMeshIndexCount;
 
@@ -95,32 +95,32 @@ PickingApp::PickingApp(HINSTANCE hInstance)
 
 	mCam.SetPosition(0.0f, 2.0f, -15.0f);
 
-	XMMATRIX MeshScale = XMMatrixScaling(0.5f, 0.5f, 0.5f);
-	XMMATRIX MeshOffset = XMMatrixTranslation(0.0f, 1.0f, 0.0f);
-	XMStoreFloat4x4(&mMeshWorld, XMMatrixMultiply(MeshScale, MeshOffset));
+	DirectX::XMMATRIX MeshScale = DirectX::XMMatrixScaling(0.5f, 0.5f, 0.5f);
+	DirectX::XMMATRIX MeshOffset = DirectX::XMMatrixTranslation(0.0f, 1.0f, 0.0f);
+	XMStoreFloat4x4(&mMeshWorld, DirectX::XMMatrixMultiply(MeshScale, MeshOffset));
 
-	mDirLights[0].Ambient  = XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
-	mDirLights[0].Diffuse  = XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
-	mDirLights[0].Specular = XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
-	mDirLights[0].Direction = XMFLOAT3(0.57735f, -0.57735f, 0.57735f);
+	mDirLights[0].Ambient  = DirectX::XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
+	mDirLights[0].Diffuse  = DirectX::XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
+	mDirLights[0].Specular = DirectX::XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
+	mDirLights[0].Direction = DirectX::XMFLOAT3(0.57735f, -0.57735f, 0.57735f);
 
-	mDirLights[1].Ambient  = XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
-	mDirLights[1].Diffuse  = XMFLOAT4(0.20f, 0.20f, 0.20f, 1.0f);
-	mDirLights[1].Specular = XMFLOAT4(0.25f, 0.25f, 0.25f, 1.0f);
-	mDirLights[1].Direction = XMFLOAT3(-0.57735f, -0.57735f, 0.57735f);
+	mDirLights[1].Ambient  = DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
+	mDirLights[1].Diffuse  = DirectX::XMFLOAT4(0.20f, 0.20f, 0.20f, 1.0f);
+	mDirLights[1].Specular = DirectX::XMFLOAT4(0.25f, 0.25f, 0.25f, 1.0f);
+	mDirLights[1].Direction = DirectX::XMFLOAT3(-0.57735f, -0.57735f, 0.57735f);
 
-	mDirLights[2].Ambient  = XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
-	mDirLights[2].Diffuse  = XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
-	mDirLights[2].Specular = XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
-	mDirLights[2].Direction = XMFLOAT3(0.0f, -0.707f, -0.707f);
+	mDirLights[2].Ambient  = DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
+	mDirLights[2].Diffuse  = DirectX::XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
+	mDirLights[2].Specular = DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
+	mDirLights[2].Direction = DirectX::XMFLOAT3(0.0f, -0.707f, -0.707f);
 
-	mMeshMat.Ambient  = XMFLOAT4(0.4f, 0.4f, 0.4f, 1.0f);
-	mMeshMat.Diffuse  = XMFLOAT4(0.8f, 0.8f, 0.8f, 1.0f);
-	mMeshMat.Specular = XMFLOAT4(0.8f, 0.8f, 0.8f, 16.0f);
+	mMeshMat.Ambient  = DirectX::XMFLOAT4(0.4f, 0.4f, 0.4f, 1.0f);
+	mMeshMat.Diffuse  = DirectX::XMFLOAT4(0.8f, 0.8f, 0.8f, 1.0f);
+	mMeshMat.Specular = DirectX::XMFLOAT4(0.8f, 0.8f, 0.8f, 16.0f);
 
-	mPickedTriangleMat.Ambient  = XMFLOAT4(0.0f, 0.8f, 0.4f, 1.0f);
-	mPickedTriangleMat.Diffuse  = XMFLOAT4(0.0f, 0.8f, 0.4f, 1.0f);
-	mPickedTriangleMat.Specular = XMFLOAT4(0.0f, 0.0f, 0.0f, 16.0f);
+	mPickedTriangleMat.Ambient  = DirectX::XMFLOAT4(0.0f, 0.8f, 0.4f, 1.0f);
+	mPickedTriangleMat.Diffuse  = DirectX::XMFLOAT4(0.0f, 0.8f, 0.4f, 1.0f);
+	mPickedTriangleMat.Specular = DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 16.0f);
 }
 
 PickingApp::~PickingApp()
@@ -185,9 +185,9 @@ void PickingApp::DrawScene()
 
 	mCam.UpdateViewMatrix();
  
-	XMMATRIX view     = mCam.View();
-	XMMATRIX proj     = mCam.Proj();
-	XMMATRIX viewProj = mCam.ViewProj();
+	DirectX::XMMATRIX view     = mCam.View();
+	DirectX::XMMATRIX proj     = mCam.Proj();
+	DirectX::XMMATRIX viewProj = mCam.ViewProj();
 
 
 	
@@ -210,9 +210,9 @@ void PickingApp::DrawScene()
 		md3dImmediateContext->IASetVertexBuffers(0, 1, &mMeshVB, &stride, &offset);
 		md3dImmediateContext->IASetIndexBuffer(mMeshIB, DXGI_FORMAT_R32_UINT, 0);
 
-		XMMATRIX world = XMLoadFloat4x4(&mMeshWorld);
-		XMMATRIX worldInvTranspose = MathHelper::InverseTranspose(world);
-		XMMATRIX worldViewProj = world*view*proj;
+		DirectX::XMMATRIX world = XMLoadFloat4x4(&mMeshWorld);
+		DirectX::XMMATRIX worldInvTranspose = MathHelper::InverseTranspose(world);
+		DirectX::XMMATRIX worldViewProj = world*view*proj;
 
 		Effects::BasicFX->SetWorld(world);
 		Effects::BasicFX->SetWorldInvTranspose(worldInvTranspose);
@@ -304,21 +304,21 @@ void PickingApp::BuildMeshGeometryBuffers()
 	fin >> ignore >> tcount;
 	fin >> ignore >> ignore >> ignore >> ignore;
 	
-	XMFLOAT3 vMinf3(+MathHelper::Infinity, +MathHelper::Infinity, +MathHelper::Infinity);
-	XMFLOAT3 vMaxf3(-MathHelper::Infinity, -MathHelper::Infinity, -MathHelper::Infinity);
+	DirectX::XMFLOAT3 vMinf3(+MathHelper::Infinity, +MathHelper::Infinity, +MathHelper::Infinity);
+	DirectX::XMFLOAT3 vMaxf3(-MathHelper::Infinity, -MathHelper::Infinity, -MathHelper::Infinity);
 	
-	XMVECTOR vMin = XMLoadFloat3(&vMinf3);
-	XMVECTOR vMax = XMLoadFloat3(&vMaxf3);
+	DirectX::XMVECTOR vMin = XMLoadFloat3(&vMinf3);
+	DirectX::XMVECTOR vMax = XMLoadFloat3(&vMaxf3);
 	mMeshVertices.resize(vcount);
 	for(UINT i = 0; i < vcount; ++i)
 	{
 		fin >> mMeshVertices[i].Pos.x >> mMeshVertices[i].Pos.y >> mMeshVertices[i].Pos.z;
 		fin >> mMeshVertices[i].Normal.x >> mMeshVertices[i].Normal.y >> mMeshVertices[i].Normal.z;
 		
-		XMVECTOR P = XMLoadFloat3(&mMeshVertices[i].Pos);
+		DirectX::XMVECTOR P = XMLoadFloat3(&mMeshVertices[i].Pos);
 		
-		vMin = XMVectorMin(vMin, P);
-		vMax = XMVectorMax(vMax, P);
+		vMin = DirectX::XMVectorMin(vMin, P);
+		vMax = DirectX::XMVectorMax(vMax, P);
 	}
 	
 	XMStoreFloat3(&mMeshBox.Center, 0.5f*(vMin+vMax));
@@ -364,30 +364,30 @@ void PickingApp::BuildMeshGeometryBuffers()
 
 void PickingApp::Pick(int sx, int sy)
 {
-	XMMATRIX P = mCam.Proj();
+	DirectX::XMMATRIX P = mCam.Proj();
 
 	// Compute picking ray in view space.
 	float vx = (+2.0f*sx/mClientWidth  - 1.0f)/P(0,0);
 	float vy = (-2.0f*sy/mClientHeight + 1.0f)/P(1,1);
 
 	// Ray definition in view space.
-	XMVECTOR rayOrigin = XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f);
-	XMVECTOR rayDir    = XMVectorSet(vx, vy, 1.0f, 0.0f);
+	DirectX::XMVECTOR rayOrigin = DirectX::XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f);
+	DirectX::XMVECTOR rayDir    = DirectX::XMVectorSet(vx, vy, 1.0f, 0.0f);
 
 	// Tranform ray to local space of Mesh.
-	XMMATRIX V = mCam.View();
-	XMMATRIX invView = XMMatrixInverse(&XMMatrixDeterminant(V), V);
+	DirectX::XMMATRIX V = mCam.View();
+	DirectX::XMMATRIX invView = DirectX::XMMatrixInverse(&DirectX::XMMatrixDeterminant(V), V);
 
-	XMMATRIX W = XMLoadFloat4x4(&mMeshWorld);
-	XMMATRIX invWorld = XMMatrixInverse(&XMMatrixDeterminant(W), W);
+	DirectX::XMMATRIX W = XMLoadFloat4x4(&mMeshWorld);
+	DirectX::XMMATRIX invWorld = DirectX::XMMatrixInverse(&DirectX::XMMatrixDeterminant(W), W);
 
-	XMMATRIX toLocal = XMMatrixMultiply(invView, invWorld);
+	DirectX::XMMATRIX toLocal = DirectX::XMMatrixMultiply(invView, invWorld);
 
-	rayOrigin = XMVector3TransformCoord(rayOrigin, toLocal);
-	rayDir = XMVector3TransformNormal(rayDir, toLocal);
+	rayOrigin = DirectX::XMVector3TransformCoord(rayOrigin, toLocal);
+	rayDir = DirectX::XMVector3TransformNormal(rayDir, toLocal);
 
 	// Make the ray direction unit length for the intersection tests.
-	rayDir = XMVector3Normalize(rayDir);
+	rayDir = DirectX::XMVector3Normalize(rayDir);
 
 	// If we hit the bounding box of the Mesh, then we might have picked a Mesh triangle,
 	// so do the ray/triangle tests.
@@ -410,9 +410,9 @@ void PickingApp::Pick(int sx, int sy)
 			UINT i2 = mMeshIndices[i*3+2];
 
 			// Vertices for this triangle.
-			XMVECTOR v0 = XMLoadFloat3(&mMeshVertices[i0].Pos);
-			XMVECTOR v1 = XMLoadFloat3(&mMeshVertices[i1].Pos);
-			XMVECTOR v2 = XMLoadFloat3(&mMeshVertices[i2].Pos);
+			DirectX::XMVECTOR v0 = XMLoadFloat3(&mMeshVertices[i0].Pos);
+			DirectX::XMVECTOR v1 = XMLoadFloat3(&mMeshVertices[i1].Pos);
+			DirectX::XMVECTOR v2 = XMLoadFloat3(&mMeshVertices[i2].Pos);
 
 			// We have to iterate over all the triangles in order to find the nearest intersection.
 			float t = 0.0f;

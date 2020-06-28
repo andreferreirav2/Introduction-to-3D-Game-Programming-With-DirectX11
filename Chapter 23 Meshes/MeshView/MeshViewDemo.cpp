@@ -28,7 +28,7 @@
 struct BoundingSphere
 {
 	BoundingSphere() : Center(0.0f, 0.0f, 0.0f), Radius(0.0f) {}
-	XMFLOAT3 Center;
+	DirectX::XMFLOAT3 Center;
 	float Radius;
 };
  
@@ -82,14 +82,14 @@ private:
 
 	static const int SMapSize = 2048;
 	ShadowMap* mSmap;
-	XMFLOAT4X4 mLightView;
-	XMFLOAT4X4 mLightProj;
-	XMFLOAT4X4 mShadowTransform;
+	DirectX::XMFLOAT4X4 mLightView;
+	DirectX::XMFLOAT4X4 mLightProj;
+	DirectX::XMFLOAT4X4 mShadowTransform;
 
 	Ssao* mSsao;
 
 	float mLightRotationAngle;
-	XMFLOAT3 mOriginalLightDir[3];
+	DirectX::XMFLOAT3 mOriginalLightDir[3];
 	DirectionalLight mDirLights[3];
 
 	Camera mCam;
@@ -128,20 +128,20 @@ MeshViewApp::MeshViewApp(HINSTANCE hInstance)
 
 	mCam.SetPosition(0.0f, 2.0f, -15.0f);
  
-	mDirLights[0].Ambient  = XMFLOAT4(0.6f, 0.6f, 0.6f, 1.0f);
-	mDirLights[0].Diffuse  = XMFLOAT4(0.8f, 0.7f, 0.7f, 1.0f);
-	mDirLights[0].Specular = XMFLOAT4(0.6f, 0.6f, 0.7f, 1.0f);
-	mDirLights[0].Direction = XMFLOAT3(-0.57735f, -0.57735f, 0.57735f);
+	mDirLights[0].Ambient  = DirectX::XMFLOAT4(0.6f, 0.6f, 0.6f, 1.0f);
+	mDirLights[0].Diffuse  = DirectX::XMFLOAT4(0.8f, 0.7f, 0.7f, 1.0f);
+	mDirLights[0].Specular = DirectX::XMFLOAT4(0.6f, 0.6f, 0.7f, 1.0f);
+	mDirLights[0].Direction = DirectX::XMFLOAT3(-0.57735f, -0.57735f, 0.57735f);
 
-	mDirLights[1].Ambient  = XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
-	mDirLights[1].Diffuse  = XMFLOAT4(0.4f, 0.4f, 0.4f, 1.0f);
-	mDirLights[1].Specular = XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
-	mDirLights[1].Direction = XMFLOAT3(0.707f, -0.707f, 0.0f);
+	mDirLights[1].Ambient  = DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
+	mDirLights[1].Diffuse  = DirectX::XMFLOAT4(0.4f, 0.4f, 0.4f, 1.0f);
+	mDirLights[1].Specular = DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
+	mDirLights[1].Direction = DirectX::XMFLOAT3(0.707f, -0.707f, 0.0f);
 
-	mDirLights[2].Ambient  = XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
-	mDirLights[2].Diffuse  = XMFLOAT4(0.3f, 0.3f, 0.3f, 1.0f);
-	mDirLights[2].Specular = XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
-	mDirLights[2].Direction = XMFLOAT3(0.0f, 0.0, -1.0f);
+	mDirLights[2].Ambient  = DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
+	mDirLights[2].Diffuse  = DirectX::XMFLOAT4(0.3f, 0.3f, 0.3f, 1.0f);
+	mDirLights[2].Specular = DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
+	mDirLights[2].Direction = DirectX::XMFLOAT3(0.0f, 0.0, -1.0f);
 
 	mOriginalLightDir[0] = mDirLights[0].Direction;
 	mOriginalLightDir[1] = mDirLights[1].Direction;
@@ -222,42 +222,42 @@ bool MeshViewApp::Init()
 	rockInstance2.Model = mRockModel;
 	rockInstance3.Model = mRockModel;
 
-	XMMATRIX modelScale = XMMatrixScaling(1.0f, 1.0f, 1.0f);
-	XMMATRIX modelRot   = XMMatrixRotationY(0.0f);
-	XMMATRIX modelOffset = XMMatrixTranslation(0.0f, 0.0f, 0.0f);
+	DirectX::XMMATRIX modelScale = DirectX::XMMatrixScaling(1.0f, 1.0f, 1.0f);
+	DirectX::XMMATRIX modelRot   = DirectX::XMMatrixRotationY(0.0f);
+	DirectX::XMMATRIX modelOffset = DirectX::XMMatrixTranslation(0.0f, 0.0f, 0.0f);
 	XMStoreFloat4x4(&treeInstance.World, modelScale*modelRot*modelOffset);
 	XMStoreFloat4x4(&baseInstance.World, modelScale*modelRot*modelOffset);
 	
-	modelRot    = XMMatrixRotationY(0.5f*XM_PI);
-	modelOffset = XMMatrixTranslation(0.0f, -2.5f, -12.0f);
+	modelRot    = DirectX::XMMatrixRotationY(0.5f*DirectX::XM_PI);
+	modelOffset = DirectX::XMMatrixTranslation(0.0f, -2.5f, -12.0f);
 	XMStoreFloat4x4(&stairsInstance.World, modelScale*modelRot*modelOffset);
 
-	modelScale = XMMatrixScaling(0.8f, 0.8f, 0.8f);
-	modelOffset = XMMatrixTranslation(-5.0f, 1.5f, 5.0f);
+	modelScale = DirectX::XMMatrixScaling(0.8f, 0.8f, 0.8f);
+	modelOffset = DirectX::XMMatrixTranslation(-5.0f, 1.5f, 5.0f);
 	XMStoreFloat4x4(&pillar1Instance.World, modelScale*modelRot*modelOffset);
 
-	modelScale = XMMatrixScaling(0.8f, 0.8f, 0.8f);
-	modelOffset = XMMatrixTranslation(5.0f, 1.5f, 5.0f);
+	modelScale = DirectX::XMMatrixScaling(0.8f, 0.8f, 0.8f);
+	modelOffset = DirectX::XMMatrixTranslation(5.0f, 1.5f, 5.0f);
 	XMStoreFloat4x4(&pillar2Instance.World, modelScale*modelRot*modelOffset);
 
-	modelScale = XMMatrixScaling(0.8f, 0.8f, 0.8f);
-	modelOffset = XMMatrixTranslation(5.0f, 1.5f, -5.0f);
+	modelScale = DirectX::XMMatrixScaling(0.8f, 0.8f, 0.8f);
+	modelOffset = DirectX::XMMatrixTranslation(5.0f, 1.5f, -5.0f);
 	XMStoreFloat4x4(&pillar3Instance.World, modelScale*modelRot*modelOffset);
 
-	modelScale = XMMatrixScaling(1.0f, 1.0f, 1.0f);
-	modelOffset = XMMatrixTranslation(-5.0f, 1.0f, -5.0f);
+	modelScale = DirectX::XMMatrixScaling(1.0f, 1.0f, 1.0f);
+	modelOffset = DirectX::XMMatrixTranslation(-5.0f, 1.0f, -5.0f);
 	XMStoreFloat4x4(&pillar4Instance.World, modelScale*modelRot*modelOffset);
 
-	modelScale = XMMatrixScaling(0.8f, 0.8f, 0.8f);
-	modelOffset = XMMatrixTranslation(-1.0f, 1.4f, -7.0f);
+	modelScale = DirectX::XMMatrixScaling(0.8f, 0.8f, 0.8f);
+	modelOffset = DirectX::XMMatrixTranslation(-1.0f, 1.4f, -7.0f);
 	XMStoreFloat4x4(&rockInstance1.World, modelScale*modelRot*modelOffset);
 
-	modelScale = XMMatrixScaling(0.8f, 0.8f, 0.8f);
-	modelOffset = XMMatrixTranslation(5.0f, 1.2f, -2.0f);
+	modelScale = DirectX::XMMatrixScaling(0.8f, 0.8f, 0.8f);
+	modelOffset = DirectX::XMMatrixTranslation(5.0f, 1.2f, -2.0f);
 	XMStoreFloat4x4(&rockInstance2.World, modelScale*modelRot*modelOffset);
 
-	modelScale = XMMatrixScaling(0.8f, 0.8f, 0.8f);
-	modelOffset = XMMatrixTranslation(-4.0f, 1.3f, 3.0f);
+	modelScale = DirectX::XMMatrixScaling(0.8f, 0.8f, 0.8f);
+	modelOffset = DirectX::XMMatrixTranslation(-4.0f, 1.3f, 3.0f);
 	XMStoreFloat4x4(&rockInstance3.World, modelScale*modelRot*modelOffset);
 
 	mAlphaClippedModelInstances.push_back(treeInstance);
@@ -276,13 +276,13 @@ bool MeshViewApp::Init()
 	// Compute scene bounding box.
 	//
 
-	XMFLOAT3 minPt(+MathHelper::Infinity, +MathHelper::Infinity, +MathHelper::Infinity);
-	XMFLOAT3 maxPt(-MathHelper::Infinity, -MathHelper::Infinity, -MathHelper::Infinity);
+	DirectX::XMFLOAT3 minPt(+MathHelper::Infinity, +MathHelper::Infinity, +MathHelper::Infinity);
+	DirectX::XMFLOAT3 maxPt(-MathHelper::Infinity, -MathHelper::Infinity, -MathHelper::Infinity);
 	for(UINT i = 0; i < mModelInstances.size(); ++i)
 	{
 		for(UINT j = 0; j < mModelInstances[i].Model->Vertices.size(); ++j)
 		{
-			XMFLOAT3 P = mModelInstances[i].Model->Vertices[j].Pos;
+			DirectX::XMFLOAT3 P = mModelInstances[i].Model->Vertices[j].Pos;
 
 			minPt.x = MathHelper::Min(minPt.x, P.x);
 			minPt.y = MathHelper::Min(minPt.x, P.x);
@@ -297,12 +297,12 @@ bool MeshViewApp::Init()
 	//
 	// Derive scene bounding sphere from bounding box.
 	//
-	mSceneBounds.Center = XMFLOAT3(
+	mSceneBounds.Center = DirectX::XMFLOAT3(
 		0.5f*(minPt.x + maxPt.x),
 		0.5f*(minPt.y + maxPt.y),
 		0.5f*(minPt.z + maxPt.z));
 
-	XMFLOAT3 extent(
+	DirectX::XMFLOAT3 extent(
 		0.5f*(maxPt.x - minPt.x),
 		0.5f*(maxPt.y - minPt.y),
 		0.5f*(maxPt.z - minPt.z));
@@ -392,15 +392,15 @@ void MeshViewApp::DrawScene()
 	md3dImmediateContext->ClearRenderTargetView(mRenderTargetView, reinterpret_cast<const float*>(&Colors::Silver));
 
 	// We already laid down scene depth to the depth buffer in the Normal/Depth map pass,
-	// so we can set the depth comparison test to “EQUALS.”  This prevents any overdraw
+	// so we can set the depth comparison test to ï¿½EQUALS.ï¿½  This prevents any overdraw
 	// in this rendering pass, as only the nearest visible pixels will pass this depth
 	// comparison test.
 
 	md3dImmediateContext->OMSetDepthStencilState(RenderStates::EqualsDSS, 0);
  
-	XMMATRIX view     = mCam.View();
-	XMMATRIX proj     = mCam.Proj();
-	XMMATRIX viewProj = mCam.ViewProj();
+	DirectX::XMMATRIX view     = mCam.View();
+	DirectX::XMMATRIX proj     = mCam.Proj();
+	DirectX::XMMATRIX viewProj = mCam.ViewProj();
 
 	float blendFactor[] = {0.0f, 0.0f, 0.0f, 0.0f};
 
@@ -417,18 +417,18 @@ void MeshViewApp::DrawScene()
 	md3dImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 
-	XMMATRIX world;
-	XMMATRIX worldInvTranspose;
-	XMMATRIX worldViewProj;
+	DirectX::XMMATRIX world;
+	DirectX::XMMATRIX worldInvTranspose;
+	DirectX::XMMATRIX worldViewProj;
 
 	// Transform NDC space [-1,+1]^2 to texture space [0,1]^2
-	XMMATRIX toTexSpace(
+	DirectX::XMMATRIX toTexSpace(
 		0.5f, 0.0f, 0.0f, 0.0f,
 		0.0f, -0.5f, 0.0f, 0.0f,
 		0.0f, 0.0f, 1.0f, 0.0f,
 		0.5f, 0.5f, 0.0f, 1.0f);
 
-	XMMATRIX shadowTransform = XMLoadFloat4x4(&mShadowTransform);
+	DirectX::XMMATRIX shadowTransform = XMLoadFloat4x4(&mShadowTransform);
 
 	
 	UINT stride = sizeof(Vertex::PosNormalTexTan);
@@ -457,7 +457,7 @@ void MeshViewApp::DrawScene()
 			Effects::NormalMapFX->SetWorldViewProj(worldViewProj);
 			Effects::NormalMapFX->SetWorldViewProjTex(worldViewProj*toTexSpace);
 			Effects::NormalMapFX->SetShadowTransform(world*shadowTransform);
-			Effects::NormalMapFX->SetTexTransform(XMMatrixScaling(1.0f, 1.0f, 1.0f));
+			Effects::NormalMapFX->SetTexTransform(DirectX::XMMatrixScaling(1.0f, 1.0f, 1.0f));
 
 			for(UINT subset = 0; subset < mModelInstances[modelIndex].Model->SubsetCount; ++subset)
 			{
@@ -487,7 +487,7 @@ void MeshViewApp::DrawScene()
 			Effects::NormalMapFX->SetWorldViewProj(worldViewProj);
 			Effects::NormalMapFX->SetWorldViewProjTex(worldViewProj*toTexSpace);
 			Effects::NormalMapFX->SetShadowTransform(world*shadowTransform);
-			Effects::NormalMapFX->SetTexTransform(XMMatrixScaling(1.0f, 1.0f, 1.0f));
+			Effects::NormalMapFX->SetTexTransform(DirectX::XMMatrixScaling(1.0f, 1.0f, 1.0f));
 
 			for(UINT subset = 0; subset < mAlphaClippedModelInstances[modelIndex].Model->SubsetCount; ++subset)
 			{
@@ -555,18 +555,18 @@ void MeshViewApp::OnMouseMove(WPARAM btnState, int x, int y)
 
 void MeshViewApp::DrawSceneToSsaoNormalDepthMap()
 {
-	XMMATRIX view     = mCam.View();
-	XMMATRIX proj     = mCam.Proj();
-	XMMATRIX viewProj = XMMatrixMultiply(view, proj);
+	DirectX::XMMATRIX view     = mCam.View();
+	DirectX::XMMATRIX proj     = mCam.Proj();
+	DirectX::XMMATRIX viewProj = DirectX::XMMatrixMultiply(view, proj);
 
 	ID3DX11EffectTechnique* tech = Effects::SsaoNormalDepthFX->NormalDepthTech;
 	ID3DX11EffectTechnique* alphaClippedTech = Effects::SsaoNormalDepthFX->NormalDepthAlphaClipTech;
 
-	XMMATRIX world;
-	XMMATRIX worldInvTranspose;
-	XMMATRIX worldView;
-	XMMATRIX worldInvTransposeView;
-	XMMATRIX worldViewProj;
+	DirectX::XMMATRIX world;
+	DirectX::XMMATRIX worldInvTranspose;
+	DirectX::XMMATRIX worldView;
+	DirectX::XMMATRIX worldInvTransposeView;
+	DirectX::XMMATRIX worldViewProj;
 
 
 	md3dImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -590,7 +590,7 @@ void MeshViewApp::DrawSceneToSsaoNormalDepthMap()
 			Effects::SsaoNormalDepthFX->SetWorldView(worldView);
 			Effects::SsaoNormalDepthFX->SetWorldInvTransposeView(worldInvTransposeView);
 			Effects::SsaoNormalDepthFX->SetWorldViewProj(worldViewProj);
-			Effects::SsaoNormalDepthFX->SetTexTransform(XMMatrixScaling(1.0f, 1.0f, 1.0f));
+			Effects::SsaoNormalDepthFX->SetTexTransform(DirectX::XMMatrixScaling(1.0f, 1.0f, 1.0f));
 
 			tech->GetPassByIndex(p)->Apply(0, md3dImmediateContext);
 			for(UINT subset = 0; subset < mModelInstances[modelIndex].Model->SubsetCount; ++subset)
@@ -616,7 +616,7 @@ void MeshViewApp::DrawSceneToSsaoNormalDepthMap()
 			Effects::SsaoNormalDepthFX->SetWorldView(worldView);
 			Effects::SsaoNormalDepthFX->SetWorldInvTransposeView(worldInvTransposeView);
 			Effects::SsaoNormalDepthFX->SetWorldViewProj(worldViewProj);
-			Effects::SsaoNormalDepthFX->SetTexTransform(XMMatrixScaling(1.0f, 1.0f, 1.0f));
+			Effects::SsaoNormalDepthFX->SetTexTransform(DirectX::XMMatrixScaling(1.0f, 1.0f, 1.0f));
 			
 			for(UINT subset = 0; subset < mAlphaClippedModelInstances[modelIndex].Model->SubsetCount; ++subset)
 			{
@@ -632,9 +632,9 @@ void MeshViewApp::DrawSceneToSsaoNormalDepthMap()
 
 void MeshViewApp::DrawSceneToShadowMap()
 {
-	XMMATRIX view     = XMLoadFloat4x4(&mLightView);
-	XMMATRIX proj     = XMLoadFloat4x4(&mLightProj);
-	XMMATRIX viewProj = XMMatrixMultiply(view, proj);
+	DirectX::XMMATRIX view     = XMLoadFloat4x4(&mLightView);
+	DirectX::XMMATRIX proj     = XMLoadFloat4x4(&mLightProj);
+	DirectX::XMMATRIX viewProj = DirectX::XMMatrixMultiply(view, proj);
 
 	Effects::BuildShadowMapFX->SetEyePosW(mCam.GetPosition());
 	Effects::BuildShadowMapFX->SetViewProj(viewProj);
@@ -644,9 +644,9 @@ void MeshViewApp::DrawSceneToShadowMap()
 
 	md3dImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-	XMMATRIX world;
-	XMMATRIX worldInvTranspose;
-	XMMATRIX worldViewProj;
+	DirectX::XMMATRIX world;
+	DirectX::XMMATRIX worldInvTranspose;
+	DirectX::XMMATRIX worldViewProj;
 
 	md3dImmediateContext->IASetInputLayout(InputLayouts::PosNormalTexTan);
      
@@ -666,7 +666,7 @@ void MeshViewApp::DrawSceneToShadowMap()
 			Effects::BuildShadowMapFX->SetWorld(world);
 			Effects::BuildShadowMapFX->SetWorldInvTranspose(worldInvTranspose);
 			Effects::BuildShadowMapFX->SetWorldViewProj(worldViewProj);
-			Effects::BuildShadowMapFX->SetTexTransform(XMMatrixScaling(1.0f, 1.0f, 1.0f));
+			Effects::BuildShadowMapFX->SetTexTransform(DirectX::XMMatrixScaling(1.0f, 1.0f, 1.0f));
 
 			tech->GetPassByIndex(p)->Apply(0, md3dImmediateContext);
 
@@ -689,7 +689,7 @@ void MeshViewApp::DrawSceneToShadowMap()
 			Effects::BuildShadowMapFX->SetWorld(world);
 			Effects::BuildShadowMapFX->SetWorldInvTranspose(worldInvTranspose);
 			Effects::BuildShadowMapFX->SetWorldViewProj(worldViewProj);
-			Effects::BuildShadowMapFX->SetTexTransform(XMMatrixScaling(1.0f, 1.0f, 1.0f));
+			Effects::BuildShadowMapFX->SetTexTransform(DirectX::XMMatrixScaling(1.0f, 1.0f, 1.0f));
 
 			for(UINT subset = 0; subset < mAlphaClippedModelInstances[modelIndex].Model->SubsetCount; ++subset)
 			{
@@ -714,7 +714,7 @@ void MeshViewApp::DrawScreenQuad(ID3D11ShaderResourceView* srv)
 	md3dImmediateContext->IASetIndexBuffer(mScreenQuadIB, DXGI_FORMAT_R32_UINT, 0);
  
 	// Scale and shift quad to lower-right corner.
-	XMMATRIX world(
+	DirectX::XMMATRIX world(
 		0.5f, 0.0f, 0.0f, 0.0f,
 		0.0f, 0.5f, 0.0f, 0.0f,
 		0.0f, 0.0f, 1.0f, 0.0f,
@@ -737,16 +737,16 @@ void MeshViewApp::DrawScreenQuad(ID3D11ShaderResourceView* srv)
 void MeshViewApp::BuildShadowTransform()
 {
 	// Only the first "main" light casts a shadow.
-	XMVECTOR lightDir = XMLoadFloat3(&mDirLights[0].Direction);
-	XMVECTOR lightPos = -2.0f*mSceneBounds.Radius*lightDir;
-	XMVECTOR targetPos = XMLoadFloat3(&mSceneBounds.Center);
-	XMVECTOR up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+	DirectX::XMVECTOR lightDir = XMLoadFloat3(&mDirLights[0].Direction);
+	DirectX::XMVECTOR lightPos = -2.0f*mSceneBounds.Radius*lightDir;
+	DirectX::XMVECTOR targetPos = XMLoadFloat3(&mSceneBounds.Center);
+	DirectX::XMVECTOR up = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 
-	XMMATRIX V = XMMatrixLookAtLH(lightPos, targetPos, up);
+	DirectX::XMMATRIX V = DirectX::XMMatrixLookAtLH(lightPos, targetPos, up);
 
 	// Transform bounding sphere to light space.
-	XMFLOAT3 sphereCenterLS;
-	XMStoreFloat3(&sphereCenterLS, XMVector3TransformCoord(targetPos, V));
+	DirectX::XMFLOAT3 sphereCenterLS;
+	XMStoreFloat3(&sphereCenterLS, DirectX::XMVector3TransformCoord(targetPos, V));
 
 	// Ortho frustum in light space encloses scene.
 	float l = sphereCenterLS.x - mSceneBounds.Radius;
@@ -755,16 +755,16 @@ void MeshViewApp::BuildShadowTransform()
 	float r = sphereCenterLS.x + mSceneBounds.Radius;
 	float t = sphereCenterLS.y + mSceneBounds.Radius;
 	float f = sphereCenterLS.z + mSceneBounds.Radius;
-	XMMATRIX P = XMMatrixOrthographicOffCenterLH(l, r, b, t, n, f);
+	DirectX::XMMATRIX P = DirectX::XMMatrixOrthographicOffCenterLH(l, r, b, t, n, f);
 
 	// Transform NDC space [-1,+1]^2 to texture space [0,1]^2
-	XMMATRIX T(
+	DirectX::XMMATRIX T(
 		0.5f, 0.0f, 0.0f, 0.0f,
 		0.0f, -0.5f, 0.0f, 0.0f,
 		0.0f, 0.0f, 1.0f, 0.0f,
 		0.5f, 0.5f, 0.0f, 1.0f);
 
-	XMMATRIX S = V*P*T;
+	DirectX::XMMATRIX S = V*P*T;
 
 	XMStoreFloat4x4(&mLightView, V);
 	XMStoreFloat4x4(&mLightProj, P);

@@ -16,8 +16,8 @@
  
 struct Vertex
 {
-	XMFLOAT3 Pos;
-	XMFLOAT4 Color;
+	DirectX::XMFLOAT3 Pos;
+	DirectX::XMFLOAT4 Color;
 };
 
 class SkullApp : public D3DApp
@@ -53,12 +53,12 @@ private:
 	ID3D11RasterizerState* mWireframeRS;
 
 	// Define transformations from local spaces to world space.
-	XMFLOAT4X4 mSkullWorld;
+	DirectX::XMFLOAT4X4 mSkullWorld;
 
 	UINT mSkullIndexCount;
 
-	XMFLOAT4X4 mView;
-	XMFLOAT4X4 mProj;
+	DirectX::XMFLOAT4X4 mView;
+	DirectX::XMFLOAT4X4 mProj;
 
 	float mTheta;
 	float mPhi;
@@ -94,11 +94,11 @@ SkullApp::SkullApp(HINSTANCE hInstance)
 	mLastMousePos.x = 0;
 	mLastMousePos.y = 0;
 
-	XMMATRIX I = XMMatrixIdentity();
+	DirectX::XMMATRIX I = DirectX::XMMatrixIdentity();
 	XMStoreFloat4x4(&mView, I);
 	XMStoreFloat4x4(&mProj, I);
 
-	XMMATRIX T = XMMatrixTranslation(0.0f, -2.0f, 0.0f);
+	DirectX::XMMATRIX T = DirectX::XMMatrixTranslation(0.0f, -2.0f, 0.0f);
 	XMStoreFloat4x4(&mSkullWorld, T);
 }
 
@@ -136,7 +136,7 @@ void SkullApp::OnResize()
 {
 	D3DApp::OnResize();
 
-	XMMATRIX P = XMMatrixPerspectiveFovLH(0.25f*MathHelper::Pi, AspectRatio(), 1.0f, 1000.0f);
+	DirectX::XMMATRIX P = DirectX::XMMatrixPerspectiveFovLH(0.25f*MathHelper::Pi, AspectRatio(), 1.0f, 1000.0f);
 	XMStoreFloat4x4(&mProj, P);
 }
 
@@ -148,11 +148,11 @@ void SkullApp::UpdateScene(float dt)
 	float y = mRadius*cosf(mPhi);
 
 	// Build the view matrix.
-	XMVECTOR pos    = XMVectorSet(x, y, z, 1.0f);
-	XMVECTOR target = XMVectorZero();
-	XMVECTOR up     = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+	DirectX::XMVECTOR pos    = DirectX::XMVectorSet(x, y, z, 1.0f);
+	DirectX::XMVECTOR target = DirectX::XMVectorZero();
+	DirectX::XMVECTOR up     = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 
-	XMMATRIX V = XMMatrixLookAtLH(pos, target, up);
+	DirectX::XMMATRIX V = DirectX::XMMatrixLookAtLH(pos, target, up);
 	XMStoreFloat4x4(&mView, V);
 }
 
@@ -173,10 +173,10 @@ void SkullApp::DrawScene()
 
 	// Set constants
 	
-	XMMATRIX view  = XMLoadFloat4x4(&mView);
-	XMMATRIX proj  = XMLoadFloat4x4(&mProj);
-	XMMATRIX world = XMLoadFloat4x4(&mSkullWorld);
-	XMMATRIX worldViewProj = world*view*proj;
+	DirectX::XMMATRIX view  = XMLoadFloat4x4(&mView);
+	DirectX::XMMATRIX proj  = XMLoadFloat4x4(&mProj);
+	DirectX::XMMATRIX world = XMLoadFloat4x4(&mSkullWorld);
+	DirectX::XMMATRIX worldViewProj = world*view*proj;
  
 	mfxWorldViewProj->SetMatrix(reinterpret_cast<float*>(&worldViewProj));
 
@@ -255,7 +255,7 @@ void SkullApp::BuildGeometryBuffers()
 	fin >> ignore >> ignore >> ignore >> ignore;
 	
 	float nx, ny, nz;
-	XMFLOAT4 black(0.0f, 0.0f, 0.0f, 1.0f);
+	DirectX::XMFLOAT4 black(0.0f, 0.0f, 0.0f, 1.0f);
 
 	std::vector<Vertex> vertices(vcount);
 	for(UINT i = 0; i < vcount; ++i)

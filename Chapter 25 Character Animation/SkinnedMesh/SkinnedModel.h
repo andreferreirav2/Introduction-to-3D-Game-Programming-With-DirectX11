@@ -32,8 +32,8 @@ struct SkinnedModelInstance
 	SkinnedModel* Model;
 	float TimePos;
 	std::string ClipName;
-	XMFLOAT4X4 World;
-	std::vector<XMFLOAT4X4> FinalTransforms;
+	DirectX::XMFLOAT4X4 World;
+	std::vector<DirectX::XMFLOAT4X4> FinalTransforms;
 
 	void Update(float dt);
 };

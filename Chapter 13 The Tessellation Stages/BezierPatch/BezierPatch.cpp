@@ -41,10 +41,10 @@ private:
 private:
 	ID3D11Buffer* mQuadPatchVB;
 
-	XMFLOAT4X4 mView;
-	XMFLOAT4X4 mProj;
+	DirectX::XMFLOAT4X4 mView;
+	DirectX::XMFLOAT4X4 mProj;
 
-	XMFLOAT3 mEyePosW;
+	DirectX::XMFLOAT3 mEyePosW;
 
 	float mTheta;
 	float mPhi;
@@ -79,7 +79,7 @@ BasicTessellation::BasicTessellation(HINSTANCE hInstance)
 	mLastMousePos.x = 0;
 	mLastMousePos.y = 0;
 
-	XMMATRIX I = XMMatrixIdentity();
+	DirectX::XMMATRIX I = DirectX::XMMatrixIdentity();
 	XMStoreFloat4x4(&mView, I);
 	XMStoreFloat4x4(&mProj, I);
 }
@@ -113,7 +113,7 @@ void BasicTessellation::OnResize()
 {
 	D3DApp::OnResize();
 
-	XMMATRIX P = XMMatrixPerspectiveFovLH(0.25f*MathHelper::Pi, AspectRatio(), 1.0f, 1000.0f);
+	DirectX::XMMATRIX P = DirectX::XMMatrixPerspectiveFovLH(0.25f*MathHelper::Pi, AspectRatio(), 1.0f, 1000.0f);
 	XMStoreFloat4x4(&mProj, P);
 }
 
@@ -124,14 +124,14 @@ void BasicTessellation::UpdateScene(float dt)
 	float z = mRadius*sinf(mPhi)*sinf(mTheta);
 	float y = mRadius*cosf(mPhi);
 
-	mEyePosW = XMFLOAT3(x, y, z);
+	mEyePosW = DirectX::XMFLOAT3(x, y, z);
 
 	// Build the view matrix.
-	XMVECTOR pos    = XMVectorSet(x, y, z, 1.0f);
-	XMVECTOR target = XMVectorZero();
-	XMVECTOR up     = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+	DirectX::XMVECTOR pos    = DirectX::XMVectorSet(x, y, z, 1.0f);
+	DirectX::XMVECTOR target = DirectX::XMVectorZero();
+	DirectX::XMVECTOR up     = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 
-	XMMATRIX V = XMMatrixLookAtLH(pos, target, up);
+	DirectX::XMMATRIX V = DirectX::XMMatrixLookAtLH(pos, target, up);
 	XMStoreFloat4x4(&mView, V);
 }
 
@@ -145,9 +145,9 @@ void BasicTessellation::DrawScene()
  
 	float blendFactor[] = {0.0f, 0.0f, 0.0f, 0.0f};
 
-	XMMATRIX view  = XMLoadFloat4x4(&mView);
-	XMMATRIX proj  = XMLoadFloat4x4(&mProj);
-	XMMATRIX viewProj = view*proj;
+	DirectX::XMMATRIX view  = XMLoadFloat4x4(&mView);
+	DirectX::XMMATRIX proj  = XMLoadFloat4x4(&mProj);
+	DirectX::XMMATRIX viewProj = view*proj;
 
 	md3dImmediateContext->IASetInputLayout(InputLayouts::Pos);
     md3dImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_16_CONTROL_POINT_PATCHLIST);
@@ -169,14 +169,14 @@ void BasicTessellation::DrawScene()
 		md3dImmediateContext->IASetVertexBuffers(0, 1, &mQuadPatchVB, &stride, &offset);
 
 		// Set per object constants.
-		XMMATRIX world = XMMatrixIdentity();
-		XMMATRIX worldInvTranspose = MathHelper::InverseTranspose(world);
-		XMMATRIX worldViewProj = world*view*proj;
+		DirectX::XMMATRIX world = DirectX::XMMatrixIdentity();
+		DirectX::XMMATRIX worldInvTranspose = MathHelper::InverseTranspose(world);
+		DirectX::XMMATRIX worldViewProj = world*view*proj;
 		
 		Effects::BezierTessellationFX->SetWorld(world);
 		Effects::BezierTessellationFX->SetWorldInvTranspose(worldInvTranspose);
 		Effects::BezierTessellationFX->SetWorldViewProj(worldViewProj);
-		Effects::BezierTessellationFX->SetTexTransform(XMMatrixIdentity());
+		Effects::BezierTessellationFX->SetTexTransform(DirectX::XMMatrixIdentity());
 		//Effects::BezierTessellationFX->SetMaterial(0);
 		Effects::BezierTessellationFX->SetDiffuseMap(0);
 
@@ -237,36 +237,36 @@ void BasicTessellation::BuildQuadPatchBuffer()
 {
 	D3D11_BUFFER_DESC vbd;
     vbd.Usage = D3D11_USAGE_IMMUTABLE;
-	vbd.ByteWidth = sizeof(XMFLOAT3) * 16;
+	vbd.ByteWidth = sizeof(DirectX::XMFLOAT3) * 16;
     vbd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
     vbd.CPUAccessFlags = 0;
     vbd.MiscFlags = 0;
 
-	XMFLOAT3 vertices[16] = 
+	DirectX::XMFLOAT3 vertices[16] = 
 	{
 		// Row 0
-		XMFLOAT3(-10.0f, -10.0f, +15.0f),
-		XMFLOAT3(-5.0f,  0.0f, +15.0f),
-		XMFLOAT3(+5.0f,  0.0f, +15.0f),
-		XMFLOAT3(+10.0f, 0.0f, +15.0f), 
+		DirectX::XMFLOAT3(-10.0f, -10.0f, +15.0f),
+		DirectX::XMFLOAT3(-5.0f,  0.0f, +15.0f),
+		DirectX::XMFLOAT3(+5.0f,  0.0f, +15.0f),
+		DirectX::XMFLOAT3(+10.0f, 0.0f, +15.0f), 
 
 		// Row 1
-		XMFLOAT3(-15.0f, 0.0f, +5.0f),
-		XMFLOAT3(-5.0f,  0.0f, +5.0f),
-		XMFLOAT3(+5.0f,  20.0f, +5.0f),
-		XMFLOAT3(+15.0f, 0.0f, +5.0f), 
+		DirectX::XMFLOAT3(-15.0f, 0.0f, +5.0f),
+		DirectX::XMFLOAT3(-5.0f,  0.0f, +5.0f),
+		DirectX::XMFLOAT3(+5.0f,  20.0f, +5.0f),
+		DirectX::XMFLOAT3(+15.0f, 0.0f, +5.0f), 
 
 		// Row 2
-		XMFLOAT3(-15.0f, 0.0f, -5.0f),
-		XMFLOAT3(-5.0f,  0.0f, -5.0f),
-		XMFLOAT3(+5.0f,  0.0f, -5.0f),
-		XMFLOAT3(+15.0f, 0.0f, -5.0f), 
+		DirectX::XMFLOAT3(-15.0f, 0.0f, -5.0f),
+		DirectX::XMFLOAT3(-5.0f,  0.0f, -5.0f),
+		DirectX::XMFLOAT3(+5.0f,  0.0f, -5.0f),
+		DirectX::XMFLOAT3(+15.0f, 0.0f, -5.0f), 
 
 		// Row 3
-		XMFLOAT3(-10.0f, 10.0f, -15.0f),
-		XMFLOAT3(-5.0f,  0.0f, -15.0f),
-		XMFLOAT3(+5.0f,  0.0f, -15.0f),
-		XMFLOAT3(+25.0f, 10.0f, -15.0f)
+		DirectX::XMFLOAT3(-10.0f, 10.0f, -15.0f),
+		DirectX::XMFLOAT3(-5.0f,  0.0f, -15.0f),
+		DirectX::XMFLOAT3(+5.0f,  0.0f, -15.0f),
+		DirectX::XMFLOAT3(+25.0f, 10.0f, -15.0f)
 	};
 
     D3D11_SUBRESOURCE_DATA vinitData;

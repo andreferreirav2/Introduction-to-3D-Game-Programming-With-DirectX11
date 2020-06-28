@@ -17,8 +17,8 @@
 
 struct Vertex
 {
-	XMFLOAT3 Pos;
-	XMFLOAT3 Normal;
+	DirectX::XMFLOAT3 Pos;
+	DirectX::XMFLOAT3 Normal;
 };
 
 class LightingApp : public D3DApp
@@ -38,7 +38,7 @@ public:
 
 private:
 	float GetHillHeight(float x, float z)const;
-	XMFLOAT3 GetHillNormal(float x, float z)const;
+	DirectX::XMFLOAT3 GetHillNormal(float x, float z)const;
 	void BuildLandGeometryBuffers();
 	void BuildWaveGeometryBuffers();
 	void BuildFX();
@@ -72,15 +72,15 @@ private:
 	ID3D11InputLayout* mInputLayout;
 
 	// Define transformations from local spaces to world space.
-	XMFLOAT4X4 mLandWorld;
-	XMFLOAT4X4 mWavesWorld;
+	DirectX::XMFLOAT4X4 mLandWorld;
+	DirectX::XMFLOAT4X4 mWavesWorld;
 
-	XMFLOAT4X4 mView;
-	XMFLOAT4X4 mProj;
+	DirectX::XMFLOAT4X4 mView;
+	DirectX::XMFLOAT4X4 mProj;
 
 	UINT mLandIndexCount;
 
-	XMFLOAT3 mEyePosW;
+	DirectX::XMFLOAT3 mEyePosW;
 
 	float mTheta;
 	float mPhi;
@@ -118,43 +118,43 @@ LightingApp::LightingApp(HINSTANCE hInstance)
 	mLastMousePos.x = 0;
 	mLastMousePos.y = 0;
 
-	XMMATRIX I = XMMatrixIdentity();
+	DirectX::XMMATRIX I = DirectX::XMMatrixIdentity();
 	XMStoreFloat4x4(&mLandWorld, I);
 	XMStoreFloat4x4(&mWavesWorld, I);
 	XMStoreFloat4x4(&mView, I);
 	XMStoreFloat4x4(&mProj, I);
 
-	XMMATRIX wavesOffset = XMMatrixTranslation(0.0f, -3.0f, 0.0f);
+	DirectX::XMMATRIX wavesOffset = DirectX::XMMatrixTranslation(0.0f, -3.0f, 0.0f);
 	XMStoreFloat4x4(&mWavesWorld, wavesOffset);
 
 	// Directional light.
-	mDirLight.Ambient  = XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
-	mDirLight.Diffuse  = XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
-	mDirLight.Specular = XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
-	mDirLight.Direction = XMFLOAT3(0.57735f, -0.57735f, 0.57735f);
+	mDirLight.Ambient  = DirectX::XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
+	mDirLight.Diffuse  = DirectX::XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
+	mDirLight.Specular = DirectX::XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
+	mDirLight.Direction = DirectX::XMFLOAT3(0.57735f, -0.57735f, 0.57735f);
  
 	// Point light--position is changed every frame to animate in UpdateScene function.
-	mPointLight.Ambient  = XMFLOAT4(0.3f, 0.3f, 0.3f, 1.0f);
-	mPointLight.Diffuse  = XMFLOAT4(0.7f, 0.7f, 0.7f, 1.0f);
-	mPointLight.Specular = XMFLOAT4(0.7f, 0.7f, 0.7f, 1.0f);
-	mPointLight.Att      = XMFLOAT3(0.0f, 0.1f, 0.0f);
+	mPointLight.Ambient  = DirectX::XMFLOAT4(0.3f, 0.3f, 0.3f, 1.0f);
+	mPointLight.Diffuse  = DirectX::XMFLOAT4(0.7f, 0.7f, 0.7f, 1.0f);
+	mPointLight.Specular = DirectX::XMFLOAT4(0.7f, 0.7f, 0.7f, 1.0f);
+	mPointLight.Att      = DirectX::XMFLOAT3(0.0f, 0.1f, 0.0f);
 	mPointLight.Range    = 25.0f;
 
 	// Spot light--position and direction changed every frame to animate in UpdateScene function.
-	mSpotLight.Ambient  = XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
-	mSpotLight.Diffuse  = XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f);
-	mSpotLight.Specular = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-	mSpotLight.Att      = XMFLOAT3(1.0f, 0.0f, 0.0f);
+	mSpotLight.Ambient  = DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
+	mSpotLight.Diffuse  = DirectX::XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f);
+	mSpotLight.Specular = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+	mSpotLight.Att      = DirectX::XMFLOAT3(1.0f, 0.0f, 0.0f);
 	mSpotLight.Spot     = 96.0f;
 	mSpotLight.Range    = 10000.0f;
 
-	mLandMat.Ambient  = XMFLOAT4(0.48f, 0.77f, 0.46f, 1.0f);
-	mLandMat.Diffuse  = XMFLOAT4(0.48f, 0.77f, 0.46f, 1.0f);
-	mLandMat.Specular = XMFLOAT4(0.2f, 0.2f, 0.2f, 16.0f);
+	mLandMat.Ambient  = DirectX::XMFLOAT4(0.48f, 0.77f, 0.46f, 1.0f);
+	mLandMat.Diffuse  = DirectX::XMFLOAT4(0.48f, 0.77f, 0.46f, 1.0f);
+	mLandMat.Specular = DirectX::XMFLOAT4(0.2f, 0.2f, 0.2f, 16.0f);
 
-	mWavesMat.Ambient  = XMFLOAT4(0.137f, 0.42f, 0.556f, 1.0f);
-	mWavesMat.Diffuse  = XMFLOAT4(0.137f, 0.42f, 0.556f, 1.0f);
-	mWavesMat.Specular = XMFLOAT4(0.8f, 0.8f, 0.8f, 96.0f);
+	mWavesMat.Ambient  = DirectX::XMFLOAT4(0.137f, 0.42f, 0.556f, 1.0f);
+	mWavesMat.Diffuse  = DirectX::XMFLOAT4(0.137f, 0.42f, 0.556f, 1.0f);
+	mWavesMat.Specular = DirectX::XMFLOAT4(0.8f, 0.8f, 0.8f, 96.0f);
 }
 
 LightingApp::~LightingApp()
@@ -187,7 +187,7 @@ void LightingApp::OnResize()
 {
 	D3DApp::OnResize();
 
-	XMMATRIX P = XMMatrixPerspectiveFovLH(0.25f*MathHelper::Pi, AspectRatio(), 1.0f, 1000.0f);
+	DirectX::XMMATRIX P = DirectX::XMMatrixPerspectiveFovLH(0.25f*MathHelper::Pi, AspectRatio(), 1.0f, 1000.0f);
 	XMStoreFloat4x4(&mProj, P);
 }
 
@@ -198,14 +198,14 @@ void LightingApp::UpdateScene(float dt)
 	float z = mRadius*sinf(mPhi)*sinf(mTheta);
 	float y = mRadius*cosf(mPhi);
 
-	mEyePosW = XMFLOAT3(x, y, z);
+	mEyePosW = DirectX::XMFLOAT3(x, y, z);
 
 	// Build the view matrix.
-	XMVECTOR pos    = XMVectorSet(x, y, z, 1.0f);
-	XMVECTOR target = XMVectorZero();
-	XMVECTOR up     = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+	DirectX::XMVECTOR pos    = DirectX::XMVectorSet(x, y, z, 1.0f);
+	DirectX::XMVECTOR target = DirectX::XMVectorZero();
+	DirectX::XMVECTOR up     = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 
-	XMMATRIX V = XMMatrixLookAtLH(pos, target, up);
+	DirectX::XMMATRIX V = DirectX::XMMatrixLookAtLH(pos, target, up);
 	XMStoreFloat4x4(&mView, V);
 
 	//
@@ -257,7 +257,7 @@ void LightingApp::UpdateScene(float dt)
 	// same direction the camera is looking.  In this way, it looks
 	// like we are holding a flashlight.
 	mSpotLight.Position = mEyePosW;
-	XMStoreFloat3(&mSpotLight.Direction, XMVector3Normalize(target - pos));
+	XMStoreFloat3(&mSpotLight.Direction, DirectX::XMVector3Normalize(target - pos));
 }
 
 void LightingApp::DrawScene()
@@ -271,9 +271,9 @@ void LightingApp::DrawScene()
 	UINT stride = sizeof(Vertex);
     UINT offset = 0;
 
-	XMMATRIX view  = XMLoadFloat4x4(&mView);
-	XMMATRIX proj  = XMLoadFloat4x4(&mProj);
-	XMMATRIX viewProj = view*proj;
+	DirectX::XMMATRIX view  = XMLoadFloat4x4(&mView);
+	DirectX::XMMATRIX proj  = XMLoadFloat4x4(&mProj);
+	DirectX::XMMATRIX viewProj = view*proj;
 
 	// Set per frame constants.
 	mfxDirLight->SetRawValue(&mDirLight, 0, sizeof(mDirLight));
@@ -292,9 +292,9 @@ void LightingApp::DrawScene()
 		md3dImmediateContext->IASetIndexBuffer(mLandIB, DXGI_FORMAT_R32_UINT, 0);
 
 		// Set per object constants.
-		XMMATRIX world = XMLoadFloat4x4(&mLandWorld);
-		XMMATRIX worldInvTranspose = MathHelper::InverseTranspose(world);
-		XMMATRIX worldViewProj = world*view*proj;
+		DirectX::XMMATRIX world = XMLoadFloat4x4(&mLandWorld);
+		DirectX::XMMATRIX worldInvTranspose = MathHelper::InverseTranspose(world);
+		DirectX::XMMATRIX worldViewProj = world*view*proj;
 		
 		mfxWorld->SetMatrix(reinterpret_cast<float*>(&world));
 		mfxWorldInvTranspose->SetMatrix(reinterpret_cast<float*>(&worldInvTranspose));
@@ -377,15 +377,15 @@ float LightingApp::GetHillHeight(float x, float z)const
 	return 0.3f*( z*sinf(0.1f*x) + x*cosf(0.1f*z) );
 }
 
-XMFLOAT3 LightingApp::GetHillNormal(float x, float z)const
+DirectX::XMFLOAT3 LightingApp::GetHillNormal(float x, float z)const
 {
 	// n = (-df/dx, 1, -df/dz)
-	XMFLOAT3 n(
+	DirectX::XMFLOAT3 n(
 		-0.03f*z*cosf(0.1f*x) - 0.3f*cosf(0.1f*z),
 		1.0f,
 		-0.3f*sinf(0.1f*x) + 0.03f*x*sinf(0.1f*z));
 	
-	XMVECTOR unitNormal = XMVector3Normalize(XMLoadFloat3(&n));
+	DirectX::XMVECTOR unitNormal = DirectX::XMVector3Normalize(XMLoadFloat3(&n));
 	XMStoreFloat3(&n, unitNormal);
 
 	return n;
@@ -409,7 +409,7 @@ void LightingApp::BuildLandGeometryBuffers()
 	std::vector<Vertex> vertices(grid.Vertices.size());
 	for(size_t i = 0; i < grid.Vertices.size(); ++i)
 	{
-		XMFLOAT3 p = grid.Vertices[i].Position;
+		DirectX::XMFLOAT3 p = grid.Vertices[i].Position;
 
 		p.y = GetHillHeight(p.x, p.z);
 		

@@ -18,8 +18,8 @@
 
 struct Vertex
 {
-	XMFLOAT3 Pos;
-	XMFLOAT4 Color;
+	DirectX::XMFLOAT3 Pos;
+	DirectX::XMFLOAT4 Color;
 };
 
 class WavesDemo : public D3DApp
@@ -59,15 +59,15 @@ private:
 	ID3D11RasterizerState* mWireframeRS;
 
 	// Define transformations from local spaces to world space.
-	XMFLOAT4X4 mGridWorld;
-	XMFLOAT4X4 mWavesWorld;
+	DirectX::XMFLOAT4X4 mGridWorld;
+	DirectX::XMFLOAT4X4 mWavesWorld;
 
 	UINT mGridIndexCount;
 
 	Waves mWaves;
 
-	XMFLOAT4X4 mView;
-	XMFLOAT4X4 mProj;
+	DirectX::XMFLOAT4X4 mView;
+	DirectX::XMFLOAT4X4 mProj;
 
 	float mTheta;
 	float mPhi;
@@ -103,7 +103,7 @@ WavesDemo::WavesDemo(HINSTANCE hInstance)
 	mLastMousePos.x = 0;
 	mLastMousePos.y = 0;
 
-	XMMATRIX I = XMMatrixIdentity();
+	DirectX::XMMATRIX I = DirectX::XMMatrixIdentity();
 	XMStoreFloat4x4(&mGridWorld, I);
 	XMStoreFloat4x4(&mWavesWorld, I);
 	XMStoreFloat4x4(&mView, I);
@@ -149,7 +149,7 @@ void WavesDemo::OnResize()
 {
 	D3DApp::OnResize();
 
-	XMMATRIX P = XMMatrixPerspectiveFovLH(0.25f*MathHelper::Pi, AspectRatio(), 1.0f, 1000.0f);
+	DirectX::XMMATRIX P = DirectX::XMMatrixPerspectiveFovLH(0.25f*MathHelper::Pi, AspectRatio(), 1.0f, 1000.0f);
 	XMStoreFloat4x4(&mProj, P);
 }
 
@@ -161,11 +161,11 @@ void WavesDemo::UpdateScene(float dt)
 	float y = mRadius*cosf(mPhi);
 
 	// Build the view matrix.
-	XMVECTOR pos    = XMVectorSet(x, y, z, 1.0f);
-	XMVECTOR target = XMVectorZero();
-	XMVECTOR up     = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+	DirectX::XMVECTOR pos    = DirectX::XMVectorSet(x, y, z, 1.0f);
+	DirectX::XMVECTOR target = DirectX::XMVectorZero();
+	DirectX::XMVECTOR up     = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 
-	XMMATRIX V = XMMatrixLookAtLH(pos, target, up);
+	DirectX::XMMATRIX V = DirectX::XMMatrixLookAtLH(pos, target, up);
 	XMStoreFloat4x4(&mView, V);
 
 	//
@@ -197,7 +197,7 @@ void WavesDemo::UpdateScene(float dt)
 	for(UINT i = 0; i < mWaves.VertexCount(); ++i)
 	{
 		v[i].Pos = mWaves[i];
-		v[i].Color = XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
+		v[i].Color = DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
 	}
 
 	md3dImmediateContext->Unmap(mWavesVB, 0);
@@ -215,8 +215,8 @@ void WavesDemo::DrawScene()
 	UINT stride = sizeof(Vertex);
     UINT offset = 0;
     
-	XMMATRIX view  = XMLoadFloat4x4(&mView);
-	XMMATRIX proj  = XMLoadFloat4x4(&mProj);
+	DirectX::XMMATRIX view  = XMLoadFloat4x4(&mView);
+	DirectX::XMMATRIX proj  = XMLoadFloat4x4(&mProj);
 	
     D3DX11_TECHNIQUE_DESC techDesc;
     mTech->GetDesc( &techDesc );
@@ -228,8 +228,8 @@ void WavesDemo::DrawScene()
 		md3dImmediateContext->IASetVertexBuffers(0, 1, &mLandVB, &stride, &offset);
 		md3dImmediateContext->IASetIndexBuffer(mLandIB, DXGI_FORMAT_R32_UINT, 0);
 
-		XMMATRIX world = XMLoadFloat4x4(&mGridWorld);
-		XMMATRIX worldViewProj = world*view*proj;
+		DirectX::XMMATRIX world = XMLoadFloat4x4(&mGridWorld);
+		DirectX::XMMATRIX worldViewProj = world*view*proj;
 		mfxWorldViewProj->SetMatrix(reinterpret_cast<float*>(&worldViewProj));
 		mTech->GetPassByIndex(p)->Apply(0, md3dImmediateContext);
 		md3dImmediateContext->DrawIndexed(mGridIndexCount, 0, 0);
@@ -325,7 +325,7 @@ void WavesDemo::BuildLandGeometryBuffers()
 	std::vector<Vertex> vertices(grid.Vertices.size());
 	for(size_t i = 0; i < grid.Vertices.size(); ++i)
 	{
-		XMFLOAT3 p = grid.Vertices[i].Position;
+		DirectX::XMFLOAT3 p = grid.Vertices[i].Position;
 
 		p.y = GetHeight(p.x, p.z);
 
@@ -335,27 +335,27 @@ void WavesDemo::BuildLandGeometryBuffers()
 		if( p.y < -10.0f )
 		{
 			// Sandy beach color.
-			vertices[i].Color = XMFLOAT4(1.0f, 0.96f, 0.62f, 1.0f);
+			vertices[i].Color = DirectX::XMFLOAT4(1.0f, 0.96f, 0.62f, 1.0f);
 		}
 		else if( p.y < 5.0f )
 		{
 			// Light yellow-green.
-			vertices[i].Color = XMFLOAT4(0.48f, 0.77f, 0.46f, 1.0f);
+			vertices[i].Color = DirectX::XMFLOAT4(0.48f, 0.77f, 0.46f, 1.0f);
 		}
 		else if( p.y < 12.0f )
 		{
 			// Dark yellow-green.
-			vertices[i].Color = XMFLOAT4(0.1f, 0.48f, 0.19f, 1.0f);
+			vertices[i].Color = DirectX::XMFLOAT4(0.1f, 0.48f, 0.19f, 1.0f);
 		}
 		else if( p.y < 20.0f )
 		{
 			// Dark brown.
-			vertices[i].Color = XMFLOAT4(0.45f, 0.39f, 0.34f, 1.0f);
+			vertices[i].Color = DirectX::XMFLOAT4(0.45f, 0.39f, 0.34f, 1.0f);
 		}
 		else
 		{
 			// White snow.
-			vertices[i].Color = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+			vertices[i].Color = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
 		}
 	}
 

@@ -22,9 +22,9 @@ public:
 	// Time elapsed since the system was reset.
 	float GetAge()const;
 
-	void SetEyePos(const XMFLOAT3& eyePosW);
-	void SetEmitPos(const XMFLOAT3& emitPosW);
-	void SetEmitDir(const XMFLOAT3& emitDirW);
+	void SetEyePos(const DirectX::XMFLOAT3& eyePosW);
+	void SetEmitPos(const DirectX::XMFLOAT3& emitPosW);
+	void SetEmitDir(const DirectX::XMFLOAT3& emitDirW);
 
 	void Init(ID3D11Device* device, ParticleEffect* fx, 
 		ID3D11ShaderResourceView* texArraySRV, 
@@ -50,9 +50,9 @@ private:
 	float mTimeStep;
 	float mAge;
 
-	XMFLOAT3 mEyePosW;
-	XMFLOAT3 mEmitPosW;
-	XMFLOAT3 mEmitDirW;
+	DirectX::XMFLOAT3 mEyePosW;
+	DirectX::XMFLOAT3 mEmitPosW;
+	DirectX::XMFLOAT3 mEmitDirW;
 
 	ParticleEffect* mFX;
 

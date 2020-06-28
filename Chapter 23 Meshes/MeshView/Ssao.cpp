@@ -76,14 +76,14 @@ void Ssao::ComputeSsao(const Camera& camera)
 	mDC->RSSetViewports(1, &mAmbientMapViewport);
 
 	// Transform NDC space [-1,+1]^2 to texture space [0,1]^2
-	static const XMMATRIX T(
+	static const DirectX::XMMATRIX T(
 		0.5f, 0.0f, 0.0f, 0.0f,
 		0.0f, -0.5f, 0.0f, 0.0f,
 		0.0f, 0.0f, 1.0f, 0.0f,
 		0.5f, 0.5f, 0.0f, 1.0f);
 
-	XMMATRIX P  = camera.Proj();
-	XMMATRIX PT = XMMatrixMultiply(P, T);
+	DirectX::XMMATRIX P  = camera.Proj();
+	DirectX::XMMATRIX PT = DirectX::XMMatrixMultiply(P, T);
 
 	Effects::SsaoFX->SetViewToTexSpace(PT);
 	Effects::SsaoFX->SetOffsetVectors(mOffsets);
@@ -171,31 +171,31 @@ void Ssao::BuildFrustumFarCorners(float fovy, float farZ)
 	float halfHeight = farZ * tanf( 0.5f*fovy );
 	float halfWidth  = aspect * halfHeight;
 
-	mFrustumFarCorner[0] = XMFLOAT4(-halfWidth, -halfHeight, farZ, 0.0f);
-	mFrustumFarCorner[1] = XMFLOAT4(-halfWidth, +halfHeight, farZ, 0.0f);
-	mFrustumFarCorner[2] = XMFLOAT4(+halfWidth, +halfHeight, farZ, 0.0f);
-	mFrustumFarCorner[3] = XMFLOAT4(+halfWidth, -halfHeight, farZ, 0.0f);
+	mFrustumFarCorner[0] = DirectX::XMFLOAT4(-halfWidth, -halfHeight, farZ, 0.0f);
+	mFrustumFarCorner[1] = DirectX::XMFLOAT4(-halfWidth, +halfHeight, farZ, 0.0f);
+	mFrustumFarCorner[2] = DirectX::XMFLOAT4(+halfWidth, +halfHeight, farZ, 0.0f);
+	mFrustumFarCorner[3] = DirectX::XMFLOAT4(+halfWidth, -halfHeight, farZ, 0.0f);
 }
 
 void Ssao::BuildFullScreenQuad()
 {
 	Vertex::Basic32 v[4];
 
-	v[0].Pos = XMFLOAT3(-1.0f, -1.0f, 0.0f);
-	v[1].Pos = XMFLOAT3(-1.0f, +1.0f, 0.0f);
-	v[2].Pos = XMFLOAT3(+1.0f, +1.0f, 0.0f);
-	v[3].Pos = XMFLOAT3(+1.0f, -1.0f, 0.0f);
+	v[0].Pos = DirectX::XMFLOAT3(-1.0f, -1.0f, 0.0f);
+	v[1].Pos = DirectX::XMFLOAT3(-1.0f, +1.0f, 0.0f);
+	v[2].Pos = DirectX::XMFLOAT3(+1.0f, +1.0f, 0.0f);
+	v[3].Pos = DirectX::XMFLOAT3(+1.0f, -1.0f, 0.0f);
 
 	// Store far plane frustum corner indices in Normal.x slot.
-	v[0].Normal = XMFLOAT3(0.0f, 0.0f, 0.0f);
-	v[1].Normal = XMFLOAT3(1.0f, 0.0f, 0.0f);
-	v[2].Normal = XMFLOAT3(2.0f, 0.0f, 0.0f);
-	v[3].Normal = XMFLOAT3(3.0f, 0.0f, 0.0f);
+	v[0].Normal = DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f);
+	v[1].Normal = DirectX::XMFLOAT3(1.0f, 0.0f, 0.0f);
+	v[2].Normal = DirectX::XMFLOAT3(2.0f, 0.0f, 0.0f);
+	v[3].Normal = DirectX::XMFLOAT3(3.0f, 0.0f, 0.0f);
 
-	v[0].Tex = XMFLOAT2(0.0f, 1.0f);
-	v[1].Tex = XMFLOAT2(0.0f, 0.0f);
-	v[2].Tex = XMFLOAT2(1.0f, 0.0f);
-	v[3].Tex = XMFLOAT2(1.0f, 1.0f);
+	v[0].Tex = DirectX::XMFLOAT2(0.0f, 1.0f);
+	v[1].Tex = DirectX::XMFLOAT2(0.0f, 0.0f);
+	v[2].Tex = DirectX::XMFLOAT2(1.0f, 0.0f);
+	v[3].Tex = DirectX::XMFLOAT2(1.0f, 1.0f);
 
 	D3D11_BUFFER_DESC vbd;
     vbd.Usage = D3D11_USAGE_IMMUTABLE;
@@ -311,7 +311,7 @@ void Ssao::BuildRandomVectorTexture()
 	{
 		for(int j = 0; j < 256; ++j)
 		{
-			XMFLOAT3 v(MathHelper::RandF(), MathHelper::RandF(), MathHelper::RandF());
+			DirectX::XMFLOAT3 v(MathHelper::RandF(), MathHelper::RandF(), MathHelper::RandF());
 
 			color[i*256+j] = DirectX::PackedVector::XMCOLOR(v.x, v.y, v.z, 0.0f);
 		}
@@ -336,34 +336,34 @@ void Ssao::BuildOffsetVectors()
 	// if we choose to use less than 14 samples.
 	
 	// 8 cube corners
-	mOffsets[0] = XMFLOAT4(+1.0f, +1.0f, +1.0f, 0.0f);
-	mOffsets[1] = XMFLOAT4(-1.0f, -1.0f, -1.0f, 0.0f);
+	mOffsets[0] = DirectX::XMFLOAT4(+1.0f, +1.0f, +1.0f, 0.0f);
+	mOffsets[1] = DirectX::XMFLOAT4(-1.0f, -1.0f, -1.0f, 0.0f);
 
-	mOffsets[2] = XMFLOAT4(-1.0f, +1.0f, +1.0f, 0.0f);
-	mOffsets[3] = XMFLOAT4(+1.0f, -1.0f, -1.0f, 0.0f);
+	mOffsets[2] = DirectX::XMFLOAT4(-1.0f, +1.0f, +1.0f, 0.0f);
+	mOffsets[3] = DirectX::XMFLOAT4(+1.0f, -1.0f, -1.0f, 0.0f);
 
-	mOffsets[4] = XMFLOAT4(+1.0f, +1.0f, -1.0f, 0.0f);
-	mOffsets[5] = XMFLOAT4(-1.0f, -1.0f, +1.0f, 0.0f);
+	mOffsets[4] = DirectX::XMFLOAT4(+1.0f, +1.0f, -1.0f, 0.0f);
+	mOffsets[5] = DirectX::XMFLOAT4(-1.0f, -1.0f, +1.0f, 0.0f);
 
-	mOffsets[6] = XMFLOAT4(-1.0f, +1.0f, -1.0f, 0.0f);
-	mOffsets[7] = XMFLOAT4(+1.0f, -1.0f, +1.0f, 0.0f);
+	mOffsets[6] = DirectX::XMFLOAT4(-1.0f, +1.0f, -1.0f, 0.0f);
+	mOffsets[7] = DirectX::XMFLOAT4(+1.0f, -1.0f, +1.0f, 0.0f);
 
 	// 6 centers of cube faces
-	mOffsets[8] = XMFLOAT4(-1.0f, 0.0f, 0.0f, 0.0f);
-	mOffsets[9] = XMFLOAT4(+1.0f, 0.0f, 0.0f, 0.0f);
+	mOffsets[8] = DirectX::XMFLOAT4(-1.0f, 0.0f, 0.0f, 0.0f);
+	mOffsets[9] = DirectX::XMFLOAT4(+1.0f, 0.0f, 0.0f, 0.0f);
 
-	mOffsets[10] = XMFLOAT4(0.0f, -1.0f, 0.0f, 0.0f);
-	mOffsets[11] = XMFLOAT4(0.0f, +1.0f, 0.0f, 0.0f);
+	mOffsets[10] = DirectX::XMFLOAT4(0.0f, -1.0f, 0.0f, 0.0f);
+	mOffsets[11] = DirectX::XMFLOAT4(0.0f, +1.0f, 0.0f, 0.0f);
 
-	mOffsets[12] = XMFLOAT4(0.0f, 0.0f, -1.0f, 0.0f);
-	mOffsets[13] = XMFLOAT4(0.0f, 0.0f, +1.0f, 0.0f);
+	mOffsets[12] = DirectX::XMFLOAT4(0.0f, 0.0f, -1.0f, 0.0f);
+	mOffsets[13] = DirectX::XMFLOAT4(0.0f, 0.0f, +1.0f, 0.0f);
 
     for(int i = 0; i < 14; ++i)
 	{
 		// Create random lengths in [0.25, 1.0].
 		float s = MathHelper::RandF(0.25f, 1.0f);
 		
-		XMVECTOR v = s * XMVector4Normalize(XMLoadFloat4(&mOffsets[i]));
+		DirectX::XMVECTOR v = s * DirectX::XMVector4Normalize(XMLoadFloat4(&mOffsets[i]));
 		
 		XMStoreFloat4(&mOffsets[i], v);
 	}

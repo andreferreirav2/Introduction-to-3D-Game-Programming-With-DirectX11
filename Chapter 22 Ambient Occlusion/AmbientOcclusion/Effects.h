@@ -33,7 +33,7 @@ public:
 	AmbientOcclusionEffect(ID3D11Device* device, const std::wstring& filename);
 	~AmbientOcclusionEffect();
 
-	void SetWorldViewProj(CXMMATRIX M)  { WorldViewProj->SetMatrix(reinterpret_cast<const float*>(&M)); }
+	void SetWorldViewProj(DirectX::CXMMATRIX M)  { WorldViewProj->SetMatrix(reinterpret_cast<const float*>(&M)); }
 
 	ID3DX11EffectTechnique* AmbientOcclusionTech;
 	ID3DX11EffectMatrixVariable* WorldViewProj;

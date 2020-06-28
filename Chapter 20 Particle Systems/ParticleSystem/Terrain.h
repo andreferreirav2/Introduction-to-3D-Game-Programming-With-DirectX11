@@ -38,8 +38,8 @@ public:
 	float GetDepth()const;
 	float GetHeight(float x, float z)const;
 
-	XMMATRIX GetWorld()const;
-	void SetWorld(CXMMATRIX M);
+	DirectX::XMMATRIX GetWorld()const;
+	void SetWorld(DirectX::CXMMATRIX M);
 
 	void Init(ID3D11Device* device, ID3D11DeviceContext* dc, const InitInfo& initInfo);
 
@@ -78,11 +78,11 @@ private:
 	UINT mNumPatchVertRows;
 	UINT mNumPatchVertCols;
 
-	XMFLOAT4X4 mWorld;
+	DirectX::XMFLOAT4X4 mWorld;
 
 	Material mMat;
 
-	std::vector<XMFLOAT2> mPatchBoundsY;
+	std::vector<DirectX::XMFLOAT2> mPatchBoundsY;
 	std::vector<float> mHeightmap;
 };
 

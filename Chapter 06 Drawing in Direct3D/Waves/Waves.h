@@ -25,7 +25,7 @@ public:
 	UINT TriangleCount()const;
 
 	// Returns the solution at the ith grid point.
-	const XMFLOAT3& operator[](int i)const { return mCurrSolution[i]; }
+	const DirectX::XMFLOAT3& operator[](int i)const { return mCurrSolution[i]; }
 
 	void Init(UINT m, UINT n, float dx, float dt, float speed, float damping);
 	void Update(float dt);
@@ -46,8 +46,8 @@ private:
 	float mTimeStep;
 	float mSpatialStep;
 
-	XMFLOAT3* mPrevSolution;
-	XMFLOAT3* mCurrSolution;
+	DirectX::XMFLOAT3* mPrevSolution;
+	DirectX::XMFLOAT3* mCurrSolution;
 };
 
 #endif // WAVES_H
