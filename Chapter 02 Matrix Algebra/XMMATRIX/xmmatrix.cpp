@@ -1,3 +1,5 @@
+#define _XM_NO_INTRINSICS_ 
+
 #include <windows.h> // for FLOAT definition
 #include <DirectXMath.h>
 #include <DirectXPackedVector.h>
