@@ -454,6 +454,8 @@ bool D3DApp::InitDirect3D()
 	HR(dxgiAdapter->GetParent(__uuidof(IDXGIFactory), (void**)&dxgiFactory));
 
 	HR(dxgiFactory->CreateSwapChain(md3dDevice, &sd, &mSwapChain));
+	// Ex 4.1 - Disable Alt+Enter to toggle between window/fullscreen
+	HR(dxgiFactory->MakeWindowAssociation(mhMainWnd, DXGI_MWA_NO_WINDOW_CHANGES));
 
 	ReleaseCOM(dxgiDevice);
 	ReleaseCOM(dxgiAdapter);
