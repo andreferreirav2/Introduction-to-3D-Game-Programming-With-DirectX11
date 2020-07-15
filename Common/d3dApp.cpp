@@ -5,6 +5,8 @@
 #include "d3dApp.h"
 #include <WindowsX.h>
 #include <sstream>
+#include <iostream>
+#include<string>  
 
 namespace
 {
@@ -456,6 +458,17 @@ bool D3DApp::InitDirect3D()
 	HR(dxgiFactory->CreateSwapChain(md3dDevice, &sd, &mSwapChain));
 	// Ex 4.1 - Disable Alt+Enter to toggle between window/fullscreen
 	HR(dxgiFactory->MakeWindowAssociation(mhMainWnd, DXGI_MWA_NO_WINDOW_CHANGES));
+
+	// Ex 4.2 - Count  number of Adapters (Graphics cards)
+	int numOfAdapters = 0;
+	while (dxgiFactory->EnumAdapters(numOfAdapters, &dxgiAdapter) != DXGI_ERROR_NOT_FOUND)
+	{
+		numOfAdapters++;
+	}
+	char buffer[256];
+	sprintf(buffer, "There are %d adapters.\n\0", numOfAdapters);
+
+	OutputDebugStringA(buffer);
 
 	ReleaseCOM(dxgiDevice);
 	ReleaseCOM(dxgiAdapter);
