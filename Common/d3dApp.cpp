@@ -477,12 +477,20 @@ bool D3DApp::InitDirect3D()
 		{
 			OutputDebugString(L"Adapter Supports DirectX11");
 		}
+
+		// Ex 4.4 - Check outputs associated with an adapter
+		IDXGIOutput* output = 0;
+		int numOfOutputs = 0;
+		while (adapter->EnumOutputs(numOfOutputs, &output) != DXGI_ERROR_NOT_FOUND)
+		{
+			numOfOutputs++;
+		}
+		ReleaseCOM(output);
+		OutputDebugStringA(("Adapter " + std::to_string(numOfAdapters) + " has " + std::to_string(numOfOutputs) + " outputs!\n").c_str());
 	}
-	char buffer[256];
-	sprintf(buffer, "There are %d adapters.\n\0", numOfAdapters);
+	OutputDebugStringA(("There are " + std::to_string(numOfAdapters) + " adapters!\n").c_str());
 
-	OutputDebugStringA(buffer);
-
+	ReleaseCOM(adapter);
 	ReleaseCOM(dxgiDevice);
 	ReleaseCOM(dxgiAdapter);
 	ReleaseCOM(dxgiFactory);
