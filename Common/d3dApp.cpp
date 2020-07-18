@@ -6,7 +6,8 @@
 #include <WindowsX.h>
 #include <sstream>
 #include <iostream>
-#include<string>  
+#include <string> 
+#include <memory>
 
 namespace
 {
@@ -483,6 +484,25 @@ bool D3DApp::InitDirect3D()
 		int numOfOutputs = 0;
 		while (adapter->EnumOutputs(numOfOutputs, &output) != DXGI_ERROR_NOT_FOUND)
 		{
+			// Ex 4.5 - Show the supported display modes for each output
+			UINT numModes;
+			output->GetDisplayModeList(DXGI_FORMAT_R8G8B8A8_UNORM, 0, &numModes, 0);
+
+			OutputDebugStringA(("Output " + std::to_string(numOfOutputs) + " has " + std::to_string(numModes) + " display modes:\n").c_str());
+
+			std::unique_ptr<DXGI_MODE_DESC[]> pDescs = std::make_unique<DXGI_MODE_DESC[]>(numModes);
+			output->GetDisplayModeList(DXGI_FORMAT_R8G8B8A8_UNORM, 0, &numModes, pDescs.get());
+
+			for (UINT i = 0; i < numModes; ++i)
+			{
+				DXGI_MODE_DESC mode = pDescs.get()[i];
+				OutputDebugStringA((
+					"w = " + std::to_string(mode.Width) +
+					" h = " + std::to_string(mode.Height) +
+					" r = " + std::to_string(mode.RefreshRate.Numerator) + "/" + std::to_string(mode.RefreshRate.Denominator) +
+					" \n").c_str());
+			}
+
 			numOfOutputs++;
 		}
 		ReleaseCOM(output);
