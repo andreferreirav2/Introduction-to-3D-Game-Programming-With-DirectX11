@@ -460,10 +460,23 @@ bool D3DApp::InitDirect3D()
 	HR(dxgiFactory->MakeWindowAssociation(mhMainWnd, DXGI_MWA_NO_WINDOW_CHANGES));
 
 	// Ex 4.2 - Count  number of Adapters (Graphics cards)
+	IDXGIAdapter* adapter = 0;
 	int numOfAdapters = 0;
-	while (dxgiFactory->EnumAdapters(numOfAdapters, &dxgiAdapter) != DXGI_ERROR_NOT_FOUND)
+	while (dxgiFactory->EnumAdapters(numOfAdapters, &adapter) != DXGI_ERROR_NOT_FOUND)
 	{
 		numOfAdapters++;
+
+		// Ex 4.3 - Check DirectX11 compatibility
+		// Docs state that this should not be used to check for compatibility with DirectX11
+		// https://docs.microsoft.com/en-us/windows/win32/api/dxgi/nf-dxgi-idxgiadapter-checkinterfacesupport?redirectedfrom=MSDN#remarks
+		// Running this as is throws a message to the Debug Output with the following message:
+		// Exception thrown at 0x75FB9862 in Init Direct3D.exe: Microsoft C++ exception: _com_error at memory location 0x0137EEAC
+		LARGE_INTEGER* pUMDVersion = 0;
+		HRESULT support = adapter->CheckInterfaceSupport(__uuidof(ID3D11Device), pUMDVersion);
+		if (support != DXGI_ERROR_UNSUPPORTED)
+		{
+			OutputDebugString(L"Adapter Supports DirectX11");
+		}
 	}
 	char buffer[256];
 	sprintf(buffer, "There are %d adapters.\n\0", numOfAdapters);
