@@ -115,7 +115,7 @@ QuatApp::QuatApp(HINSTANCE hInstance)
 	mLastMousePos.x = 0;
 	mLastMousePos.y = 0;
 
-	mCam.Pitch(XMConvertToRadians(25.0f));
+	mCam.Pitch(DirectX::XMConvertToRadians(25.0f));
 	mCam.SetPosition(0.0f, 8.0f, -20.0f);
 
 	DirectX::XMMATRIX I = DirectX::XMMatrixIdentity();
@@ -173,10 +173,10 @@ QuatApp::QuatApp(HINSTANCE hInstance)
 	// Define the animation keyframes
 	//
 
-	DirectX::XMVECTOR q0 = XMQuaternionRotationAxis(DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f), XMConvertToRadians(30.0f)); 
-	DirectX::XMVECTOR q1 = XMQuaternionRotationAxis(DirectX::XMVectorSet(1.0f, 1.0f, 2.0f, 0.0f), XMConvertToRadians(45.0f)); 
-	DirectX::XMVECTOR q2 = XMQuaternionRotationAxis(DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f), XMConvertToRadians(-30.0f)); 
-	DirectX::XMVECTOR q3 = XMQuaternionRotationAxis(DirectX::XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f), XMConvertToRadians(70.0f)); 
+	DirectX::XMVECTOR q0 = XMQuaternionRotationAxis(DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f), DirectX::XMConvertToRadians(30.0f)); 
+	DirectX::XMVECTOR q1 = XMQuaternionRotationAxis(DirectX::XMVectorSet(1.0f, 1.0f, 2.0f, 0.0f), DirectX::XMConvertToRadians(45.0f)); 
+	DirectX::XMVECTOR q2 = XMQuaternionRotationAxis(DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f), DirectX::XMConvertToRadians(-30.0f)); 
+	DirectX::XMVECTOR q3 = XMQuaternionRotationAxis(DirectX::XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f), DirectX::XMConvertToRadians(70.0f)); 
 
 	mSkullAnimation.Keyframes.resize(5);
 	mSkullAnimation.Keyframes[0].TimePos = 0.0f;
@@ -420,8 +420,8 @@ void QuatApp::OnMouseMove(WPARAM btnState, int x, int y)
 	if( (btnState & MK_LBUTTON) != 0 )
 	{
 		// Make each pixel correspond to a quarter of a degree.
-		float dx = XMConvertToRadians(0.25f*static_cast<float>(x - mLastMousePos.x));
-		float dy = XMConvertToRadians(0.25f*static_cast<float>(y - mLastMousePos.y));
+		float dx = DirectX::XMConvertToRadians(0.25f*static_cast<float>(x - mLastMousePos.x));
+		float dy = DirectX::XMConvertToRadians(0.25f*static_cast<float>(y - mLastMousePos.y));
 
 		mCam.Pitch(dy);
 		mCam.RotateY(dx);

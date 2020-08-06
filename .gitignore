@@ -174,3 +174,5 @@ UpgradeLog*.htm
 FakesAssemblies/
 
 .vs
+*.fxo
+*.cod
