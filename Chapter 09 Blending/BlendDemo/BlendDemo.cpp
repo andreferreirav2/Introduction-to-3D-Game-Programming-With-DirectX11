@@ -39,7 +39,7 @@ public:
 	bool Init();
 	void OnResize();
 	void UpdateScene(float dt);
-	void DrawScene(); 
+	void DrawScene();
 
 	void OnMouseDown(WPARAM btnState, int x, int y);
 	void OnMouseUp(WPARAM btnState, int x, int y);
@@ -98,25 +98,25 @@ private:
 };
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance,
-				   PSTR cmdLine, int showCmd)
+	PSTR cmdLine, int showCmd)
 {
 	// Enable run-time memory check for debug builds.
 #if defined(DEBUG) | defined(_DEBUG)
-	_CrtSetDbgFlag( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 #endif
 
 	BlendApp theApp(hInstance);
-	
-	if( !theApp.Init() )
+
+	if (!theApp.Init())
 		return 0;
-	
+
 	return theApp.Run();
 }
 
 BlendApp::BlendApp(HINSTANCE hInstance)
-: D3DApp(hInstance), mLandVB(0), mLandIB(0), mWavesVB(0), mWavesIB(0), mBoxVB(0), mBoxIB(0), mGrassMapSRV(0), mWavesMapSRV(0), mBoxMapSRV(0),
-  mWaterTexOffset(0.0f, 0.0f), mEyePosW(0.0f, 0.0f, 0.0f), mLandIndexCount(0), mRenderOptions(RenderOptions::TexturesAndFog),
-  mTheta(1.3f*MathHelper::Pi), mPhi(0.4f*MathHelper::Pi), mRadius(80.0f)
+	: D3DApp(hInstance), mLandVB(0), mLandIB(0), mWavesVB(0), mWavesIB(0), mBoxVB(0), mBoxIB(0), mGrassMapSRV(0), mWavesMapSRV(0), mBoxMapSRV(0),
+	mWaterTexOffset(0.0f, 0.0f), mEyePosW(0.0f, 0.0f, 0.0f), mLandIndexCount(0), mRenderOptions(RenderOptions::TexturesAndFog),
+	mTheta(1.3f * MathHelper::Pi), mPhi(0.4f * MathHelper::Pi), mRadius(80.0f)
 {
 	mMainWndCaption = L"Blend Demo";
 	mEnable4xMsaa = false;
@@ -132,36 +132,36 @@ BlendApp::BlendApp(HINSTANCE hInstance)
 
 	DirectX::XMMATRIX boxScale = DirectX::XMMatrixScaling(15.0f, 15.0f, 15.0f);
 	DirectX::XMMATRIX boxOffset = DirectX::XMMatrixTranslation(8.0f, 5.0f, -15.0f);
-	XMStoreFloat4x4(&mBoxWorld, boxScale*boxOffset);
+	XMStoreFloat4x4(&mBoxWorld, boxScale * boxOffset);
 
 	DirectX::XMMATRIX grassTexScale = DirectX::XMMatrixScaling(5.0f, 5.0f, 0.0f);
 	XMStoreFloat4x4(&mGrassTexTransform, grassTexScale);
 
-	mDirLights[0].Ambient  = DirectX::XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
-	mDirLights[0].Diffuse  = DirectX::XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
+	mDirLights[0].Ambient = DirectX::XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
+	mDirLights[0].Diffuse = DirectX::XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
 	mDirLights[0].Specular = DirectX::XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
 	mDirLights[0].Direction = DirectX::XMFLOAT3(0.57735f, -0.57735f, 0.57735f);
 
-	mDirLights[1].Ambient  = DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
-	mDirLights[1].Diffuse  = DirectX::XMFLOAT4(0.20f, 0.20f, 0.20f, 1.0f);
+	mDirLights[1].Ambient = DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
+	mDirLights[1].Diffuse = DirectX::XMFLOAT4(0.20f, 0.20f, 0.20f, 1.0f);
 	mDirLights[1].Specular = DirectX::XMFLOAT4(0.25f, 0.25f, 0.25f, 1.0f);
 	mDirLights[1].Direction = DirectX::XMFLOAT3(-0.57735f, -0.57735f, 0.57735f);
 
-	mDirLights[2].Ambient  = DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
-	mDirLights[2].Diffuse  = DirectX::XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
+	mDirLights[2].Ambient = DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
+	mDirLights[2].Diffuse = DirectX::XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
 	mDirLights[2].Specular = DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
 	mDirLights[2].Direction = DirectX::XMFLOAT3(0.0f, -0.707f, -0.707f);
 
-	mLandMat.Ambient  = DirectX::XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
-	mLandMat.Diffuse  = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+	mLandMat.Ambient = DirectX::XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
+	mLandMat.Diffuse = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
 	mLandMat.Specular = DirectX::XMFLOAT4(0.2f, 0.2f, 0.2f, 16.0f);
 
-	mWavesMat.Ambient  = DirectX::XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
-	mWavesMat.Diffuse  = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 0.5f);
+	mWavesMat.Ambient = DirectX::XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
+	mWavesMat.Diffuse = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 0.5f);
 	mWavesMat.Specular = DirectX::XMFLOAT4(0.8f, 0.8f, 0.8f, 32.0f);
 
-	mBoxMat.Ambient  = DirectX::XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
-	mBoxMat.Diffuse  = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+	mBoxMat.Ambient = DirectX::XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
+	mBoxMat.Diffuse = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
 	mBoxMat.Specular = DirectX::XMFLOAT4(0.4f, 0.4f, 0.4f, 16.0f);
 }
 
@@ -185,7 +185,7 @@ BlendApp::~BlendApp()
 
 bool BlendApp::Init()
 {
-	if(!D3DApp::Init())
+	if (!D3DApp::Init())
 		return false;
 
 	mWaves.Init(160, 160, 1.0f, 0.03f, 5.0f, 0.3f);
@@ -195,14 +195,16 @@ bool BlendApp::Init()
 	InputLayouts::InitAll(md3dDevice);
 	RenderStates::InitAll(md3dDevice);
 
-	HR(D3DX11CreateShaderResourceViewFromFile(md3dDevice, 
-		L"Textures/grass.dds", 0, 0, &mGrassMapSRV, 0 ));
+	ID3D11Resource* texResource = nullptr;
 
-	HR(D3DX11CreateShaderResourceViewFromFile(md3dDevice, 
-		L"Textures/water2.dds", 0, 0, &mWavesMapSRV, 0 ));
+	HR(DirectX::CreateDDSTextureFromFile(md3dDevice, L"Textures/grass.dds", &texResource, &mGrassMapSRV));
+	ReleaseCOM(texResource); // view saves reference
 
-	HR(D3DX11CreateShaderResourceViewFromFile(md3dDevice, 
-		L"Textures/WireFence.dds", 0, 0, &mBoxMapSRV, 0 ));
+	HR(DirectX::CreateDDSTextureFromFile(md3dDevice, L"Textures/water2.dds", &texResource, &mWavesMapSRV));
+	ReleaseCOM(texResource); // view saves reference
+
+	HR(DirectX::CreateDDSTextureFromFile(md3dDevice, L"Textures/WireFence.dds", &texResource, &mBoxMapSRV));
+	ReleaseCOM(texResource); // view saves reference
 
 	BuildLandGeometryBuffers();
 	BuildWaveGeometryBuffers();
@@ -215,23 +217,23 @@ void BlendApp::OnResize()
 {
 	D3DApp::OnResize();
 
-	DirectX::XMMATRIX P = DirectX::XMMatrixPerspectiveFovLH(0.25f*MathHelper::Pi, AspectRatio(), 1.0f, 1000.0f);
+	DirectX::XMMATRIX P = DirectX::XMMatrixPerspectiveFovLH(0.25f * MathHelper::Pi, AspectRatio(), 1.0f, 1000.0f);
 	XMStoreFloat4x4(&mProj, P);
 }
 
 void BlendApp::UpdateScene(float dt)
 {
 	// Convert Spherical to Cartesian coordinates.
-	float x = mRadius*sinf(mPhi)*cosf(mTheta);
-	float z = mRadius*sinf(mPhi)*sinf(mTheta);
-	float y = mRadius*cosf(mPhi);
+	float x = mRadius * sinf(mPhi) * cosf(mTheta);
+	float z = mRadius * sinf(mPhi) * sinf(mTheta);
+	float y = mRadius * cosf(mPhi);
 
 	mEyePosW = DirectX::XMFLOAT3(x, y, z);
 
 	// Build the view matrix.
-	DirectX::XMVECTOR pos    = DirectX::XMVectorSet(x, y, z, 1.0f);
+	DirectX::XMVECTOR pos = DirectX::XMVectorSet(x, y, z, 1.0f);
 	DirectX::XMVECTOR target = DirectX::XMVectorZero();
-	DirectX::XMVECTOR up     = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+	DirectX::XMVECTOR up = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 
 	DirectX::XMMATRIX V = DirectX::XMMatrixLookAtLH(pos, target, up);
 	XMStoreFloat4x4(&mView, V);
@@ -240,12 +242,12 @@ void BlendApp::UpdateScene(float dt)
 	// Every quarter second, generate a random wave.
 	//
 	static float t_base = 0.0f;
-	if( (mTimer.TotalTime() - t_base) >= 0.1f )
+	if ((mTimer.TotalTime() - t_base) >= 0.1f)
 	{
 		t_base += 0.1f;
- 
-		DWORD i = 5 + rand() % (mWaves.RowCount()-10);
-		DWORD j = 5 + rand() % (mWaves.ColumnCount()-10);
+
+		DWORD i = 5 + rand() % (mWaves.RowCount() - 10);
+		DWORD j = 5 + rand() % (mWaves.ColumnCount() - 10);
 
 		float r = MathHelper::RandF(0.5f, 1.0f);
 
@@ -257,19 +259,19 @@ void BlendApp::UpdateScene(float dt)
 	//
 	// Update the wave vertex buffer with the new solution.
 	//
-	
+
 	D3D11_MAPPED_SUBRESOURCE mappedData;
 	HR(md3dImmediateContext->Map(mWavesVB, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedData));
 
 	Vertex::Basic32* v = reinterpret_cast<Vertex::Basic32*>(mappedData.pData);
-	for(UINT i = 0; i < mWaves.VertexCount(); ++i)
+	for (UINT i = 0; i < mWaves.VertexCount(); ++i)
 	{
-		v[i].Pos    = mWaves[i];
+		v[i].Pos = mWaves[i];
 		v[i].Normal = mWaves.Normal(i);
 
 		// Derive tex-coords in [0,1] from position.
-		v[i].Tex.x  = 0.5f + mWaves[i].x / mWaves.Width();
-		v[i].Tex.y  = 0.5f - mWaves[i].z / mWaves.Depth();
+		v[i].Tex.x = 0.5f + mWaves[i].x / mWaves.Width();
+		v[i].Tex.y = 0.5f - mWaves[i].z / mWaves.Depth();
 	}
 
 	md3dImmediateContext->Unmap(mWavesVB, 0);
@@ -282,42 +284,42 @@ void BlendApp::UpdateScene(float dt)
 	DirectX::XMMATRIX wavesScale = DirectX::XMMatrixScaling(5.0f, 5.0f, 0.0f);
 
 	// Translate texture over time.
-	mWaterTexOffset.y += 0.05f*dt;
-	mWaterTexOffset.x += 0.1f*dt;	
+	mWaterTexOffset.y += 0.05f * dt;
+	mWaterTexOffset.x += 0.1f * dt;
 	DirectX::XMMATRIX wavesOffset = DirectX::XMMatrixTranslation(mWaterTexOffset.x, mWaterTexOffset.y, 0.0f);
 
 	// Combine scale and translation.
-	XMStoreFloat4x4(&mWaterTexTransform, wavesScale*wavesOffset);
+	XMStoreFloat4x4(&mWaterTexTransform, wavesScale * wavesOffset);
 
 	//
 	// Switch the render mode based in key input.
 	//
-	if( GetAsyncKeyState('1') & 0x8000 )
-		mRenderOptions = RenderOptions::Lighting; 
+	if (GetAsyncKeyState('1') & 0x8000)
+		mRenderOptions = RenderOptions::Lighting;
 
-	if( GetAsyncKeyState('2') & 0x8000 )
-		mRenderOptions = RenderOptions::Textures; 
+	if (GetAsyncKeyState('2') & 0x8000)
+		mRenderOptions = RenderOptions::Textures;
 
-	if( GetAsyncKeyState('3') & 0x8000 )
-		mRenderOptions = RenderOptions::TexturesAndFog; 
+	if (GetAsyncKeyState('3') & 0x8000)
+		mRenderOptions = RenderOptions::TexturesAndFog;
 }
 
 void BlendApp::DrawScene()
 {
 	md3dImmediateContext->ClearRenderTargetView(mRenderTargetView, reinterpret_cast<const float*>(&Colors::Silver));
-	md3dImmediateContext->ClearDepthStencilView(mDepthStencilView, D3D11_CLEAR_DEPTH|D3D11_CLEAR_STENCIL, 1.0f, 0);
+	md3dImmediateContext->ClearDepthStencilView(mDepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
 	md3dImmediateContext->IASetInputLayout(InputLayouts::Basic32);
-    md3dImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
- 
-	float blendFactor[] = {0.0f, 0.0f, 0.0f, 0.0f};
+	md3dImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	float blendFactor[] = { 0.0f, 0.0f, 0.0f, 0.0f };
 
 	UINT stride = sizeof(Vertex::Basic32);
-    UINT offset = 0;
- 
-	DirectX::XMMATRIX view  = XMLoadFloat4x4(&mView);
-	DirectX::XMMATRIX proj  = XMLoadFloat4x4(&mProj);
-	DirectX::XMMATRIX viewProj = view*proj;
+	UINT offset = 0;
+
+	DirectX::XMMATRIX view = XMLoadFloat4x4(&mView);
+	DirectX::XMMATRIX proj = XMLoadFloat4x4(&mProj);
+	DirectX::XMMATRIX viewProj = view * proj;
 
 	// Set per frame constants.
 	Effects::BasicFX->SetDirLights(mDirLights);
@@ -325,11 +327,11 @@ void BlendApp::DrawScene()
 	Effects::BasicFX->SetFogColor(Colors::Silver);
 	Effects::BasicFX->SetFogStart(15.0f);
 	Effects::BasicFX->SetFogRange(175.0f);
- 
+
 	ID3DX11EffectTechnique* boxTech;
 	ID3DX11EffectTechnique* landAndWavesTech;
 
-	switch(mRenderOptions)
+	switch (mRenderOptions)
 	{
 	case RenderOptions::Lighting:
 		boxTech = Effects::BasicFX->Light3Tech;
@@ -351,17 +353,17 @@ void BlendApp::DrawScene()
 	// Draw the box with alpha clipping.
 	// 
 
-	boxTech->GetDesc( &techDesc );
-	for(UINT p = 0; p < techDesc.Passes; ++p)
-    {
+	boxTech->GetDesc(&techDesc);
+	for (UINT p = 0; p < techDesc.Passes; ++p)
+	{
 		md3dImmediateContext->IASetVertexBuffers(0, 1, &mBoxVB, &stride, &offset);
 		md3dImmediateContext->IASetIndexBuffer(mBoxIB, DXGI_FORMAT_R32_UINT, 0);
 
 		// Set per object constants.
 		DirectX::XMMATRIX world = XMLoadFloat4x4(&mBoxWorld);
 		DirectX::XMMATRIX worldInvTranspose = MathHelper::InverseTranspose(world);
-		DirectX::XMMATRIX worldViewProj = world*view*proj;
-		
+		DirectX::XMMATRIX worldViewProj = world * view * proj;
+
 		Effects::BasicFX->SetWorld(world);
 		Effects::BasicFX->SetWorldInvTranspose(worldInvTranspose);
 		Effects::BasicFX->SetWorldViewProj(worldViewProj);
@@ -381,9 +383,9 @@ void BlendApp::DrawScene()
 	// Draw the hills and water with texture and fog (no alpha clipping needed).
 	//
 
-	landAndWavesTech->GetDesc( &techDesc );
-    for(UINT p = 0; p < techDesc.Passes; ++p)
-    {
+	landAndWavesTech->GetDesc(&techDesc);
+	for (UINT p = 0; p < techDesc.Passes; ++p)
+	{
 		//
 		// Draw the hills.
 		//
@@ -393,8 +395,8 @@ void BlendApp::DrawScene()
 		// Set per object constants.
 		DirectX::XMMATRIX world = XMLoadFloat4x4(&mLandWorld);
 		DirectX::XMMATRIX worldInvTranspose = MathHelper::InverseTranspose(world);
-		DirectX::XMMATRIX worldViewProj = world*view*proj;
-		
+		DirectX::XMMATRIX worldViewProj = world * view * proj;
+
 		Effects::BasicFX->SetWorld(world);
 		Effects::BasicFX->SetWorldInvTranspose(worldInvTranspose);
 		Effects::BasicFX->SetWorldViewProj(worldViewProj);
@@ -414,8 +416,8 @@ void BlendApp::DrawScene()
 		// Set per object constants.
 		world = XMLoadFloat4x4(&mWavesWorld);
 		worldInvTranspose = MathHelper::InverseTranspose(world);
-		worldViewProj = world*view*proj;
-		
+		worldViewProj = world * view * proj;
+
 		Effects::BasicFX->SetWorld(world);
 		Effects::BasicFX->SetWorldInvTranspose(worldInvTranspose);
 		Effects::BasicFX->SetWorldViewProj(worldViewProj);
@@ -425,11 +427,11 @@ void BlendApp::DrawScene()
 
 		md3dImmediateContext->OMSetBlendState(RenderStates::TransparentBS, blendFactor, 0xffffffff);
 		landAndWavesTech->GetPassByIndex(p)->Apply(0, md3dImmediateContext);
-		md3dImmediateContext->DrawIndexed(3*mWaves.TriangleCount(), 0, 0);
+		md3dImmediateContext->DrawIndexed(3 * mWaves.TriangleCount(), 0, 0);
 
 		// Restore default blend state
 		md3dImmediateContext->OMSetBlendState(0, blendFactor, 0xffffffff);
-    }
+	}
 
 	HR(mSwapChain->Present(0, 0));
 }
@@ -449,24 +451,24 @@ void BlendApp::OnMouseUp(WPARAM btnState, int x, int y)
 
 void BlendApp::OnMouseMove(WPARAM btnState, int x, int y)
 {
-	if( (btnState & MK_LBUTTON) != 0 )
+	if ((btnState & MK_LBUTTON) != 0)
 	{
 		// Make each pixel correspond to a quarter of a degree.
-		float dx = DirectX::XMConvertToRadians(0.25f*static_cast<float>(x - mLastMousePos.x));
-		float dy = DirectX::XMConvertToRadians(0.25f*static_cast<float>(y - mLastMousePos.y));
+		float dx = DirectX::XMConvertToRadians(0.25f * static_cast<float>(x - mLastMousePos.x));
+		float dy = DirectX::XMConvertToRadians(0.25f * static_cast<float>(y - mLastMousePos.y));
 
 		// Update angles based on input to orbit camera around box.
 		mTheta += dx;
-		mPhi   += dy;
+		mPhi += dy;
 
 		// Restrict the angle mPhi.
-		mPhi = MathHelper::Clamp(mPhi, 0.1f, MathHelper::Pi-0.1f);
+		mPhi = MathHelper::Clamp(mPhi, 0.1f, MathHelper::Pi - 0.1f);
 	}
-	else if( (btnState & MK_RBUTTON) != 0 )
+	else if ((btnState & MK_RBUTTON) != 0)
 	{
 		// Make each pixel correspond to 0.01 unit in the scene.
-		float dx = 0.1f*static_cast<float>(x - mLastMousePos.x);
-		float dy = 0.1f*static_cast<float>(y - mLastMousePos.y);
+		float dx = 0.1f * static_cast<float>(x - mLastMousePos.x);
+		float dy = 0.1f * static_cast<float>(y - mLastMousePos.y);
 
 		// Update the camera radius based on input.
 		mRadius += dx - dy;
@@ -481,17 +483,17 @@ void BlendApp::OnMouseMove(WPARAM btnState, int x, int y)
 
 float BlendApp::GetHillHeight(float x, float z)const
 {
-	return 0.3f*( z*sinf(0.1f*x) + x*cosf(0.1f*z) );
+	return 0.3f * (z * sinf(0.1f * x) + x * cosf(0.1f * z));
 }
 
 DirectX::XMFLOAT3 BlendApp::GetHillNormal(float x, float z)const
 {
 	// n = (-df/dx, 1, -df/dz)
 	DirectX::XMFLOAT3 n(
-		-0.03f*z*cosf(0.1f*x) - 0.3f*cosf(0.1f*z),
+		-0.03f * z * cosf(0.1f * x) - 0.3f * cosf(0.1f * z),
 		1.0f,
-		-0.3f*sinf(0.1f*x) + 0.03f*x*sinf(0.1f*z));
-	
+		-0.3f * sinf(0.1f * x) + 0.03f * x * sinf(0.1f * z));
+
 	DirectX::XMVECTOR unitNormal = DirectX::XMVector3Normalize(XMLoadFloat3(&n));
 	XMStoreFloat3(&n, unitNormal);
 
@@ -501,7 +503,7 @@ DirectX::XMFLOAT3 BlendApp::GetHillNormal(float x, float z)const
 void BlendApp::BuildLandGeometryBuffers()
 {
 	GeometryGenerator::MeshData grid;
- 
+
 	GeometryGenerator geoGen;
 
 	geoGen.CreateGrid(160.0f, 160.0f, 50, 50, grid);
@@ -514,40 +516,40 @@ void BlendApp::BuildLandGeometryBuffers()
 	//
 
 	std::vector<Vertex::Basic32> vertices(grid.Vertices.size());
-	for(UINT i = 0; i < grid.Vertices.size(); ++i)
+	for (UINT i = 0; i < grid.Vertices.size(); ++i)
 	{
 		DirectX::XMFLOAT3 p = grid.Vertices[i].Position;
 
 		p.y = GetHillHeight(p.x, p.z);
-		
-		vertices[i].Pos    = p;
+
+		vertices[i].Pos = p;
 		vertices[i].Normal = GetHillNormal(p.x, p.z);
-		vertices[i].Tex    = grid.Vertices[i].TexC;
+		vertices[i].Tex = grid.Vertices[i].TexC;
 	}
 
-    D3D11_BUFFER_DESC vbd;
-    vbd.Usage = D3D11_USAGE_IMMUTABLE;
+	D3D11_BUFFER_DESC vbd;
+	vbd.Usage = D3D11_USAGE_IMMUTABLE;
 	vbd.ByteWidth = sizeof(Vertex::Basic32) * grid.Vertices.size();
-    vbd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-    vbd.CPUAccessFlags = 0;
-    vbd.MiscFlags = 0;
-    D3D11_SUBRESOURCE_DATA vinitData;
-    vinitData.pSysMem = &vertices[0];
-    HR(md3dDevice->CreateBuffer(&vbd, &vinitData, &mLandVB));
+	vbd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	vbd.CPUAccessFlags = 0;
+	vbd.MiscFlags = 0;
+	D3D11_SUBRESOURCE_DATA vinitData;
+	vinitData.pSysMem = &vertices[0];
+	HR(md3dDevice->CreateBuffer(&vbd, &vinitData, &mLandVB));
 
 	//
 	// Pack the indices of all the meshes into one index buffer.
 	//
 
 	D3D11_BUFFER_DESC ibd;
-    ibd.Usage = D3D11_USAGE_IMMUTABLE;
+	ibd.Usage = D3D11_USAGE_IMMUTABLE;
 	ibd.ByteWidth = sizeof(UINT) * mLandIndexCount;
-    ibd.BindFlags = D3D11_BIND_INDEX_BUFFER;
-    ibd.CPUAccessFlags = 0;
-    ibd.MiscFlags = 0;
-    D3D11_SUBRESOURCE_DATA iinitData;
+	ibd.BindFlags = D3D11_BIND_INDEX_BUFFER;
+	ibd.CPUAccessFlags = 0;
+	ibd.MiscFlags = 0;
+	D3D11_SUBRESOURCE_DATA iinitData;
 	iinitData.pSysMem = &grid.Indices[0];
-    HR(md3dDevice->CreateBuffer(&ibd, &iinitData, &mLandIB));
+	HR(md3dDevice->CreateBuffer(&ibd, &iinitData, &mLandIB));
 }
 
 void BlendApp::BuildWaveGeometryBuffers()
@@ -555,49 +557,49 @@ void BlendApp::BuildWaveGeometryBuffers()
 	// Create the vertex buffer.  Note that we allocate space only, as
 	// we will be updating the data every time step of the simulation.
 
-    D3D11_BUFFER_DESC vbd;
-    vbd.Usage = D3D11_USAGE_DYNAMIC;
+	D3D11_BUFFER_DESC vbd;
+	vbd.Usage = D3D11_USAGE_DYNAMIC;
 	vbd.ByteWidth = sizeof(Vertex::Basic32) * mWaves.VertexCount();
-    vbd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-    vbd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-    vbd.MiscFlags = 0;
-    HR(md3dDevice->CreateBuffer(&vbd, 0, &mWavesVB));
+	vbd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	vbd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	vbd.MiscFlags = 0;
+	HR(md3dDevice->CreateBuffer(&vbd, 0, &mWavesVB));
 
 
 	// Create the index buffer.  The index buffer is fixed, so we only 
 	// need to create and set once.
 
-	std::vector<UINT> indices(3*mWaves.TriangleCount()); // 3 indices per face
+	std::vector<UINT> indices(3 * mWaves.TriangleCount()); // 3 indices per face
 
 	// Iterate over each quad.
 	UINT m = mWaves.RowCount();
 	UINT n = mWaves.ColumnCount();
 	int k = 0;
-	for(UINT i = 0; i < m-1; ++i)
+	for (UINT i = 0; i < m - 1; ++i)
 	{
-		for(DWORD j = 0; j < n-1; ++j)
+		for (DWORD j = 0; j < n - 1; ++j)
 		{
-			indices[k]   = i*n+j;
-			indices[k+1] = i*n+j+1;
-			indices[k+2] = (i+1)*n+j;
+			indices[k] = i * n + j;
+			indices[k + 1] = i * n + j + 1;
+			indices[k + 2] = (i + 1) * n + j;
 
-			indices[k+3] = (i+1)*n+j;
-			indices[k+4] = i*n+j+1;
-			indices[k+5] = (i+1)*n+j+1;
+			indices[k + 3] = (i + 1) * n + j;
+			indices[k + 4] = i * n + j + 1;
+			indices[k + 5] = (i + 1) * n + j + 1;
 
 			k += 6; // next quad
 		}
 	}
 
 	D3D11_BUFFER_DESC ibd;
-    ibd.Usage = D3D11_USAGE_IMMUTABLE;
+	ibd.Usage = D3D11_USAGE_IMMUTABLE;
 	ibd.ByteWidth = sizeof(UINT) * indices.size();
-    ibd.BindFlags = D3D11_BIND_INDEX_BUFFER;
-    ibd.CPUAccessFlags = 0;
-    ibd.MiscFlags = 0;
-    D3D11_SUBRESOURCE_DATA iinitData;
-    iinitData.pSysMem = &indices[0];
-    HR(md3dDevice->CreateBuffer(&ibd, &iinitData, &mWavesIB));
+	ibd.BindFlags = D3D11_BIND_INDEX_BUFFER;
+	ibd.CPUAccessFlags = 0;
+	ibd.MiscFlags = 0;
+	D3D11_SUBRESOURCE_DATA iinitData;
+	iinitData.pSysMem = &indices[0];
+	HR(md3dDevice->CreateBuffer(&ibd, &iinitData, &mWavesIB));
 }
 
 void BlendApp::BuildCrateGeometryBuffers()
@@ -614,34 +616,34 @@ void BlendApp::BuildCrateGeometryBuffers()
 
 	std::vector<Vertex::Basic32> vertices(box.Vertices.size());
 
-	for(UINT i = 0; i < box.Vertices.size(); ++i)
+	for (UINT i = 0; i < box.Vertices.size(); ++i)
 	{
-		vertices[i].Pos    = box.Vertices[i].Position;
+		vertices[i].Pos = box.Vertices[i].Position;
 		vertices[i].Normal = box.Vertices[i].Normal;
-		vertices[i].Tex    = box.Vertices[i].TexC;
+		vertices[i].Tex = box.Vertices[i].TexC;
 	}
 
-    D3D11_BUFFER_DESC vbd;
-    vbd.Usage = D3D11_USAGE_IMMUTABLE;
-    vbd.ByteWidth = sizeof(Vertex::Basic32) * box.Vertices.size();
-    vbd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-    vbd.CPUAccessFlags = 0;
-    vbd.MiscFlags = 0;
-    D3D11_SUBRESOURCE_DATA vinitData;
-    vinitData.pSysMem = &vertices[0];
-    HR(md3dDevice->CreateBuffer(&vbd, &vinitData, &mBoxVB));
+	D3D11_BUFFER_DESC vbd;
+	vbd.Usage = D3D11_USAGE_IMMUTABLE;
+	vbd.ByteWidth = sizeof(Vertex::Basic32) * box.Vertices.size();
+	vbd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	vbd.CPUAccessFlags = 0;
+	vbd.MiscFlags = 0;
+	D3D11_SUBRESOURCE_DATA vinitData;
+	vinitData.pSysMem = &vertices[0];
+	HR(md3dDevice->CreateBuffer(&vbd, &vinitData, &mBoxVB));
 
 	//
 	// Pack the indices of all the meshes into one index buffer.
 	//
 
 	D3D11_BUFFER_DESC ibd;
-    ibd.Usage = D3D11_USAGE_IMMUTABLE;
+	ibd.Usage = D3D11_USAGE_IMMUTABLE;
 	ibd.ByteWidth = sizeof(UINT) * box.Indices.size();
-    ibd.BindFlags = D3D11_BIND_INDEX_BUFFER;
-    ibd.CPUAccessFlags = 0;
-    ibd.MiscFlags = 0;
-    D3D11_SUBRESOURCE_DATA iinitData;
-    iinitData.pSysMem = &box.Indices[0];
-    HR(md3dDevice->CreateBuffer(&ibd, &iinitData, &mBoxIB));
+	ibd.BindFlags = D3D11_BIND_INDEX_BUFFER;
+	ibd.CPUAccessFlags = 0;
+	ibd.MiscFlags = 0;
+	D3D11_SUBRESOURCE_DATA iinitData;
+	iinitData.pSysMem = &box.Indices[0];
+	HR(md3dDevice->CreateBuffer(&ibd, &iinitData, &mBoxIB));
 }
