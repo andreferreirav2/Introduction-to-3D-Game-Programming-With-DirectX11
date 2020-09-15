@@ -33,12 +33,12 @@ public:
 	BasicEffect(ID3D11Device* device, const std::wstring& filename);
 	~BasicEffect();
 
-	void SetWorldViewProj(CXMMATRIX M)                  { WorldViewProj->SetMatrix(reinterpret_cast<const float*>(&M)); }
-	void SetWorld(CXMMATRIX M)                          { World->SetMatrix(reinterpret_cast<const float*>(&M)); }
-	void SetWorldInvTranspose(CXMMATRIX M)              { WorldInvTranspose->SetMatrix(reinterpret_cast<const float*>(&M)); }
-	void SetTexTransform(CXMMATRIX M)                   { TexTransform->SetMatrix(reinterpret_cast<const float*>(&M)); }
-	void SetEyePosW(const XMFLOAT3& v)                  { EyePosW->SetRawValue(&v, 0, sizeof(XMFLOAT3)); }
-	void SetFogColor(const FXMVECTOR v)                 { FogColor->SetFloatVector(reinterpret_cast<const float*>(&v)); }
+	void SetWorldViewProj(DirectX::CXMMATRIX M)                  { WorldViewProj->SetMatrix(reinterpret_cast<const float*>(&M)); }
+	void SetWorld(DirectX::CXMMATRIX M)                          { World->SetMatrix(reinterpret_cast<const float*>(&M)); }
+	void SetWorldInvTranspose(DirectX::CXMMATRIX M)              { WorldInvTranspose->SetMatrix(reinterpret_cast<const float*>(&M)); }
+	void SetTexTransform(DirectX::CXMMATRIX M)                   { TexTransform->SetMatrix(reinterpret_cast<const float*>(&M)); }
+	void SetEyePosW(const DirectX::XMFLOAT3& v)                  { EyePosW->SetRawValue(&v, 0, sizeof(DirectX::XMFLOAT3)); }
+	void SetFogColor(const DirectX::FXMVECTOR v)                 { FogColor->SetFloatVector(reinterpret_cast<const float*>(&v)); }
 	void SetFogStart(float f)                           { FogStart->SetFloat(f); }
 	void SetFogRange(float f)                           { FogRange->SetFloat(f); }
 	void SetDirLights(const DirectionalLight* lights)   { DirLights->SetRawValue(lights, 0, 3*sizeof(DirectionalLight)); }
@@ -95,16 +95,16 @@ public:
 	WaveRenderEffect(ID3D11Device* device, const std::wstring& filename);
 	~WaveRenderEffect();
 
-	void SetWorldViewProj(CXMMATRIX M)                     { WorldViewProj->SetMatrix(reinterpret_cast<const float*>(&M)); }
-	void SetWorld(CXMMATRIX M)                             { World->SetMatrix(reinterpret_cast<const float*>(&M)); }
-	void SetWorldInvTranspose(CXMMATRIX M)                 { WorldInvTranspose->SetMatrix(reinterpret_cast<const float*>(&M)); }
-	void SetTexTransform(CXMMATRIX M)                      { TexTransform->SetMatrix(reinterpret_cast<const float*>(&M)); }
-	void SetEyePosW(const XMFLOAT3& v)                     { EyePosW->SetRawValue(&v, 0, sizeof(XMFLOAT3)); }
-	void SetFogColor(const FXMVECTOR v)                    { FogColor->SetFloatVector(reinterpret_cast<const float*>(&v)); }
+	void SetWorldViewProj(DirectX::CXMMATRIX M)                     { WorldViewProj->SetMatrix(reinterpret_cast<const float*>(&M)); }
+	void SetWorld(DirectX::CXMMATRIX M)                             { World->SetMatrix(reinterpret_cast<const float*>(&M)); }
+	void SetWorldInvTranspose(DirectX::CXMMATRIX M)                 { WorldInvTranspose->SetMatrix(reinterpret_cast<const float*>(&M)); }
+	void SetTexTransform(DirectX::CXMMATRIX M)                      { TexTransform->SetMatrix(reinterpret_cast<const float*>(&M)); }
+	void SetEyePosW(const DirectX::XMFLOAT3& v)                     { EyePosW->SetRawValue(&v, 0, sizeof(DirectX::XMFLOAT3)); }
+	void SetFogColor(const DirectX::FXMVECTOR v)                    { FogColor->SetFloatVector(reinterpret_cast<const float*>(&v)); }
 	void SetFogStart(float f)                              { FogStart->SetFloat(f); }
 	void SetFogRange(float f)                              { FogRange->SetFloat(f); }
 	void SetGridSpatialStep(float f)                       { GridSpatialStep->SetFloat(f); }
-	void SetDisplacementTexelSize(const XMFLOAT2& v)       { DisplacementMapTexelSize->SetRawValue(&v, 0, sizeof(XMFLOAT2)); }
+	void SetDisplacementTexelSize(const DirectX::XMFLOAT2& v)       { DisplacementMapTexelSize->SetRawValue(&v, 0, sizeof(DirectX::XMFLOAT2)); }
 	void SetDirLights(const DirectionalLight* lights)      { DirLights->SetRawValue(lights, 0, 3*sizeof(DirectionalLight)); }
 	void SetMaterial(const Material& mat)                  { Mat->SetRawValue(&mat, 0, sizeof(Material)); }
 	void SetDiffuseMap(ID3D11ShaderResourceView* tex)      { DiffuseMap->SetResource(tex); }

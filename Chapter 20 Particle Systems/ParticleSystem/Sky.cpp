@@ -16,7 +16,7 @@ Sky::Sky(ID3D11Device* device, const std::wstring& cubemapFilename, float skySph
 	GeometryGenerator geoGen;
 	geoGen.CreateSphere(skySphereRadius, 30, 30, sphere);
 
-	std::vector<XMFLOAT3> vertices(sphere.Vertices.size());
+	std::vector<DirectX::XMFLOAT3> vertices(sphere.Vertices.size());
 
 	for(size_t i = 0; i < sphere.Vertices.size(); ++i)
 	{
@@ -25,7 +25,7 @@ Sky::Sky(ID3D11Device* device, const std::wstring& cubemapFilename, float skySph
 
     D3D11_BUFFER_DESC vbd;
     vbd.Usage = D3D11_USAGE_IMMUTABLE;
-	vbd.ByteWidth = sizeof(XMFLOAT3) * vertices.size();
+	vbd.ByteWidth = sizeof(DirectX::XMFLOAT3) * vertices.size();
     vbd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
     vbd.CPUAccessFlags = 0;
     vbd.MiscFlags = 0;
@@ -71,17 +71,17 @@ ID3D11ShaderResourceView* Sky::CubeMapSRV()
 void Sky::Draw(ID3D11DeviceContext* dc, const Camera& camera)
 {
 	// center Sky about eye in world space
-	XMFLOAT3 eyePos = camera.GetPosition();
-	XMMATRIX T = XMMatrixTranslation(eyePos.x, eyePos.y, eyePos.z);
+	DirectX::XMFLOAT3 eyePos = camera.GetPosition();
+	DirectX::XMMATRIX T = DirectX::XMMatrixTranslation(eyePos.x, eyePos.y, eyePos.z);
 
 
-	XMMATRIX WVP = XMMatrixMultiply(T, camera.ViewProj());
+	DirectX::XMMATRIX WVP = DirectX::XMMatrixMultiply(T, camera.ViewProj());
 
 	Effects::SkyFX->SetWorldViewProj(WVP);
 	Effects::SkyFX->SetCubeMap(mCubeMapSRV);
 
 
-	UINT stride = sizeof(XMFLOAT3);
+	UINT stride = sizeof(DirectX::XMFLOAT3);
     UINT offset = 0;
     dc->IASetVertexBuffers(0, 1, &mVB, &stride, &offset);
 	dc->IASetIndexBuffer(mIB, DXGI_FORMAT_R16_UINT, 0);

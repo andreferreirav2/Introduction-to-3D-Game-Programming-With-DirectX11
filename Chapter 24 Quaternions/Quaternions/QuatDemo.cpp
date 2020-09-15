@@ -57,11 +57,11 @@ private:
 	Material mSkullMat;
 
 	// Define transformations from local spaces to world space.
-	XMFLOAT4X4 mSphereWorld[10];
-	XMFLOAT4X4 mCylWorld[10];
-	XMFLOAT4X4 mBoxWorld;
-	XMFLOAT4X4 mGridWorld;
-	XMFLOAT4X4 mSkullWorld;
+	DirectX::XMFLOAT4X4 mSphereWorld[10];
+	DirectX::XMFLOAT4X4 mCylWorld[10];
+	DirectX::XMFLOAT4X4 mBoxWorld;
+	DirectX::XMFLOAT4X4 mGridWorld;
+	DirectX::XMFLOAT4X4 mSkullWorld;
 
 	int mBoxVertexOffset;
 	int mGridVertexOffset;
@@ -115,93 +115,93 @@ QuatApp::QuatApp(HINSTANCE hInstance)
 	mLastMousePos.x = 0;
 	mLastMousePos.y = 0;
 
-	mCam.Pitch(XMConvertToRadians(25.0f));
+	mCam.Pitch(DirectX::XMConvertToRadians(25.0f));
 	mCam.SetPosition(0.0f, 8.0f, -20.0f);
 
-	XMMATRIX I = XMMatrixIdentity();
+	DirectX::XMMATRIX I = DirectX::XMMatrixIdentity();
 	XMStoreFloat4x4(&mGridWorld, I);
 
-	XMMATRIX boxScale = XMMatrixScaling(3.0f, 1.0f, 3.0f);
-	XMMATRIX boxOffset = XMMatrixTranslation(0.0f, 0.5f, 0.0f);
-	XMStoreFloat4x4(&mBoxWorld, XMMatrixMultiply(boxScale, boxOffset));
+	DirectX::XMMATRIX boxScale = DirectX::XMMatrixScaling(3.0f, 1.0f, 3.0f);
+	DirectX::XMMATRIX boxOffset = DirectX::XMMatrixTranslation(0.0f, 0.5f, 0.0f);
+	XMStoreFloat4x4(&mBoxWorld, DirectX::XMMatrixMultiply(boxScale, boxOffset));
 
 	for(int i = 0; i < 5; ++i)
 	{
-		XMStoreFloat4x4(&mCylWorld[i*2+0], XMMatrixTranslation(-5.0f, 1.5f, -10.0f + i*5.0f));
-		XMStoreFloat4x4(&mCylWorld[i*2+1], XMMatrixTranslation(+5.0f, 1.5f, -10.0f + i*5.0f));
+		XMStoreFloat4x4(&mCylWorld[i*2+0], DirectX::XMMatrixTranslation(-5.0f, 1.5f, -10.0f + i*5.0f));
+		XMStoreFloat4x4(&mCylWorld[i*2+1], DirectX::XMMatrixTranslation(+5.0f, 1.5f, -10.0f + i*5.0f));
 
-		XMStoreFloat4x4(&mSphereWorld[i*2+0], XMMatrixTranslation(-5.0f, 3.5f, -10.0f + i*5.0f));
-		XMStoreFloat4x4(&mSphereWorld[i*2+1], XMMatrixTranslation(+5.0f, 3.5f, -10.0f + i*5.0f));
+		XMStoreFloat4x4(&mSphereWorld[i*2+0], DirectX::XMMatrixTranslation(-5.0f, 3.5f, -10.0f + i*5.0f));
+		XMStoreFloat4x4(&mSphereWorld[i*2+1], DirectX::XMMatrixTranslation(+5.0f, 3.5f, -10.0f + i*5.0f));
 	}
 
-	mDirLights[0].Ambient  = XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
-	mDirLights[0].Diffuse  = XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
-	mDirLights[0].Specular = XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
-	mDirLights[0].Direction = XMFLOAT3(0.57735f, -0.57735f, 0.57735f);
+	mDirLights[0].Ambient  = DirectX::XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
+	mDirLights[0].Diffuse  = DirectX::XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
+	mDirLights[0].Specular = DirectX::XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
+	mDirLights[0].Direction = DirectX::XMFLOAT3(0.57735f, -0.57735f, 0.57735f);
 
-	mDirLights[1].Ambient  = XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
-	mDirLights[1].Diffuse  = XMFLOAT4(0.20f, 0.20f, 0.20f, 1.0f);
-	mDirLights[1].Specular = XMFLOAT4(0.25f, 0.25f, 0.25f, 1.0f);
-	mDirLights[1].Direction = XMFLOAT3(-0.57735f, -0.57735f, 0.57735f);
+	mDirLights[1].Ambient  = DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
+	mDirLights[1].Diffuse  = DirectX::XMFLOAT4(0.20f, 0.20f, 0.20f, 1.0f);
+	mDirLights[1].Specular = DirectX::XMFLOAT4(0.25f, 0.25f, 0.25f, 1.0f);
+	mDirLights[1].Direction = DirectX::XMFLOAT3(-0.57735f, -0.57735f, 0.57735f);
 
-	mDirLights[2].Ambient  = XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
-	mDirLights[2].Diffuse  = XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
-	mDirLights[2].Specular = XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
-	mDirLights[2].Direction = XMFLOAT3(0.0f, -0.707f, -0.707f);
+	mDirLights[2].Ambient  = DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
+	mDirLights[2].Diffuse  = DirectX::XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
+	mDirLights[2].Specular = DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
+	mDirLights[2].Direction = DirectX::XMFLOAT3(0.0f, -0.707f, -0.707f);
 
-	mGridMat.Ambient  = XMFLOAT4(0.8f, 0.8f, 0.8f, 1.0f);
-	mGridMat.Diffuse  = XMFLOAT4(0.8f, 0.8f, 0.8f, 1.0f);
-	mGridMat.Specular = XMFLOAT4(0.8f, 0.8f, 0.8f, 16.0f);
+	mGridMat.Ambient  = DirectX::XMFLOAT4(0.8f, 0.8f, 0.8f, 1.0f);
+	mGridMat.Diffuse  = DirectX::XMFLOAT4(0.8f, 0.8f, 0.8f, 1.0f);
+	mGridMat.Specular = DirectX::XMFLOAT4(0.8f, 0.8f, 0.8f, 16.0f);
 
-	mCylinderMat.Ambient  = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-	mCylinderMat.Diffuse  = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-	mCylinderMat.Specular = XMFLOAT4(0.8f, 0.8f, 0.8f, 16.0f);
+	mCylinderMat.Ambient  = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+	mCylinderMat.Diffuse  = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+	mCylinderMat.Specular = DirectX::XMFLOAT4(0.8f, 0.8f, 0.8f, 16.0f);
 
-	mSphereMat.Ambient  = XMFLOAT4(0.6f, 0.8f, 0.9f, 1.0f);
-	mSphereMat.Diffuse  = XMFLOAT4(0.6f, 0.8f, 0.9f, 1.0f);
-	mSphereMat.Specular = XMFLOAT4(0.9f, 0.9f, 0.9f, 16.0f);
+	mSphereMat.Ambient  = DirectX::XMFLOAT4(0.6f, 0.8f, 0.9f, 1.0f);
+	mSphereMat.Diffuse  = DirectX::XMFLOAT4(0.6f, 0.8f, 0.9f, 1.0f);
+	mSphereMat.Specular = DirectX::XMFLOAT4(0.9f, 0.9f, 0.9f, 16.0f);
 
-	mBoxMat.Ambient  = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-	mBoxMat.Diffuse  = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-	mBoxMat.Specular = XMFLOAT4(0.8f, 0.8f, 0.8f, 16.0f);
+	mBoxMat.Ambient  = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+	mBoxMat.Diffuse  = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+	mBoxMat.Specular = DirectX::XMFLOAT4(0.8f, 0.8f, 0.8f, 16.0f);
 
-	mSkullMat.Ambient  = XMFLOAT4(0.4f, 0.4f, 0.4f, 1.0f);
-	mSkullMat.Diffuse  = XMFLOAT4(0.8f, 0.8f, 0.8f, 1.0f);
-	mSkullMat.Specular = XMFLOAT4(0.8f, 0.8f, 0.8f, 16.0f);
+	mSkullMat.Ambient  = DirectX::XMFLOAT4(0.4f, 0.4f, 0.4f, 1.0f);
+	mSkullMat.Diffuse  = DirectX::XMFLOAT4(0.8f, 0.8f, 0.8f, 1.0f);
+	mSkullMat.Specular = DirectX::XMFLOAT4(0.8f, 0.8f, 0.8f, 16.0f);
 
 	//
 	// Define the animation keyframes
 	//
 
-	XMVECTOR q0 = XMQuaternionRotationAxis(XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f), XMConvertToRadians(30.0f)); 
-	XMVECTOR q1 = XMQuaternionRotationAxis(XMVectorSet(1.0f, 1.0f, 2.0f, 0.0f), XMConvertToRadians(45.0f)); 
-	XMVECTOR q2 = XMQuaternionRotationAxis(XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f), XMConvertToRadians(-30.0f)); 
-	XMVECTOR q3 = XMQuaternionRotationAxis(XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f), XMConvertToRadians(70.0f)); 
+	DirectX::XMVECTOR q0 = XMQuaternionRotationAxis(DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f), DirectX::XMConvertToRadians(30.0f)); 
+	DirectX::XMVECTOR q1 = XMQuaternionRotationAxis(DirectX::XMVectorSet(1.0f, 1.0f, 2.0f, 0.0f), DirectX::XMConvertToRadians(45.0f)); 
+	DirectX::XMVECTOR q2 = XMQuaternionRotationAxis(DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f), DirectX::XMConvertToRadians(-30.0f)); 
+	DirectX::XMVECTOR q3 = XMQuaternionRotationAxis(DirectX::XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f), DirectX::XMConvertToRadians(70.0f)); 
 
 	mSkullAnimation.Keyframes.resize(5);
 	mSkullAnimation.Keyframes[0].TimePos = 0.0f;
-	mSkullAnimation.Keyframes[0].Translation = XMFLOAT3(-7.0f, 0.0f, 0.0f);
-	mSkullAnimation.Keyframes[0].Scale = XMFLOAT3(0.25f, 0.25f, 0.25f);
+	mSkullAnimation.Keyframes[0].Translation = DirectX::XMFLOAT3(-7.0f, 0.0f, 0.0f);
+	mSkullAnimation.Keyframes[0].Scale = DirectX::XMFLOAT3(0.25f, 0.25f, 0.25f);
 	XMStoreFloat4(&mSkullAnimation.Keyframes[0].RotationQuat, q0);
 
 	mSkullAnimation.Keyframes[1].TimePos = 2.0f;
-	mSkullAnimation.Keyframes[1].Translation = XMFLOAT3(0.0f, 2.0f, 10.0f);
-	mSkullAnimation.Keyframes[1].Scale = XMFLOAT3(0.5f, 0.5f, 0.5f);
+	mSkullAnimation.Keyframes[1].Translation = DirectX::XMFLOAT3(0.0f, 2.0f, 10.0f);
+	mSkullAnimation.Keyframes[1].Scale = DirectX::XMFLOAT3(0.5f, 0.5f, 0.5f);
 	XMStoreFloat4(&mSkullAnimation.Keyframes[1].RotationQuat, q1);
 
 	mSkullAnimation.Keyframes[2].TimePos = 4.0f;
-	mSkullAnimation.Keyframes[2].Translation = XMFLOAT3(7.0f, 0.0f, 0.0f);
-	mSkullAnimation.Keyframes[2].Scale = XMFLOAT3(0.25f, 0.25f, 0.25f);
+	mSkullAnimation.Keyframes[2].Translation = DirectX::XMFLOAT3(7.0f, 0.0f, 0.0f);
+	mSkullAnimation.Keyframes[2].Scale = DirectX::XMFLOAT3(0.25f, 0.25f, 0.25f);
 	XMStoreFloat4(&mSkullAnimation.Keyframes[2].RotationQuat, q2);
 
 	mSkullAnimation.Keyframes[3].TimePos = 6.0f;
-	mSkullAnimation.Keyframes[3].Translation = XMFLOAT3(0.0f, 1.0f, -10.0f);
-	mSkullAnimation.Keyframes[3].Scale = XMFLOAT3(0.5f, 0.5f, 0.5f);
+	mSkullAnimation.Keyframes[3].Translation = DirectX::XMFLOAT3(0.0f, 1.0f, -10.0f);
+	mSkullAnimation.Keyframes[3].Scale = DirectX::XMFLOAT3(0.5f, 0.5f, 0.5f);
 	XMStoreFloat4(&mSkullAnimation.Keyframes[3].RotationQuat, q3);
 
 	mSkullAnimation.Keyframes[4].TimePos = 8.0f;
-	mSkullAnimation.Keyframes[4].Translation = XMFLOAT3(-7.0f, 0.0f, 0.0f);
-	mSkullAnimation.Keyframes[4].Scale = XMFLOAT3(0.25f, 0.25f, 0.25f);
+	mSkullAnimation.Keyframes[4].Translation = DirectX::XMFLOAT3(-7.0f, 0.0f, 0.0f);
+	mSkullAnimation.Keyframes[4].Scale = DirectX::XMFLOAT3(0.25f, 0.25f, 0.25f);
 	XMStoreFloat4(&mSkullAnimation.Keyframes[4].RotationQuat, q0);
 }
 
@@ -291,9 +291,9 @@ void QuatApp::DrawScene()
 
 	mCam.UpdateViewMatrix();
  
-	XMMATRIX view     = mCam.View();
-	XMMATRIX proj     = mCam.Proj();
-	XMMATRIX viewProj = mCam.ViewProj();
+	DirectX::XMMATRIX view     = mCam.View();
+	DirectX::XMMATRIX proj     = mCam.Proj();
+	DirectX::XMMATRIX viewProj = mCam.ViewProj();
 
 	// Set per frame constants.
 	Effects::BasicFX->SetDirLights(mDirLights);
@@ -312,14 +312,14 @@ void QuatApp::DrawScene()
 		md3dImmediateContext->IASetIndexBuffer(mShapesIB, DXGI_FORMAT_R32_UINT, 0);
 
 		// Draw the grid.
-		XMMATRIX world = XMLoadFloat4x4(&mGridWorld);
-		XMMATRIX worldInvTranspose = MathHelper::InverseTranspose(world);
-		XMMATRIX worldViewProj = world*view*proj;
+		DirectX::XMMATRIX world = XMLoadFloat4x4(&mGridWorld);
+		DirectX::XMMATRIX worldInvTranspose = MathHelper::InverseTranspose(world);
+		DirectX::XMMATRIX worldViewProj = world*view*proj;
 
 		Effects::BasicFX->SetWorld(world);
 		Effects::BasicFX->SetWorldInvTranspose(worldInvTranspose);
 		Effects::BasicFX->SetWorldViewProj(worldViewProj);
-		Effects::BasicFX->SetTexTransform(XMMatrixScaling(6.0f, 8.0f, 1.0f));
+		Effects::BasicFX->SetTexTransform(DirectX::XMMatrixScaling(6.0f, 8.0f, 1.0f));
 		Effects::BasicFX->SetMaterial(mGridMat);
 		Effects::BasicFX->SetDiffuseMap(mFloorTexSRV);
 
@@ -334,7 +334,7 @@ void QuatApp::DrawScene()
 		Effects::BasicFX->SetWorld(world);
 		Effects::BasicFX->SetWorldInvTranspose(worldInvTranspose);
 		Effects::BasicFX->SetWorldViewProj(worldViewProj);
-		Effects::BasicFX->SetTexTransform(XMMatrixIdentity());
+		Effects::BasicFX->SetTexTransform(DirectX::XMMatrixIdentity());
 		Effects::BasicFX->SetMaterial(mBoxMat);
 		Effects::BasicFX->SetDiffuseMap(mStoneTexSRV);
 
@@ -351,7 +351,7 @@ void QuatApp::DrawScene()
 			Effects::BasicFX->SetWorld(world);
 			Effects::BasicFX->SetWorldInvTranspose(worldInvTranspose);
 			Effects::BasicFX->SetWorldViewProj(worldViewProj);
-			Effects::BasicFX->SetTexTransform(XMMatrixIdentity());
+			Effects::BasicFX->SetTexTransform(DirectX::XMMatrixIdentity());
 			Effects::BasicFX->SetMaterial(mCylinderMat);
 			Effects::BasicFX->SetDiffuseMap(mBrickTexSRV);
 
@@ -369,7 +369,7 @@ void QuatApp::DrawScene()
 			Effects::BasicFX->SetWorld(world);
 			Effects::BasicFX->SetWorldInvTranspose(worldInvTranspose);
 			Effects::BasicFX->SetWorldViewProj(worldViewProj);
-			Effects::BasicFX->SetTexTransform(XMMatrixIdentity());
+			Effects::BasicFX->SetTexTransform(DirectX::XMMatrixIdentity());
 			Effects::BasicFX->SetMaterial(mSphereMat);
 			Effects::BasicFX->SetDiffuseMap(mStoneTexSRV);
 
@@ -386,9 +386,9 @@ void QuatApp::DrawScene()
 		md3dImmediateContext->IASetVertexBuffers(0, 1, &mSkullVB, &stride, &offset);
 		md3dImmediateContext->IASetIndexBuffer(mSkullIB, DXGI_FORMAT_R32_UINT, 0);
 
-		XMMATRIX world = XMLoadFloat4x4(&mSkullWorld);
-		XMMATRIX worldInvTranspose = MathHelper::InverseTranspose(world);
-		XMMATRIX worldViewProj = world*view*proj;
+		DirectX::XMMATRIX world = XMLoadFloat4x4(&mSkullWorld);
+		DirectX::XMMATRIX worldInvTranspose = MathHelper::InverseTranspose(world);
+		DirectX::XMMATRIX worldViewProj = world*view*proj;
 
 		Effects::BasicFX->SetWorld(world);
 		Effects::BasicFX->SetWorldInvTranspose(worldInvTranspose);
@@ -420,8 +420,8 @@ void QuatApp::OnMouseMove(WPARAM btnState, int x, int y)
 	if( (btnState & MK_LBUTTON) != 0 )
 	{
 		// Make each pixel correspond to a quarter of a degree.
-		float dx = XMConvertToRadians(0.25f*static_cast<float>(x - mLastMousePos.x));
-		float dy = XMConvertToRadians(0.25f*static_cast<float>(y - mLastMousePos.y));
+		float dx = DirectX::XMConvertToRadians(0.25f*static_cast<float>(x - mLastMousePos.x));
+		float dy = DirectX::XMConvertToRadians(0.25f*static_cast<float>(y - mLastMousePos.y));
 
 		mCam.Pitch(dy);
 		mCam.RotateY(dx);

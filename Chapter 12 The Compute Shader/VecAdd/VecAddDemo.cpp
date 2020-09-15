@@ -18,8 +18,8 @@
 
 struct Data
 {
-	XMFLOAT3 v1;
-	XMFLOAT2 v2;
+	DirectX::XMFLOAT3 v1;
+	DirectX::XMFLOAT2 v2;
 };
 
 class VecAddApp : public D3DApp
@@ -180,11 +180,11 @@ void VecAddApp::BuildBuffersAndViews()
 	std::vector<Data> dataB(mNumElements);
 	for(int i = 0; i < mNumElements; ++i)
 	{
-		dataA[i].v1 = XMFLOAT3(i, i, i);
-		dataA[i].v2 = XMFLOAT2(i, 0);
+		dataA[i].v1 = DirectX::XMFLOAT3(i, i, i);
+		dataA[i].v2 = DirectX::XMFLOAT2(i, 0);
 
-		dataB[i].v1 = XMFLOAT3(-i, i, 0.0f);
-		dataB[i].v2 = XMFLOAT2(0, -i);
+		dataB[i].v1 = DirectX::XMFLOAT3(-i, i, 0.0f);
+		dataB[i].v2 = DirectX::XMFLOAT2(0, -i);
 	}
 
 	// Create a buffer to be bound as a shader input (D3D11_BIND_SHADER_RESOURCE).

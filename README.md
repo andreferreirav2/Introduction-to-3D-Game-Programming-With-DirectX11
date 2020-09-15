@@ -5,6 +5,11 @@ Book Example Code in [Introduction to 3D Game Programming With DirectX11 by Fran
 http://www.d3dcoder.net/
 
 
+VS2019 / Win10 adaptation:
+==================
+
+Followed the indications from Frank Luna: http://www.d3dcoder.net/Data/Book4/d3d11Win10.htm
+
 
 New Project setup:
 ==================
@@ -15,12 +20,12 @@ project sample, the Common folder must be obtained from it via "../../Common".
 Debug libraries:
 ----------------
 
-d3d11.lib;d3dx11d.lib;D3DCompiler.lib;Effects11d.lib;dxerr.lib;dxgi.lib;dxguid.lib;%(AdditionalDependencies)
+d3d11.lib;D3DCompiler.lib;Effects11d.lib;dxgi.lib;dxguid.lib;%(AdditionalDependencies)
 
 Release libraries:
 ------------------
 
-d3d11.lib;d3dx11.lib;D3DCompiler.lib;Effects11.lib;dxerr.lib;dxgi.lib;dxguid.lib;%(AdditionalDependencies)
+d3d11.lib;D3DCompiler.lib;Effects11.lib;dxgi.lib;dxguid.lib;%(AdditionalDependencies)
 
 C/C++ Additional Include Directories:
 -------------------------------------

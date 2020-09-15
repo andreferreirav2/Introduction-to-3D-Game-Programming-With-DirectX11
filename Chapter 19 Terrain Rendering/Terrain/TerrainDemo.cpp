@@ -76,20 +76,20 @@ TerrainApp::TerrainApp(HINSTANCE hInstance)
 
 	mCam.SetPosition(0.0f, 2.0f, 100.0f);
 
-	mDirLights[0].Ambient  = XMFLOAT4(0.3f, 0.3f, 0.3f, 1.0f);
-	mDirLights[0].Diffuse  = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-	mDirLights[0].Specular = XMFLOAT4(0.8f, 0.8f, 0.7f, 1.0f);
-	mDirLights[0].Direction = XMFLOAT3(0.707f, -0.707f, 0.0f);
+	mDirLights[0].Ambient  = DirectX::XMFLOAT4(0.3f, 0.3f, 0.3f, 1.0f);
+	mDirLights[0].Diffuse  = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+	mDirLights[0].Specular = DirectX::XMFLOAT4(0.8f, 0.8f, 0.7f, 1.0f);
+	mDirLights[0].Direction = DirectX::XMFLOAT3(0.707f, -0.707f, 0.0f);
 
-	mDirLights[1].Ambient  = XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
-	mDirLights[1].Diffuse  = XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
-	mDirLights[1].Specular = XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
-	mDirLights[1].Direction = XMFLOAT3(0.57735f, -0.57735f, 0.57735f);
+	mDirLights[1].Ambient  = DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
+	mDirLights[1].Diffuse  = DirectX::XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
+	mDirLights[1].Specular = DirectX::XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
+	mDirLights[1].Direction = DirectX::XMFLOAT3(0.57735f, -0.57735f, 0.57735f);
 
-	mDirLights[2].Ambient  = XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
-	mDirLights[2].Diffuse  = XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
-	mDirLights[2].Specular = XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
-	mDirLights[2].Direction = XMFLOAT3(-0.57735f, -0.57735f, -0.57735f);
+	mDirLights[2].Ambient  = DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
+	mDirLights[2].Diffuse  = DirectX::XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
+	mDirLights[2].Specular = DirectX::XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
+	mDirLights[2].Direction = DirectX::XMFLOAT3(-0.57735f, -0.57735f, -0.57735f);
 }
 
 TerrainApp::~TerrainApp()
@@ -169,7 +169,7 @@ void TerrainApp::UpdateScene(float dt)
 	//
 	if( mWalkCamMode )
 	{
-		XMFLOAT3 camPos = mCam.GetPosition();
+		DirectX::XMFLOAT3 camPos = mCam.GetPosition();
 		float y = mTerrain.GetHeight(camPos.x, camPos.z);
 		mCam.SetPosition(camPos.x, y + 2.0f, camPos.z);
 	}
@@ -221,8 +221,8 @@ void TerrainApp::OnMouseMove(WPARAM btnState, int x, int y)
 	if( (btnState & MK_LBUTTON) != 0 )
 	{
 		// Make each pixel correspond to a quarter of a degree.
-		float dx = XMConvertToRadians(0.25f*static_cast<float>(x - mLastMousePos.x));
-		float dy = XMConvertToRadians(0.25f*static_cast<float>(y - mLastMousePos.y));
+		float dx = DirectX::XMConvertToRadians(0.25f*static_cast<float>(x - mLastMousePos.x));
+		float dy = DirectX::XMConvertToRadians(0.25f*static_cast<float>(y - mLastMousePos.y));
 
 		mCam.Pitch(dy);
 		mCam.RotateY(dx);

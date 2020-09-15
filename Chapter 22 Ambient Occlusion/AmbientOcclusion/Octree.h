@@ -18,17 +18,17 @@ public:
 	Octree();
 	~Octree();
 
-	void Build(const std::vector<XMFLOAT3>& vertices, const std::vector<UINT>& indices);
-	bool RayOctreeIntersect(FXMVECTOR rayPos, FXMVECTOR rayDir);
+	void Build(const std::vector<DirectX::XMFLOAT3>& vertices, const std::vector<UINT>& indices);
+	bool RayOctreeIntersect(FXMVECTOR rayPos, DirectX::FXMVECTOR rayDir);
 
 private:
 	XNA::AxisAlignedBox BuildAABB();
 	void BuildOctree(OctreeNode* parent, const std::vector<UINT>& indices);
-	bool RayOctreeIntersect(OctreeNode* parent, FXMVECTOR rayPos, FXMVECTOR rayDir);
+	bool RayOctreeIntersect(OctreeNode* parent, DirectX::FXMVECTOR rayPos, DirectX::FXMVECTOR rayDir);
 private:
 	OctreeNode* mRoot;
  
-	std::vector<XMFLOAT3> mVertices;
+	std::vector<DirectX::XMFLOAT3> mVertices;
 };
 
 struct OctreeNode
@@ -49,8 +49,8 @@ struct OctreeNode
 		for(int i = 0; i < 8; ++i)
 			Children[i] = 0;
 
-		Bounds.Center  = XMFLOAT3(0.0f, 0.0f, 0.0f);
-		Bounds.Extents = XMFLOAT3(0.0f, 0.0f, 0.0f);
+		Bounds.Center  = DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f);
+		Bounds.Extents = DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f);
 
 		IsLeaf = false;
 	}
@@ -66,56 +66,56 @@ struct OctreeNode
 	///</summary>
 	void Subdivide(XNA::AxisAlignedBox box[8])
 	{
-		XMFLOAT3 halfExtent(
+		DirectX::XMFLOAT3 halfExtent(
 			0.5f*Bounds.Extents.x,
 			0.5f*Bounds.Extents.y,
 			0.5f*Bounds.Extents.z);
 
 		// "Top" four quadrants.
-		box[0].Center  = XMFLOAT3(
+		box[0].Center  = DirectX::XMFLOAT3(
 			Bounds.Center.x + halfExtent.x,
 			Bounds.Center.y + halfExtent.y,
 			Bounds.Center.z + halfExtent.z);
 		box[0].Extents = halfExtent;
 
-		box[1].Center  = XMFLOAT3(
+		box[1].Center  = DirectX::XMFLOAT3(
 			Bounds.Center.x - halfExtent.x,
 			Bounds.Center.y + halfExtent.y,
 			Bounds.Center.z + halfExtent.z);
 		box[1].Extents = halfExtent;
 
-		box[2].Center  = XMFLOAT3(
+		box[2].Center  = DirectX::XMFLOAT3(
 			Bounds.Center.x - halfExtent.x,
 			Bounds.Center.y + halfExtent.y,
 			Bounds.Center.z - halfExtent.z);
 		box[2].Extents = halfExtent;
 
-		box[3].Center  = XMFLOAT3(
+		box[3].Center  = DirectX::XMFLOAT3(
 			Bounds.Center.x + halfExtent.x,
 			Bounds.Center.y + halfExtent.y,
 			Bounds.Center.z - halfExtent.z);
 		box[3].Extents = halfExtent;
 
 		// "Bottom" four quadrants.
-		box[4].Center  = XMFLOAT3(
+		box[4].Center  = DirectX::XMFLOAT3(
 			Bounds.Center.x + halfExtent.x,
 			Bounds.Center.y - halfExtent.y,
 			Bounds.Center.z + halfExtent.z);
 		box[4].Extents = halfExtent;
 
-		box[5].Center  = XMFLOAT3(
+		box[5].Center  = DirectX::XMFLOAT3(
 			Bounds.Center.x - halfExtent.x,
 			Bounds.Center.y - halfExtent.y,
 			Bounds.Center.z + halfExtent.z);
 		box[5].Extents = halfExtent;
 
-		box[6].Center  = XMFLOAT3(
+		box[6].Center  = DirectX::XMFLOAT3(
 			Bounds.Center.x - halfExtent.x,
 			Bounds.Center.y - halfExtent.y,
 			Bounds.Center.z - halfExtent.z);
 		box[6].Extents = halfExtent;
 
-		box[7].Center  = XMFLOAT3(
+		box[7].Center  = DirectX::XMFLOAT3(
 			Bounds.Center.x + halfExtent.x,
 			Bounds.Center.y - halfExtent.y,
 			Bounds.Center.z - halfExtent.z);

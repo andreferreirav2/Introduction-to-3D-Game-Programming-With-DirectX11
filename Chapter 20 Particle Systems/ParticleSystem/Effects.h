@@ -33,12 +33,12 @@ public:
 	BasicEffect(ID3D11Device* device, const std::wstring& filename);
 	~BasicEffect();
 
-	void SetWorldViewProj(CXMMATRIX M)                  { WorldViewProj->SetMatrix(reinterpret_cast<const float*>(&M)); }
-	void SetWorld(CXMMATRIX M)                          { World->SetMatrix(reinterpret_cast<const float*>(&M)); }
-	void SetWorldInvTranspose(CXMMATRIX M)              { WorldInvTranspose->SetMatrix(reinterpret_cast<const float*>(&M)); }
-	void SetTexTransform(CXMMATRIX M)                   { TexTransform->SetMatrix(reinterpret_cast<const float*>(&M)); }
-	void SetEyePosW(const XMFLOAT3& v)                  { EyePosW->SetRawValue(&v, 0, sizeof(XMFLOAT3)); }
-	void SetFogColor(const FXMVECTOR v)                 { FogColor->SetFloatVector(reinterpret_cast<const float*>(&v)); }
+	void SetWorldViewProj(DirectX::CXMMATRIX M)                  { WorldViewProj->SetMatrix(reinterpret_cast<const float*>(&M)); }
+	void SetWorld(DirectX::CXMMATRIX M)                          { World->SetMatrix(reinterpret_cast<const float*>(&M)); }
+	void SetWorldInvTranspose(DirectX::CXMMATRIX M)              { WorldInvTranspose->SetMatrix(reinterpret_cast<const float*>(&M)); }
+	void SetTexTransform(DirectX::CXMMATRIX M)                   { TexTransform->SetMatrix(reinterpret_cast<const float*>(&M)); }
+	void SetEyePosW(const DirectX::XMFLOAT3& v)                  { EyePosW->SetRawValue(&v, 0, sizeof(DirectX::XMFLOAT3)); }
+	void SetFogColor(const DirectX::FXMVECTOR v)                 { FogColor->SetFloatVector(reinterpret_cast<const float*>(&v)); }
 	void SetFogStart(float f)                           { FogStart->SetFloat(f); }
 	void SetFogRange(float f)                           { FogRange->SetFloat(f); }
 	void SetDirLights(const DirectionalLight* lights)   { DirLights->SetRawValue(lights, 0, 3*sizeof(DirectionalLight)); }
@@ -125,7 +125,7 @@ public:
 	SkyEffect(ID3D11Device* device, const std::wstring& filename);
 	~SkyEffect();
 
-	void SetWorldViewProj(CXMMATRIX M)                  { WorldViewProj->SetMatrix(reinterpret_cast<const float*>(&M)); }
+	void SetWorldViewProj(DirectX::CXMMATRIX M)                  { WorldViewProj->SetMatrix(reinterpret_cast<const float*>(&M)); }
 	void SetCubeMap(ID3D11ShaderResourceView* cubemap)  { CubeMap->SetResource(cubemap); }
 
 	ID3DX11EffectTechnique* SkyTech;
@@ -143,9 +143,9 @@ public:
 	TerrainEffect(ID3D11Device* device, const std::wstring& filename);
 	~TerrainEffect();
 
-	void SetViewProj(CXMMATRIX M)                       { ViewProj->SetMatrix(reinterpret_cast<const float*>(&M)); }
-	void SetEyePosW(const XMFLOAT3& v)                  { EyePosW->SetRawValue(&v, 0, sizeof(XMFLOAT3)); }
-	void SetFogColor(const FXMVECTOR v)                 { FogColor->SetFloatVector(reinterpret_cast<const float*>(&v)); }
+	void SetViewProj(DirectX::CXMMATRIX M)                       { ViewProj->SetMatrix(reinterpret_cast<const float*>(&M)); }
+	void SetEyePosW(const DirectX::XMFLOAT3& v)                  { EyePosW->SetRawValue(&v, 0, sizeof(DirectX::XMFLOAT3)); }
+	void SetFogColor(const DirectX::FXMVECTOR v)                 { FogColor->SetFloatVector(reinterpret_cast<const float*>(&v)); }
 	void SetFogStart(float f)                           { FogStart->SetFloat(f); }
 	void SetFogRange(float f)                           { FogRange->SetFloat(f); }
 	void SetDirLights(const DirectionalLight* lights)   { DirLights->SetRawValue(lights, 0, 3*sizeof(DirectionalLight)); }
@@ -158,7 +158,7 @@ public:
 	void SetTexelCellSpaceU(float f)                    { TexelCellSpaceU->SetFloat(f); }
 	void SetTexelCellSpaceV(float f)                    { TexelCellSpaceV->SetFloat(f); }
 	void SetWorldCellSpace(float f)                     { WorldCellSpace->SetFloat(f); }
-	void SetWorldFrustumPlanes(XMFLOAT4 planes[6])      { WorldFrustumPlanes->SetFloatVectorArray(reinterpret_cast<float*>(planes), 0, 6); }
+	void SetWorldFrustumPlanes(DirectX::XMFLOAT4 planes[6])      { WorldFrustumPlanes->SetFloatVectorArray(reinterpret_cast<float*>(planes), 0, 6); }
 
 	void SetLayerMapArray(ID3D11ShaderResourceView* tex)   { LayerMapArray->SetResource(tex); }
 	void SetBlendMap(ID3D11ShaderResourceView* tex)        { BlendMap->SetResource(tex); }
@@ -206,14 +206,14 @@ public:
 	ParticleEffect(ID3D11Device* device, const std::wstring& filename);
 	~ParticleEffect();
 
-	void SetViewProj(CXMMATRIX M)                       { ViewProj->SetMatrix(reinterpret_cast<const float*>(&M)); }
+	void SetViewProj(DirectX::CXMMATRIX M)                       { ViewProj->SetMatrix(reinterpret_cast<const float*>(&M)); }
 
 	void SetGameTime(float f)                           { GameTime->SetFloat(f); }
 	void SetTimeStep(float f)                           { TimeStep->SetFloat(f); }
 
-	void SetEyePosW(const XMFLOAT3& v)                  { EyePosW->SetRawValue(&v, 0, sizeof(XMFLOAT3)); }
-	void SetEmitPosW(const XMFLOAT3& v)                 { EmitPosW->SetRawValue(&v, 0, sizeof(XMFLOAT3)); }
-	void SetEmitDirW(const XMFLOAT3& v)                 { EmitDirW->SetRawValue(&v, 0, sizeof(XMFLOAT3)); }
+	void SetEyePosW(const DirectX::XMFLOAT3& v)                  { EyePosW->SetRawValue(&v, 0, sizeof(DirectX::XMFLOAT3)); }
+	void SetEmitPosW(const DirectX::XMFLOAT3& v)                 { EmitPosW->SetRawValue(&v, 0, sizeof(DirectX::XMFLOAT3)); }
+	void SetEmitDirW(const DirectX::XMFLOAT3& v)                 { EmitDirW->SetRawValue(&v, 0, sizeof(DirectX::XMFLOAT3)); }
 
 	void SetTexArray(ID3D11ShaderResourceView* tex)     { TexArray->SetResource(tex); }
 	void SetRandomTex(ID3D11ShaderResourceView* tex)    { RandomTex->SetResource(tex); }

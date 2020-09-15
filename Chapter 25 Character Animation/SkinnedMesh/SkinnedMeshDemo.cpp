@@ -29,7 +29,7 @@
 struct BoundingSphere
 {
 	BoundingSphere() : Center(0.0f, 0.0f, 0.0f), Radius(0.0f) {}
-	XMFLOAT3 Center;
+	DirectX::XMFLOAT3 Center;
 	float Radius;
 };
  
@@ -89,14 +89,14 @@ private:
 
 	static const int SMapSize = 2048;
 	ShadowMap* mSmap;
-	XMFLOAT4X4 mLightView;
-	XMFLOAT4X4 mLightProj;
-	XMFLOAT4X4 mShadowTransform;
+	DirectX::XMFLOAT4X4 mLightView;
+	DirectX::XMFLOAT4X4 mLightProj;
+	DirectX::XMFLOAT4X4 mShadowTransform;
 
 	Ssao* mSsao;
 
 	float mLightRotationAngle;
-	XMFLOAT3 mOriginalLightDir[3];
+	DirectX::XMFLOAT3 mOriginalLightDir[3];
 	DirectionalLight mDirLights[3];
 	Material mGridMat;
 	Material mBoxMat;
@@ -105,11 +105,11 @@ private:
 	Material mSkullMat;
 
 	// Define transformations from local spaces to world space.
-	XMFLOAT4X4 mSphereWorld[10];
-	XMFLOAT4X4 mCylWorld[10];
-	XMFLOAT4X4 mBoxWorld;
-	XMFLOAT4X4 mGridWorld;
-	XMFLOAT4X4 mSkullWorld;
+	DirectX::XMFLOAT4X4 mSphereWorld[10];
+	DirectX::XMFLOAT4X4 mCylWorld[10];
+	DirectX::XMFLOAT4X4 mBoxWorld;
+	DirectX::XMFLOAT4X4 mGridWorld;
+	DirectX::XMFLOAT4X4 mSkullWorld;
  
 	int mBoxVertexOffset;
 	int mGridVertexOffset;
@@ -169,79 +169,79 @@ SkinnedMeshApp::SkinnedMeshApp(HINSTANCE hInstance)
 	// The grid is the "widest object" with a width of 20 and depth of 30.0f, and centered at
 	// the world space origin.  In general, you need to loop over every world space vertex
 	// position and compute the bounding sphere.
-	mSceneBounds.Center = XMFLOAT3(0.0f, 0.0f, 0.0f);
+	mSceneBounds.Center = DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f);
 	mSceneBounds.Radius = sqrtf(10.0f*10.0f + 15.0f*15.0f);
 
-	XMMATRIX I = XMMatrixIdentity();
+	DirectX::XMMATRIX I = DirectX::XMMatrixIdentity();
 	XMStoreFloat4x4(&mGridWorld, I);
 
-	XMMATRIX boxScale = XMMatrixScaling(3.0f, 1.0f, 3.0f);
-	XMMATRIX boxOffset = XMMatrixTranslation(0.0f, 0.5f, 0.0f);
-	XMStoreFloat4x4(&mBoxWorld, XMMatrixMultiply(boxScale, boxOffset));
+	DirectX::XMMATRIX boxScale = DirectX::XMMatrixScaling(3.0f, 1.0f, 3.0f);
+	DirectX::XMMATRIX boxOffset = DirectX::XMMatrixTranslation(0.0f, 0.5f, 0.0f);
+	XMStoreFloat4x4(&mBoxWorld, DirectX::XMMatrixMultiply(boxScale, boxOffset));
 
-	XMMATRIX skullScale = XMMatrixScaling(0.5f, 0.5f, 0.5f);
-	XMMATRIX skullOffset = XMMatrixTranslation(0.0f, 1.0f, 0.0f);
-	XMStoreFloat4x4(&mSkullWorld, XMMatrixMultiply(skullScale, skullOffset));
+	DirectX::XMMATRIX skullScale = DirectX::XMMatrixScaling(0.5f, 0.5f, 0.5f);
+	DirectX::XMMATRIX skullOffset = DirectX::XMMatrixTranslation(0.0f, 1.0f, 0.0f);
+	XMStoreFloat4x4(&mSkullWorld, DirectX::XMMatrixMultiply(skullScale, skullOffset));
 
 	for(int i = 0; i < 5; ++i)
 	{
-		XMStoreFloat4x4(&mCylWorld[i*2+0], XMMatrixTranslation(-5.0f, 1.5f, -10.0f + i*5.0f));
-		XMStoreFloat4x4(&mCylWorld[i*2+1], XMMatrixTranslation(+5.0f, 1.5f, -10.0f + i*5.0f));
+		XMStoreFloat4x4(&mCylWorld[i*2+0], DirectX::XMMatrixTranslation(-5.0f, 1.5f, -10.0f + i*5.0f));
+		XMStoreFloat4x4(&mCylWorld[i*2+1], DirectX::XMMatrixTranslation(+5.0f, 1.5f, -10.0f + i*5.0f));
 
-		XMStoreFloat4x4(&mSphereWorld[i*2+0], XMMatrixTranslation(-5.0f, 3.5f, -10.0f + i*5.0f));
-		XMStoreFloat4x4(&mSphereWorld[i*2+1], XMMatrixTranslation(+5.0f, 3.5f, -10.0f + i*5.0f));
+		XMStoreFloat4x4(&mSphereWorld[i*2+0], DirectX::XMMatrixTranslation(-5.0f, 3.5f, -10.0f + i*5.0f));
+		XMStoreFloat4x4(&mSphereWorld[i*2+1], DirectX::XMMatrixTranslation(+5.0f, 3.5f, -10.0f + i*5.0f));
 	}
 
-	mDirLights[0].Ambient  = XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
-	mDirLights[0].Diffuse  = XMFLOAT4(1.0f, 0.9f, 0.9f, 1.0f);
-	mDirLights[0].Specular = XMFLOAT4(0.8f, 0.8f, 0.7f, 1.0f);
-	mDirLights[0].Direction = XMFLOAT3(-0.57735f, -0.57735f, 0.57735f);
+	mDirLights[0].Ambient  = DirectX::XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
+	mDirLights[0].Diffuse  = DirectX::XMFLOAT4(1.0f, 0.9f, 0.9f, 1.0f);
+	mDirLights[0].Specular = DirectX::XMFLOAT4(0.8f, 0.8f, 0.7f, 1.0f);
+	mDirLights[0].Direction = DirectX::XMFLOAT3(-0.57735f, -0.57735f, 0.57735f);
 
 	// Shadow acne gets worse as we increase the slope of the polygon (from the
 	// perspective of the light).
-	//mDirLights[0].Direction = XMFLOAT3(5.0f/sqrtf(50.0f), -5.0f/sqrtf(50.0f), 0.0f);
-	//mDirLights[0].Direction = XMFLOAT3(10.0f/sqrtf(125.0f), -5.0f/sqrtf(125.0f), 0.0f);
-	//mDirLights[0].Direction = XMFLOAT3(10.0f/sqrtf(116.0f), -4.0f/sqrtf(116.0f), 0.0f);
-	//mDirLights[0].Direction = XMFLOAT3(10.0f/sqrtf(109.0f), -3.0f/sqrtf(109.0f), 0.0f);
+	//mDirLights[0].Direction = DirectX::XMFLOAT3(5.0f/sqrtf(50.0f), -5.0f/sqrtf(50.0f), 0.0f);
+	//mDirLights[0].Direction = DirectX::XMFLOAT3(10.0f/sqrtf(125.0f), -5.0f/sqrtf(125.0f), 0.0f);
+	//mDirLights[0].Direction = DirectX::XMFLOAT3(10.0f/sqrtf(116.0f), -4.0f/sqrtf(116.0f), 0.0f);
+	//mDirLights[0].Direction = DirectX::XMFLOAT3(10.0f/sqrtf(109.0f), -3.0f/sqrtf(109.0f), 0.0f);
 
-	mDirLights[1].Ambient  = XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
-	mDirLights[1].Diffuse  = XMFLOAT4(0.40f, 0.40f, 0.40f, 1.0f);
-	mDirLights[1].Specular = XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
-	mDirLights[1].Direction = XMFLOAT3(0.707f, -0.707f, 0.0f);
+	mDirLights[1].Ambient  = DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
+	mDirLights[1].Diffuse  = DirectX::XMFLOAT4(0.40f, 0.40f, 0.40f, 1.0f);
+	mDirLights[1].Specular = DirectX::XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
+	mDirLights[1].Direction = DirectX::XMFLOAT3(0.707f, -0.707f, 0.0f);
 
-	mDirLights[2].Ambient  = XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
-	mDirLights[2].Diffuse  = XMFLOAT4(0.4f, 0.4f, 0.4f, 1.0f);
-	mDirLights[2].Specular = XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
-	mDirLights[2].Direction = XMFLOAT3(0.0f, 0.0, -1.0f);
+	mDirLights[2].Ambient  = DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
+	mDirLights[2].Diffuse  = DirectX::XMFLOAT4(0.4f, 0.4f, 0.4f, 1.0f);
+	mDirLights[2].Specular = DirectX::XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
+	mDirLights[2].Direction = DirectX::XMFLOAT3(0.0f, 0.0, -1.0f);
 
 	mOriginalLightDir[0] = mDirLights[0].Direction;
 	mOriginalLightDir[1] = mDirLights[1].Direction;
 	mOriginalLightDir[2] = mDirLights[2].Direction;
 
-	mGridMat.Ambient  = XMFLOAT4(0.7f, 0.7f, 0.7f, 1.0f);
-	mGridMat.Diffuse  = XMFLOAT4(0.6f, 0.6f, 0.6f, 1.0f);
-	mGridMat.Specular = XMFLOAT4(0.4f, 0.4f, 0.4f, 16.0f);
-	mGridMat.Reflect  = XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
+	mGridMat.Ambient  = DirectX::XMFLOAT4(0.7f, 0.7f, 0.7f, 1.0f);
+	mGridMat.Diffuse  = DirectX::XMFLOAT4(0.6f, 0.6f, 0.6f, 1.0f);
+	mGridMat.Specular = DirectX::XMFLOAT4(0.4f, 0.4f, 0.4f, 16.0f);
+	mGridMat.Reflect  = DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
 
-	mCylinderMat.Ambient  = XMFLOAT4(0.8f, 0.8f, 0.8f, 1.0f);
-	mCylinderMat.Diffuse  = XMFLOAT4(0.4f, 0.4f, 0.4f, 1.0f);
-	mCylinderMat.Specular = XMFLOAT4(1.0f, 1.0f, 1.0f, 32.0f);
-	mCylinderMat.Reflect  = XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
+	mCylinderMat.Ambient  = DirectX::XMFLOAT4(0.8f, 0.8f, 0.8f, 1.0f);
+	mCylinderMat.Diffuse  = DirectX::XMFLOAT4(0.4f, 0.4f, 0.4f, 1.0f);
+	mCylinderMat.Specular = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 32.0f);
+	mCylinderMat.Reflect  = DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
 
-	mSphereMat.Ambient  = XMFLOAT4(0.3f, 0.4f, 0.5f, 1.0f);
-	mSphereMat.Diffuse  = XMFLOAT4(0.2f, 0.3f, 0.4f, 1.0f);
-	mSphereMat.Specular = XMFLOAT4(0.9f, 0.9f, 0.9f, 16.0f);
-	mSphereMat.Reflect  = XMFLOAT4(0.3f, 0.3f, 0.3f, 1.0f);
+	mSphereMat.Ambient  = DirectX::XMFLOAT4(0.3f, 0.4f, 0.5f, 1.0f);
+	mSphereMat.Diffuse  = DirectX::XMFLOAT4(0.2f, 0.3f, 0.4f, 1.0f);
+	mSphereMat.Specular = DirectX::XMFLOAT4(0.9f, 0.9f, 0.9f, 16.0f);
+	mSphereMat.Reflect  = DirectX::XMFLOAT4(0.3f, 0.3f, 0.3f, 1.0f);
 
-	mBoxMat.Ambient  = XMFLOAT4(0.8f, 0.8f, 0.8f, 1.0f);
-	mBoxMat.Diffuse  = XMFLOAT4(0.4f, 0.4f, 0.4f, 1.0f);
-	mBoxMat.Specular = XMFLOAT4(0.8f, 0.8f, 0.8f, 16.0f);
-	mBoxMat.Reflect  = XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
+	mBoxMat.Ambient  = DirectX::XMFLOAT4(0.8f, 0.8f, 0.8f, 1.0f);
+	mBoxMat.Diffuse  = DirectX::XMFLOAT4(0.4f, 0.4f, 0.4f, 1.0f);
+	mBoxMat.Specular = DirectX::XMFLOAT4(0.8f, 0.8f, 0.8f, 16.0f);
+	mBoxMat.Reflect  = DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
 
-	mSkullMat.Ambient  = XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
-	mSkullMat.Diffuse  = XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
-	mSkullMat.Specular = XMFLOAT4(0.5f, 0.5f, 0.5f, 16.0f);
-	mSkullMat.Reflect  = XMFLOAT4(0.3f, 0.3f, 0.3f, 1.0f);
+	mSkullMat.Ambient  = DirectX::XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
+	mSkullMat.Diffuse  = DirectX::XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
+	mSkullMat.Specular = DirectX::XMFLOAT4(0.5f, 0.5f, 0.5f, 16.0f);
+	mSkullMat.Reflect  = DirectX::XMFLOAT4(0.3f, 0.3f, 0.3f, 1.0f);
 }
 
 SkinnedMeshApp::~SkinnedMeshApp()
@@ -302,12 +302,12 @@ bool SkinnedMeshApp::Init()
 	mCharacterInstance2.FinalTransforms.resize(mCharacterModel->SkinnedData.BoneCount());
 
 	// Reflect to change coordinate system from the RHS the data was exported out as.
-	XMMATRIX modelScale = XMMatrixScaling(0.05f, 0.05f, -0.05f);
-	XMMATRIX modelRot   = XMMatrixRotationY(MathHelper::Pi);
-	XMMATRIX modelOffset = XMMatrixTranslation(-2.0f, 0.0f, -7.0f);
+	DirectX::XMMATRIX modelScale = DirectX::XMMatrixScaling(0.05f, 0.05f, -0.05f);
+	DirectX::XMMATRIX modelRot   = DirectX::XMMatrixRotationY(MathHelper::Pi);
+	DirectX::XMMATRIX modelOffset = DirectX::XMMatrixTranslation(-2.0f, 0.0f, -7.0f);
 	XMStoreFloat4x4(&mCharacterInstance1.World, modelScale*modelRot*modelOffset);
 
-	modelOffset = XMMatrixTranslation(2.0f, 0.0f, -7.0f);
+	modelOffset = DirectX::XMMatrixTranslation(2.0f, 0.0f, -7.0f);
 	XMStoreFloat4x4(&mCharacterInstance2.World, modelScale*modelRot*modelOffset);
 	
 	return true;
@@ -400,15 +400,15 @@ void SkinnedMeshApp::DrawScene()
 	md3dImmediateContext->ClearRenderTargetView(mRenderTargetView, reinterpret_cast<const float*>(&Colors::Silver));
 
 	// We already laid down scene depth to the depth buffer in the Normal/Depth map pass,
-	// so we can set the depth comparison test to “EQUALS.”  This prevents any overdraw
+	// so we can set the depth comparison test to ï¿½EQUALS.ï¿½  This prevents any overdraw
 	// in this rendering pass, as only the nearest visible pixels will pass this depth
 	// comparison test.
 
 	md3dImmediateContext->OMSetDepthStencilState(RenderStates::EqualsDSS, 0);
  
-	XMMATRIX view     = mCam.View();
-	XMMATRIX proj     = mCam.Proj();
-	XMMATRIX viewProj = mCam.ViewProj();
+	DirectX::XMMATRIX view     = mCam.View();
+	DirectX::XMMATRIX proj     = mCam.Proj();
+	DirectX::XMMATRIX viewProj = mCam.ViewProj();
 
 	float blendFactor[] = {0.0f, 0.0f, 0.0f, 0.0f};
 
@@ -434,18 +434,18 @@ void SkinnedMeshApp::DrawScene()
 	md3dImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 
-	XMMATRIX world;
-	XMMATRIX worldInvTranspose;
-	XMMATRIX worldViewProj;
+	DirectX::XMMATRIX world;
+	DirectX::XMMATRIX worldInvTranspose;
+	DirectX::XMMATRIX worldViewProj;
 
 	// Transform NDC space [-1,+1]^2 to texture space [0,1]^2
-	XMMATRIX toTexSpace(
+	DirectX::XMMATRIX toTexSpace(
 		0.5f, 0.0f, 0.0f, 0.0f,
 		0.0f, -0.5f, 0.0f, 0.0f,
 		0.0f, 0.0f, 1.0f, 0.0f,
 		0.5f, 0.5f, 0.0f, 1.0f);
 
-	XMMATRIX shadowTransform = XMLoadFloat4x4(&mShadowTransform);
+	DirectX::XMMATRIX shadowTransform = XMLoadFloat4x4(&mShadowTransform);
 
 	//
 	// Draw the grid, cylinders, and box without any cubemap reflection.
@@ -475,7 +475,7 @@ void SkinnedMeshApp::DrawScene()
 		Effects::NormalMapFX->SetWorldViewProj(worldViewProj);
 		Effects::NormalMapFX->SetWorldViewProjTex(worldViewProj*toTexSpace);
 		Effects::NormalMapFX->SetShadowTransform(world*shadowTransform);
-		Effects::NormalMapFX->SetTexTransform(XMMatrixScaling(8.0f, 10.0f, 1.0f));
+		Effects::NormalMapFX->SetTexTransform(DirectX::XMMatrixScaling(8.0f, 10.0f, 1.0f));
 		Effects::NormalMapFX->SetMaterial(mGridMat);
 		Effects::NormalMapFX->SetDiffuseMap(mStoneTexSRV);
 		Effects::NormalMapFX->SetNormalMap(mStoneNormalTexSRV);
@@ -493,7 +493,7 @@ void SkinnedMeshApp::DrawScene()
 		Effects::NormalMapFX->SetWorldViewProj(worldViewProj);
 		Effects::NormalMapFX->SetWorldViewProjTex(worldViewProj*toTexSpace);
 		Effects::NormalMapFX->SetShadowTransform(world*shadowTransform);
-		Effects::NormalMapFX->SetTexTransform(XMMatrixScaling(2.0f, 1.0f, 1.0f));
+		Effects::NormalMapFX->SetTexTransform(DirectX::XMMatrixScaling(2.0f, 1.0f, 1.0f));
 		Effects::NormalMapFX->SetMaterial(mBoxMat);
 		Effects::NormalMapFX->SetDiffuseMap(mBrickTexSRV);
 		Effects::NormalMapFX->SetNormalMap(mBrickNormalTexSRV);
@@ -513,7 +513,7 @@ void SkinnedMeshApp::DrawScene()
 			Effects::NormalMapFX->SetWorldViewProj(worldViewProj);
 			Effects::NormalMapFX->SetWorldViewProjTex(worldViewProj*toTexSpace);
 			Effects::NormalMapFX->SetShadowTransform(world*shadowTransform);
-			Effects::NormalMapFX->SetTexTransform(XMMatrixScaling(1.0f, 2.0f, 1.0f));
+			Effects::NormalMapFX->SetTexTransform(DirectX::XMMatrixScaling(1.0f, 2.0f, 1.0f));
 			Effects::NormalMapFX->SetMaterial(mCylinderMat);
 			Effects::NormalMapFX->SetDiffuseMap(mBrickTexSRV);
 			Effects::NormalMapFX->SetNormalMap(mBrickNormalTexSRV);
@@ -545,7 +545,7 @@ void SkinnedMeshApp::DrawScene()
 			Effects::BasicFX->SetWorldViewProj(worldViewProj);
 			Effects::BasicFX->SetWorldViewProjTex(worldViewProj*toTexSpace);
 			Effects::BasicFX->SetShadowTransform(world*shadowTransform);
-			Effects::BasicFX->SetTexTransform(XMMatrixIdentity());
+			Effects::BasicFX->SetTexTransform(DirectX::XMMatrixIdentity());
 			Effects::BasicFX->SetMaterial(mSphereMat);
  
 			activeSphereTech->GetPassByIndex(p)->Apply(0, md3dImmediateContext);
@@ -599,7 +599,7 @@ void SkinnedMeshApp::DrawScene()
 		Effects::NormalMapFX->SetWorldViewProj(worldViewProj);
 		Effects::NormalMapFX->SetWorldViewProjTex(worldViewProj*toTexSpace);
 		Effects::NormalMapFX->SetShadowTransform(world*shadowTransform);
-		Effects::NormalMapFX->SetTexTransform(XMMatrixScaling(1.0f, 1.0f, 1.0f));
+		Effects::NormalMapFX->SetTexTransform(DirectX::XMMatrixScaling(1.0f, 1.0f, 1.0f));
 		Effects::NormalMapFX->SetBoneTransforms(
 			&mCharacterInstance1.FinalTransforms[0], 
 			mCharacterInstance1.FinalTransforms.size());
@@ -625,7 +625,7 @@ void SkinnedMeshApp::DrawScene()
 		Effects::NormalMapFX->SetWorldViewProj(worldViewProj);
 		Effects::NormalMapFX->SetWorldViewProjTex(worldViewProj*toTexSpace);
 		Effects::NormalMapFX->SetShadowTransform(world*shadowTransform);
-		Effects::NormalMapFX->SetTexTransform(XMMatrixScaling(1.0f, 1.0f, 1.0f));
+		Effects::NormalMapFX->SetTexTransform(DirectX::XMMatrixScaling(1.0f, 1.0f, 1.0f));
 		
 		Effects::NormalMapFX->SetBoneTransforms(
 			&mCharacterInstance2.FinalTransforms[0], 
@@ -683,8 +683,8 @@ void SkinnedMeshApp::OnMouseMove(WPARAM btnState, int x, int y)
 	if( (btnState & MK_LBUTTON) != 0 )
 	{
 		// Make each pixel correspond to a quarter of a degree.
-		float dx = XMConvertToRadians(0.25f*static_cast<float>(x - mLastMousePos.x));
-		float dy = XMConvertToRadians(0.25f*static_cast<float>(y - mLastMousePos.y));
+		float dx = DirectX::XMConvertToRadians(0.25f*static_cast<float>(x - mLastMousePos.x));
+		float dy = DirectX::XMConvertToRadians(0.25f*static_cast<float>(y - mLastMousePos.y));
 
 		mCam.Pitch(dy);
 		mCam.RotateY(dx);
@@ -696,18 +696,18 @@ void SkinnedMeshApp::OnMouseMove(WPARAM btnState, int x, int y)
 
 void SkinnedMeshApp::DrawSceneToSsaoNormalDepthMap()
 {
-	XMMATRIX view     = mCam.View();
-	XMMATRIX proj     = mCam.Proj();
-	XMMATRIX viewProj = XMMatrixMultiply(view, proj);
+	DirectX::XMMATRIX view     = mCam.View();
+	DirectX::XMMATRIX proj     = mCam.Proj();
+	DirectX::XMMATRIX viewProj = DirectX::XMMatrixMultiply(view, proj);
 
 	ID3DX11EffectTechnique* tech = Effects::SsaoNormalDepthFX->NormalDepthTech;
 	ID3DX11EffectTechnique* animatedTech = Effects::SsaoNormalDepthFX->NormalDepthSkinnedTech;
 
-	XMMATRIX world;
-	XMMATRIX worldInvTranspose;
-	XMMATRIX worldView;
-	XMMATRIX worldInvTransposeView;
-	XMMATRIX worldViewProj;
+	DirectX::XMMATRIX world;
+	DirectX::XMMATRIX worldInvTranspose;
+	DirectX::XMMATRIX worldView;
+	DirectX::XMMATRIX worldInvTransposeView;
+	DirectX::XMMATRIX worldViewProj;
 
 	//
 	// Draw the grid, cylinders, spheres and box.
@@ -737,7 +737,7 @@ void SkinnedMeshApp::DrawSceneToSsaoNormalDepthMap()
 		Effects::SsaoNormalDepthFX->SetWorldView(worldView);
 		Effects::SsaoNormalDepthFX->SetWorldInvTransposeView(worldInvTransposeView);
 		Effects::SsaoNormalDepthFX->SetWorldViewProj(worldViewProj);
-		Effects::SsaoNormalDepthFX->SetTexTransform(XMMatrixScaling(8.0f, 10.0f, 1.0f));
+		Effects::SsaoNormalDepthFX->SetTexTransform(DirectX::XMMatrixScaling(8.0f, 10.0f, 1.0f));
 
 		tech->GetPassByIndex(p)->Apply(0, md3dImmediateContext);
 		md3dImmediateContext->DrawIndexed(mGridIndexCount, mGridIndexOffset, mGridVertexOffset);
@@ -752,7 +752,7 @@ void SkinnedMeshApp::DrawSceneToSsaoNormalDepthMap()
 		Effects::SsaoNormalDepthFX->SetWorldView(worldView);
 		Effects::SsaoNormalDepthFX->SetWorldInvTransposeView(worldInvTransposeView);
 		Effects::SsaoNormalDepthFX->SetWorldViewProj(worldViewProj);
-		Effects::SsaoNormalDepthFX->SetTexTransform(XMMatrixScaling(2.0f, 1.0f, 1.0f));
+		Effects::SsaoNormalDepthFX->SetTexTransform(DirectX::XMMatrixScaling(2.0f, 1.0f, 1.0f));
 
 		tech->GetPassByIndex(p)->Apply(0, md3dImmediateContext);
 		md3dImmediateContext->DrawIndexed(mBoxIndexCount, mBoxIndexOffset, mBoxVertexOffset);
@@ -769,7 +769,7 @@ void SkinnedMeshApp::DrawSceneToSsaoNormalDepthMap()
 			Effects::SsaoNormalDepthFX->SetWorldView(worldView);
 			Effects::SsaoNormalDepthFX->SetWorldInvTransposeView(worldInvTransposeView);
 			Effects::SsaoNormalDepthFX->SetWorldViewProj(worldViewProj);
-			Effects::SsaoNormalDepthFX->SetTexTransform(XMMatrixScaling(1.0f, 2.0f, 1.0f));
+			Effects::SsaoNormalDepthFX->SetTexTransform(DirectX::XMMatrixScaling(1.0f, 2.0f, 1.0f));
 
 			tech->GetPassByIndex(p)->Apply(0, md3dImmediateContext);
 			md3dImmediateContext->DrawIndexed(mCylinderIndexCount, mCylinderIndexOffset, mCylinderVertexOffset);
@@ -787,7 +787,7 @@ void SkinnedMeshApp::DrawSceneToSsaoNormalDepthMap()
 			Effects::SsaoNormalDepthFX->SetWorldView(worldView);
 			Effects::SsaoNormalDepthFX->SetWorldInvTransposeView(worldInvTransposeView);
 			Effects::SsaoNormalDepthFX->SetWorldViewProj(worldViewProj);
-			Effects::SsaoNormalDepthFX->SetTexTransform(XMMatrixIdentity());
+			Effects::SsaoNormalDepthFX->SetTexTransform(DirectX::XMMatrixIdentity());
 
 			tech->GetPassByIndex(p)->Apply(0, md3dImmediateContext);
 			md3dImmediateContext->DrawIndexed(mSphereIndexCount, mSphereIndexOffset, mSphereVertexOffset);
@@ -816,7 +816,7 @@ void SkinnedMeshApp::DrawSceneToSsaoNormalDepthMap()
 		Effects::SsaoNormalDepthFX->SetWorldView(worldView);
 		Effects::SsaoNormalDepthFX->SetWorldInvTransposeView(worldInvTransposeView);
 		Effects::SsaoNormalDepthFX->SetWorldViewProj(worldViewProj);
-		Effects::SsaoNormalDepthFX->SetTexTransform(XMMatrixIdentity());
+		Effects::SsaoNormalDepthFX->SetTexTransform(DirectX::XMMatrixIdentity());
 
 		tech->GetPassByIndex(p)->Apply(0, md3dImmediateContext);
 		md3dImmediateContext->DrawIndexed(mSkullIndexCount, 0, 0);
@@ -842,7 +842,7 @@ void SkinnedMeshApp::DrawSceneToSsaoNormalDepthMap()
 		Effects::SsaoNormalDepthFX->SetWorldView(worldView);
 		Effects::SsaoNormalDepthFX->SetWorldInvTransposeView(worldInvTransposeView);
 		Effects::SsaoNormalDepthFX->SetWorldViewProj(worldViewProj);
-		Effects::SsaoNormalDepthFX->SetTexTransform(XMMatrixIdentity());
+		Effects::SsaoNormalDepthFX->SetTexTransform(DirectX::XMMatrixIdentity());
 		Effects::SsaoNormalDepthFX->SetBoneTransforms(
 			&mCharacterInstance1.FinalTransforms[0], 
 			mCharacterInstance1.FinalTransforms.size());
@@ -865,7 +865,7 @@ void SkinnedMeshApp::DrawSceneToSsaoNormalDepthMap()
 		Effects::SsaoNormalDepthFX->SetWorldView(worldView);
 		Effects::SsaoNormalDepthFX->SetWorldInvTransposeView(worldInvTransposeView);
 		Effects::SsaoNormalDepthFX->SetWorldViewProj(worldViewProj);
-		Effects::SsaoNormalDepthFX->SetTexTransform(XMMatrixIdentity());
+		Effects::SsaoNormalDepthFX->SetTexTransform(DirectX::XMMatrixIdentity());
 		Effects::SsaoNormalDepthFX->SetBoneTransforms(
 			&mCharacterInstance2.FinalTransforms[0], 
 			mCharacterInstance2.FinalTransforms.size());
@@ -883,9 +883,9 @@ void SkinnedMeshApp::DrawSceneToSsaoNormalDepthMap()
 
 void SkinnedMeshApp::DrawSceneToShadowMap()
 {
-	XMMATRIX view     = XMLoadFloat4x4(&mLightView);
-	XMMATRIX proj     = XMLoadFloat4x4(&mLightProj);
-	XMMATRIX viewProj = XMMatrixMultiply(view, proj);
+	DirectX::XMMATRIX view     = XMLoadFloat4x4(&mLightView);
+	DirectX::XMMATRIX proj     = XMLoadFloat4x4(&mLightProj);
+	DirectX::XMMATRIX viewProj = DirectX::XMMatrixMultiply(view, proj);
 
 	Effects::BuildShadowMapFX->SetEyePosW(mCam.GetPosition());
 	Effects::BuildShadowMapFX->SetViewProj(viewProj);
@@ -902,9 +902,9 @@ void SkinnedMeshApp::DrawSceneToShadowMap()
 
 	md3dImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-	XMMATRIX world;
-	XMMATRIX worldInvTranspose;
-	XMMATRIX worldViewProj;
+	DirectX::XMMATRIX world;
+	DirectX::XMMATRIX worldInvTranspose;
+	DirectX::XMMATRIX worldViewProj;
 
 	//
 	// Draw the grid, cylinders, spheres, and box.
@@ -932,7 +932,7 @@ void SkinnedMeshApp::DrawSceneToShadowMap()
 		Effects::BuildShadowMapFX->SetWorld(world);
 		Effects::BuildShadowMapFX->SetWorldInvTranspose(worldInvTranspose);
 		Effects::BuildShadowMapFX->SetWorldViewProj(worldViewProj);
-		Effects::BuildShadowMapFX->SetTexTransform(XMMatrixScaling(8.0f, 10.0f, 1.0f));
+		Effects::BuildShadowMapFX->SetTexTransform(DirectX::XMMatrixScaling(8.0f, 10.0f, 1.0f));
 
 		smapTech->GetPassByIndex(p)->Apply(0, md3dImmediateContext);
 		md3dImmediateContext->DrawIndexed(mGridIndexCount, mGridIndexOffset, mGridVertexOffset);
@@ -945,7 +945,7 @@ void SkinnedMeshApp::DrawSceneToShadowMap()
 		Effects::BuildShadowMapFX->SetWorld(world);
 		Effects::BuildShadowMapFX->SetWorldInvTranspose(worldInvTranspose);
 		Effects::BuildShadowMapFX->SetWorldViewProj(worldViewProj);
-		Effects::BuildShadowMapFX->SetTexTransform(XMMatrixScaling(2.0f, 1.0f, 1.0f));
+		Effects::BuildShadowMapFX->SetTexTransform(DirectX::XMMatrixScaling(2.0f, 1.0f, 1.0f));
 
 		smapTech->GetPassByIndex(p)->Apply(0, md3dImmediateContext);
 		md3dImmediateContext->DrawIndexed(mBoxIndexCount, mBoxIndexOffset, mBoxVertexOffset);
@@ -960,7 +960,7 @@ void SkinnedMeshApp::DrawSceneToShadowMap()
 			Effects::BuildShadowMapFX->SetWorld(world);
 			Effects::BuildShadowMapFX->SetWorldInvTranspose(worldInvTranspose);
 			Effects::BuildShadowMapFX->SetWorldViewProj(worldViewProj);
-			Effects::BuildShadowMapFX->SetTexTransform(XMMatrixScaling(1.0f, 2.0f, 1.0f));
+			Effects::BuildShadowMapFX->SetTexTransform(DirectX::XMMatrixScaling(1.0f, 2.0f, 1.0f));
 
 			smapTech->GetPassByIndex(p)->Apply(0, md3dImmediateContext);
 			md3dImmediateContext->DrawIndexed(mCylinderIndexCount, mCylinderIndexOffset, mCylinderVertexOffset);
@@ -976,7 +976,7 @@ void SkinnedMeshApp::DrawSceneToShadowMap()
 			Effects::BuildShadowMapFX->SetWorld(world);
 			Effects::BuildShadowMapFX->SetWorldInvTranspose(worldInvTranspose);
 			Effects::BuildShadowMapFX->SetWorldViewProj(worldViewProj);
-			Effects::BuildShadowMapFX->SetTexTransform(XMMatrixIdentity());
+			Effects::BuildShadowMapFX->SetTexTransform(DirectX::XMMatrixIdentity());
 
 			smapTech->GetPassByIndex(p)->Apply(0, md3dImmediateContext);
 			md3dImmediateContext->DrawIndexed(mSphereIndexCount, mSphereIndexOffset, mSphereVertexOffset);
@@ -1002,7 +1002,7 @@ void SkinnedMeshApp::DrawSceneToShadowMap()
 		Effects::BuildShadowMapFX->SetWorld(world);
 		Effects::BuildShadowMapFX->SetWorldInvTranspose(worldInvTranspose);
 		Effects::BuildShadowMapFX->SetWorldViewProj(worldViewProj);
-		Effects::BuildShadowMapFX->SetTexTransform(XMMatrixIdentity());
+		Effects::BuildShadowMapFX->SetTexTransform(DirectX::XMMatrixIdentity());
 
 		smapTech->GetPassByIndex(p)->Apply(0, md3dImmediateContext);
 		md3dImmediateContext->DrawIndexed(mSkullIndexCount, 0, 0);
@@ -1026,7 +1026,7 @@ void SkinnedMeshApp::DrawSceneToShadowMap()
 		Effects::BuildShadowMapFX->SetWorld(world);
 		Effects::BuildShadowMapFX->SetWorldInvTranspose(worldInvTranspose);
 		Effects::BuildShadowMapFX->SetWorldViewProj(worldViewProj);
-		Effects::BuildShadowMapFX->SetTexTransform(XMMatrixIdentity());
+		Effects::BuildShadowMapFX->SetTexTransform(DirectX::XMMatrixIdentity());
 		Effects::BuildShadowMapFX->SetBoneTransforms(
 			&mCharacterInstance1.FinalTransforms[0], 
 			mCharacterInstance1.FinalTransforms.size());
@@ -1048,7 +1048,7 @@ void SkinnedMeshApp::DrawSceneToShadowMap()
 		Effects::BuildShadowMapFX->SetWorld(world);
 		Effects::BuildShadowMapFX->SetWorldInvTranspose(worldInvTranspose);
 		Effects::BuildShadowMapFX->SetWorldViewProj(worldViewProj);
-		Effects::BuildShadowMapFX->SetTexTransform(XMMatrixIdentity());
+		Effects::BuildShadowMapFX->SetTexTransform(DirectX::XMMatrixIdentity());
 		Effects::BuildShadowMapFX->SetBoneTransforms(
 			&mCharacterInstance2.FinalTransforms[0], 
 			mCharacterInstance2.FinalTransforms.size());
@@ -1075,7 +1075,7 @@ void SkinnedMeshApp::DrawScreenQuad(ID3D11ShaderResourceView* srv)
 	md3dImmediateContext->IASetIndexBuffer(mScreenQuadIB, DXGI_FORMAT_R32_UINT, 0);
  
 	// Scale and shift quad to lower-right corner.
-	XMMATRIX world(
+	DirectX::XMMATRIX world(
 		0.5f, 0.0f, 0.0f, 0.0f,
 		0.0f, 0.5f, 0.0f, 0.0f,
 		0.0f, 0.0f, 1.0f, 0.0f,
@@ -1098,16 +1098,16 @@ void SkinnedMeshApp::DrawScreenQuad(ID3D11ShaderResourceView* srv)
 void SkinnedMeshApp::BuildShadowTransform()
 {
 	// Only the first "main" light casts a shadow.
-	XMVECTOR lightDir = XMLoadFloat3(&mDirLights[0].Direction);
-	XMVECTOR lightPos = -2.0f*mSceneBounds.Radius*lightDir;
-	XMVECTOR targetPos = XMLoadFloat3(&mSceneBounds.Center);
-	XMVECTOR up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+	DirectX::XMVECTOR lightDir = XMLoadFloat3(&mDirLights[0].Direction);
+	DirectX::XMVECTOR lightPos = -2.0f*mSceneBounds.Radius*lightDir;
+	DirectX::XMVECTOR targetPos = XMLoadFloat3(&mSceneBounds.Center);
+	DirectX::XMVECTOR up = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 
-	XMMATRIX V = XMMatrixLookAtLH(lightPos, targetPos, up);
+	DirectX::XMMATRIX V = DirectX::XMMatrixLookAtLH(lightPos, targetPos, up);
 
 	// Transform bounding sphere to light space.
-	XMFLOAT3 sphereCenterLS;
-	XMStoreFloat3(&sphereCenterLS, XMVector3TransformCoord(targetPos, V));
+	DirectX::XMFLOAT3 sphereCenterLS;
+	XMStoreFloat3(&sphereCenterLS, DirectX::XMVector3TransformCoord(targetPos, V));
 
 	// Ortho frustum in light space encloses scene.
 	float l = sphereCenterLS.x - mSceneBounds.Radius;
@@ -1116,16 +1116,16 @@ void SkinnedMeshApp::BuildShadowTransform()
 	float r = sphereCenterLS.x + mSceneBounds.Radius;
 	float t = sphereCenterLS.y + mSceneBounds.Radius;
 	float f = sphereCenterLS.z + mSceneBounds.Radius;
-	XMMATRIX P = XMMatrixOrthographicOffCenterLH(l, r, b, t, n, f);
+	DirectX::XMMATRIX P = DirectX::XMMatrixOrthographicOffCenterLH(l, r, b, t, n, f);
 
 	// Transform NDC space [-1,+1]^2 to texture space [0,1]^2
-	XMMATRIX T(
+	DirectX::XMMATRIX T(
 		0.5f, 0.0f, 0.0f, 0.0f,
 		0.0f, -0.5f, 0.0f, 0.0f,
 		0.0f, 0.0f, 1.0f, 0.0f,
 		0.5f, 0.5f, 0.0f, 1.0f);
 
-	XMMATRIX S = V*P*T;
+	DirectX::XMMATRIX S = V*P*T;
 
 	XMStoreFloat4x4(&mLightView, V);
 	XMStoreFloat4x4(&mLightProj, P);
@@ -1188,7 +1188,7 @@ void SkinnedMeshApp::BuildShapeGeometryBuffers()
 		vertices[k].Pos      = box.Vertices[i].Position;
 		vertices[k].Normal   = box.Vertices[i].Normal;
 		vertices[k].Tex      = box.Vertices[i].TexC;
-		vertices[k].TangentU = XMFLOAT4(
+		vertices[k].TangentU = DirectX::XMFLOAT4(
 			box.Vertices[i].TangentU.x,
 			box.Vertices[i].TangentU.y,
 			box.Vertices[i].TangentU.z,
@@ -1200,7 +1200,7 @@ void SkinnedMeshApp::BuildShapeGeometryBuffers()
 		vertices[k].Pos      = grid.Vertices[i].Position;
 		vertices[k].Normal   = grid.Vertices[i].Normal;
 		vertices[k].Tex      = grid.Vertices[i].TexC;
-		vertices[k].TangentU = XMFLOAT4(
+		vertices[k].TangentU = DirectX::XMFLOAT4(
 			grid.Vertices[i].TangentU.x,
 			grid.Vertices[i].TangentU.y,
 			grid.Vertices[i].TangentU.z,
@@ -1212,7 +1212,7 @@ void SkinnedMeshApp::BuildShapeGeometryBuffers()
 		vertices[k].Pos      = sphere.Vertices[i].Position;
 		vertices[k].Normal   = sphere.Vertices[i].Normal;
 		vertices[k].Tex      = sphere.Vertices[i].TexC;
-		vertices[k].TangentU = XMFLOAT4(
+		vertices[k].TangentU = DirectX::XMFLOAT4(
 			sphere.Vertices[i].TangentU.x,
 			sphere.Vertices[i].TangentU.y,
 			sphere.Vertices[i].TangentU.z,
@@ -1224,7 +1224,7 @@ void SkinnedMeshApp::BuildShapeGeometryBuffers()
 		vertices[k].Pos      = cylinder.Vertices[i].Position;
 		vertices[k].Normal   = cylinder.Vertices[i].Normal;
 		vertices[k].Tex      = cylinder.Vertices[i].TexC;
-		vertices[k].TangentU = XMFLOAT4(
+		vertices[k].TangentU = DirectX::XMFLOAT4(
 			cylinder.Vertices[i].TangentU.x,
 			cylinder.Vertices[i].TangentU.y,
 			cylinder.Vertices[i].TangentU.z,

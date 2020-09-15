@@ -72,12 +72,12 @@ private:
 	Material mCenterSphereMat;
 
 	// Define transformations from local spaces to world space.
-	XMFLOAT4X4 mSphereWorld[10];
-	XMFLOAT4X4 mCylWorld[10];
-	XMFLOAT4X4 mBoxWorld;
-	XMFLOAT4X4 mGridWorld;
-	XMFLOAT4X4 mSkullWorld;
-	XMFLOAT4X4 mCenterSphereWorld;
+	DirectX::XMFLOAT4X4 mSphereWorld[10];
+	DirectX::XMFLOAT4X4 mCylWorld[10];
+	DirectX::XMFLOAT4X4 mBoxWorld;
+	DirectX::XMFLOAT4X4 mGridWorld;
+	DirectX::XMFLOAT4X4 mSkullWorld;
+	DirectX::XMFLOAT4X4 mCenterSphereWorld;
 
 	int mBoxVertexOffset;
 	int mGridVertexOffset;
@@ -142,70 +142,70 @@ DynamicCubeMapApp::DynamicCubeMapApp(HINSTANCE hInstance)
 		mDynamicCubeMapRTV[i] = 0;
 	}
 
-	XMMATRIX I = XMMatrixIdentity();
+	DirectX::XMMATRIX I = DirectX::XMMatrixIdentity();
 	XMStoreFloat4x4(&mGridWorld, I);
 
-	XMMATRIX boxScale = XMMatrixScaling(3.0f, 1.0f, 3.0f);
-	XMMATRIX boxOffset = XMMatrixTranslation(0.0f, 0.5f, 0.0f);
-	XMStoreFloat4x4(&mBoxWorld, XMMatrixMultiply(boxScale, boxOffset));
+	DirectX::XMMATRIX boxScale = DirectX::XMMatrixScaling(3.0f, 1.0f, 3.0f);
+	DirectX::XMMATRIX boxOffset = DirectX::XMMatrixTranslation(0.0f, 0.5f, 0.0f);
+	XMStoreFloat4x4(&mBoxWorld, DirectX::XMMatrixMultiply(boxScale, boxOffset));
 
-	XMMATRIX centerSphereScale = XMMatrixScaling(2.0f, 2.0f, 2.0f);
-	XMMATRIX centerSphereOffset = XMMatrixTranslation(0.0f, 2.0f, 0.0f);
-	XMStoreFloat4x4(&mCenterSphereWorld, XMMatrixMultiply(centerSphereScale, centerSphereOffset));
+	DirectX::XMMATRIX centerSphereScale = DirectX::XMMatrixScaling(2.0f, 2.0f, 2.0f);
+	DirectX::XMMATRIX centerSphereOffset = DirectX::XMMatrixTranslation(0.0f, 2.0f, 0.0f);
+	XMStoreFloat4x4(&mCenterSphereWorld, DirectX::XMMatrixMultiply(centerSphereScale, centerSphereOffset));
 
 	for(int i = 0; i < 5; ++i)
 	{
-		XMStoreFloat4x4(&mCylWorld[i*2+0], XMMatrixTranslation(-5.0f, 1.5f, -10.0f + i*5.0f));
-		XMStoreFloat4x4(&mCylWorld[i*2+1], XMMatrixTranslation(+5.0f, 1.5f, -10.0f + i*5.0f));
+		XMStoreFloat4x4(&mCylWorld[i*2+0], DirectX::XMMatrixTranslation(-5.0f, 1.5f, -10.0f + i*5.0f));
+		XMStoreFloat4x4(&mCylWorld[i*2+1], DirectX::XMMatrixTranslation(+5.0f, 1.5f, -10.0f + i*5.0f));
 
-		XMStoreFloat4x4(&mSphereWorld[i*2+0], XMMatrixTranslation(-5.0f, 3.5f, -10.0f + i*5.0f));
-		XMStoreFloat4x4(&mSphereWorld[i*2+1], XMMatrixTranslation(+5.0f, 3.5f, -10.0f + i*5.0f));
+		XMStoreFloat4x4(&mSphereWorld[i*2+0], DirectX::XMMatrixTranslation(-5.0f, 3.5f, -10.0f + i*5.0f));
+		XMStoreFloat4x4(&mSphereWorld[i*2+1], DirectX::XMMatrixTranslation(+5.0f, 3.5f, -10.0f + i*5.0f));
 	}
 
-	mDirLights[0].Ambient  = XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
-	mDirLights[0].Diffuse  = XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
-	mDirLights[0].Specular = XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
-	mDirLights[0].Direction = XMFLOAT3(0.57735f, -0.57735f, 0.57735f);
+	mDirLights[0].Ambient  = DirectX::XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
+	mDirLights[0].Diffuse  = DirectX::XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
+	mDirLights[0].Specular = DirectX::XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
+	mDirLights[0].Direction = DirectX::XMFLOAT3(0.57735f, -0.57735f, 0.57735f);
 
-	mDirLights[1].Ambient  = XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
-	mDirLights[1].Diffuse  = XMFLOAT4(0.20f, 0.20f, 0.20f, 1.0f);
-	mDirLights[1].Specular = XMFLOAT4(0.25f, 0.25f, 0.25f, 1.0f);
-	mDirLights[1].Direction = XMFLOAT3(-0.57735f, -0.57735f, 0.57735f);
+	mDirLights[1].Ambient  = DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
+	mDirLights[1].Diffuse  = DirectX::XMFLOAT4(0.20f, 0.20f, 0.20f, 1.0f);
+	mDirLights[1].Specular = DirectX::XMFLOAT4(0.25f, 0.25f, 0.25f, 1.0f);
+	mDirLights[1].Direction = DirectX::XMFLOAT3(-0.57735f, -0.57735f, 0.57735f);
 
-	mDirLights[2].Ambient  = XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
-	mDirLights[2].Diffuse  = XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
-	mDirLights[2].Specular = XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
-	mDirLights[2].Direction = XMFLOAT3(0.0f, -0.707f, -0.707f);
+	mDirLights[2].Ambient  = DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
+	mDirLights[2].Diffuse  = DirectX::XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
+	mDirLights[2].Specular = DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
+	mDirLights[2].Direction = DirectX::XMFLOAT3(0.0f, -0.707f, -0.707f);
 
-	mGridMat.Ambient  = XMFLOAT4(0.8f, 0.8f, 0.8f, 1.0f);
-	mGridMat.Diffuse  = XMFLOAT4(0.8f, 0.8f, 0.8f, 1.0f);
-	mGridMat.Specular = XMFLOAT4(0.8f, 0.8f, 0.8f, 16.0f);
-	mGridMat.Reflect  = XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
+	mGridMat.Ambient  = DirectX::XMFLOAT4(0.8f, 0.8f, 0.8f, 1.0f);
+	mGridMat.Diffuse  = DirectX::XMFLOAT4(0.8f, 0.8f, 0.8f, 1.0f);
+	mGridMat.Specular = DirectX::XMFLOAT4(0.8f, 0.8f, 0.8f, 16.0f);
+	mGridMat.Reflect  = DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
 
-	mCylinderMat.Ambient  = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-	mCylinderMat.Diffuse  = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-	mCylinderMat.Specular = XMFLOAT4(0.8f, 0.8f, 0.8f, 16.0f);
-	mCylinderMat.Reflect  = XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
+	mCylinderMat.Ambient  = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+	mCylinderMat.Diffuse  = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+	mCylinderMat.Specular = DirectX::XMFLOAT4(0.8f, 0.8f, 0.8f, 16.0f);
+	mCylinderMat.Reflect  = DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
 
-	mSphereMat.Ambient  = XMFLOAT4(0.6f, 0.8f, 1.0f, 1.0f);
-	mSphereMat.Diffuse  = XMFLOAT4(0.6f, 0.8f, 1.0f, 1.0f);
-	mSphereMat.Specular = XMFLOAT4(0.9f, 0.9f, 0.9f, 16.0f);
-	mSphereMat.Reflect  = XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
+	mSphereMat.Ambient  = DirectX::XMFLOAT4(0.6f, 0.8f, 1.0f, 1.0f);
+	mSphereMat.Diffuse  = DirectX::XMFLOAT4(0.6f, 0.8f, 1.0f, 1.0f);
+	mSphereMat.Specular = DirectX::XMFLOAT4(0.9f, 0.9f, 0.9f, 16.0f);
+	mSphereMat.Reflect  = DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
 
-	mBoxMat.Ambient  = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-	mBoxMat.Diffuse  = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-	mBoxMat.Specular = XMFLOAT4(0.8f, 0.8f, 0.8f, 16.0f);
-	mBoxMat.Reflect  = XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
+	mBoxMat.Ambient  = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+	mBoxMat.Diffuse  = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+	mBoxMat.Specular = DirectX::XMFLOAT4(0.8f, 0.8f, 0.8f, 16.0f);
+	mBoxMat.Reflect  = DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
 
-	mSkullMat.Ambient  = XMFLOAT4(0.4f, 0.4f, 0.4f, 1.0f);
-	mSkullMat.Diffuse  = XMFLOAT4(0.8f, 0.8f, 0.8f, 1.0f);
-	mSkullMat.Specular = XMFLOAT4(0.8f, 0.8f, 0.8f, 16.0f);
-	mSkullMat.Reflect  = XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
+	mSkullMat.Ambient  = DirectX::XMFLOAT4(0.4f, 0.4f, 0.4f, 1.0f);
+	mSkullMat.Diffuse  = DirectX::XMFLOAT4(0.8f, 0.8f, 0.8f, 1.0f);
+	mSkullMat.Specular = DirectX::XMFLOAT4(0.8f, 0.8f, 0.8f, 16.0f);
+	mSkullMat.Reflect  = DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
 
-	mCenterSphereMat.Ambient  = XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
-	mCenterSphereMat.Diffuse  = XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
-	mCenterSphereMat.Specular = XMFLOAT4(0.8f, 0.8f, 0.8f, 16.0f);
-	mCenterSphereMat.Reflect  = XMFLOAT4(0.8f, 0.8f, 0.8f, 1.0f);
+	mCenterSphereMat.Ambient  = DirectX::XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
+	mCenterSphereMat.Diffuse  = DirectX::XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
+	mCenterSphereMat.Specular = DirectX::XMFLOAT4(0.8f, 0.8f, 0.8f, 16.0f);
+	mCenterSphereMat.Reflect  = DirectX::XMFLOAT4(0.8f, 0.8f, 0.8f, 1.0f);
 }
 
 DynamicCubeMapApp::~DynamicCubeMapApp()
@@ -299,10 +299,10 @@ void DynamicCubeMapApp::UpdateScene(float dt)
 	// Animate the skull around the center sphere.
 	//
 
-	XMMATRIX skullScale = XMMatrixScaling(0.2f, 0.2f, 0.2f);
-	XMMATRIX skullOffset = XMMatrixTranslation(3.0f, 2.0f, 0.0f);
-	XMMATRIX skullLocalRotate = XMMatrixRotationY(2.0f*mTimer.TotalTime());
-	XMMATRIX skullGlobalRotate = XMMatrixRotationY(0.5f*mTimer.TotalTime());
+	DirectX::XMMATRIX skullScale = DirectX::XMMatrixScaling(0.2f, 0.2f, 0.2f);
+	DirectX::XMMATRIX skullOffset = DirectX::XMMatrixTranslation(3.0f, 2.0f, 0.0f);
+	DirectX::XMMATRIX skullLocalRotate = DirectX::XMMatrixRotationY(2.0f*mTimer.TotalTime());
+	DirectX::XMMATRIX skullGlobalRotate = DirectX::XMMatrixRotationY(0.5f*mTimer.TotalTime());
 	XMStoreFloat4x4(&mSkullWorld, skullScale*skullLocalRotate*skullOffset*skullGlobalRotate);
 
 	mCam.UpdateViewMatrix();
@@ -363,8 +363,8 @@ void DynamicCubeMapApp::OnMouseMove(WPARAM btnState, int x, int y)
 	if( (btnState & MK_LBUTTON) != 0 )
 	{
 		// Make each pixel correspond to a quarter of a degree.
-		float dx = XMConvertToRadians(0.25f*static_cast<float>(x - mLastMousePos.x));
-		float dy = XMConvertToRadians(0.25f*static_cast<float>(y - mLastMousePos.y));
+		float dx = DirectX::XMConvertToRadians(0.25f*static_cast<float>(x - mLastMousePos.x));
+		float dy = DirectX::XMConvertToRadians(0.25f*static_cast<float>(y - mLastMousePos.y));
 
 		mCam.Pitch(dy);
 		mCam.RotateY(dx);
@@ -382,9 +382,9 @@ void DynamicCubeMapApp::DrawScene(const Camera& camera, bool drawCenterSphere)
 	UINT stride = sizeof(Vertex::Basic32);
     UINT offset = 0;
  
-	XMMATRIX view     = camera.View();
-	XMMATRIX proj     = camera.Proj();
-	XMMATRIX viewProj = camera.ViewProj();
+	DirectX::XMMATRIX view     = camera.View();
+	DirectX::XMMATRIX proj     = camera.Proj();
+	DirectX::XMMATRIX viewProj = camera.ViewProj();
 
 	float blendFactor[] = {0.0f, 0.0f, 0.0f, 0.0f};
 
@@ -416,9 +416,9 @@ void DynamicCubeMapApp::DrawScene(const Camera& camera, bool drawCenterSphere)
 		break;
 	}
 
-	XMMATRIX world;
-	XMMATRIX worldInvTranspose;
-	XMMATRIX worldViewProj;
+	DirectX::XMMATRIX world;
+	DirectX::XMMATRIX worldInvTranspose;
+	DirectX::XMMATRIX worldViewProj;
 
 	//
 	// Draw the skull.
@@ -437,7 +437,7 @@ void DynamicCubeMapApp::DrawScene(const Camera& camera, bool drawCenterSphere)
 		Effects::BasicFX->SetWorld(world);
 		Effects::BasicFX->SetWorldInvTranspose(worldInvTranspose);
 		Effects::BasicFX->SetWorldViewProj(worldViewProj);
-		Effects::BasicFX->SetTexTransform(XMMatrixIdentity());
+		Effects::BasicFX->SetTexTransform(DirectX::XMMatrixIdentity());
 		Effects::BasicFX->SetMaterial(mSkullMat);
 
 		activeSkullTech->GetPassByIndex(p)->Apply(0, md3dImmediateContext);
@@ -462,7 +462,7 @@ void DynamicCubeMapApp::DrawScene(const Camera& camera, bool drawCenterSphere)
 		Effects::BasicFX->SetWorld(world);
 		Effects::BasicFX->SetWorldInvTranspose(worldInvTranspose);
 		Effects::BasicFX->SetWorldViewProj(worldViewProj);
-		Effects::BasicFX->SetTexTransform(XMMatrixScaling(6.0f, 8.0f, 1.0f));
+		Effects::BasicFX->SetTexTransform(DirectX::XMMatrixScaling(6.0f, 8.0f, 1.0f));
 		Effects::BasicFX->SetMaterial(mGridMat);
 		Effects::BasicFX->SetDiffuseMap(mFloorTexSRV);
 
@@ -477,7 +477,7 @@ void DynamicCubeMapApp::DrawScene(const Camera& camera, bool drawCenterSphere)
 		Effects::BasicFX->SetWorld(world);
 		Effects::BasicFX->SetWorldInvTranspose(worldInvTranspose);
 		Effects::BasicFX->SetWorldViewProj(worldViewProj);
-		Effects::BasicFX->SetTexTransform(XMMatrixIdentity());
+		Effects::BasicFX->SetTexTransform(DirectX::XMMatrixIdentity());
 		Effects::BasicFX->SetMaterial(mBoxMat);
 		Effects::BasicFX->SetDiffuseMap(mStoneTexSRV);
 
@@ -494,7 +494,7 @@ void DynamicCubeMapApp::DrawScene(const Camera& camera, bool drawCenterSphere)
 			Effects::BasicFX->SetWorld(world);
 			Effects::BasicFX->SetWorldInvTranspose(worldInvTranspose);
 			Effects::BasicFX->SetWorldViewProj(worldViewProj);
-			Effects::BasicFX->SetTexTransform(XMMatrixIdentity());
+			Effects::BasicFX->SetTexTransform(DirectX::XMMatrixIdentity());
 			Effects::BasicFX->SetMaterial(mCylinderMat);
 			Effects::BasicFX->SetDiffuseMap(mBrickTexSRV);
 
@@ -512,7 +512,7 @@ void DynamicCubeMapApp::DrawScene(const Camera& camera, bool drawCenterSphere)
 			Effects::BasicFX->SetWorld(world);
 			Effects::BasicFX->SetWorldInvTranspose(worldInvTranspose);
 			Effects::BasicFX->SetWorldViewProj(worldViewProj);
-			Effects::BasicFX->SetTexTransform(XMMatrixIdentity());
+			Effects::BasicFX->SetTexTransform(DirectX::XMMatrixIdentity());
 			Effects::BasicFX->SetMaterial(mSphereMat);
 			Effects::BasicFX->SetDiffuseMap(mStoneTexSRV);
 
@@ -538,7 +538,7 @@ void DynamicCubeMapApp::DrawScene(const Camera& camera, bool drawCenterSphere)
 			Effects::BasicFX->SetWorld(world);
 			Effects::BasicFX->SetWorldInvTranspose(worldInvTranspose);
 			Effects::BasicFX->SetWorldViewProj(worldViewProj);
-			Effects::BasicFX->SetTexTransform(XMMatrixIdentity());
+			Effects::BasicFX->SetTexTransform(DirectX::XMMatrixIdentity());
 			Effects::BasicFX->SetMaterial(mCenterSphereMat);
 			Effects::BasicFX->SetDiffuseMap(mStoneTexSRV);
 			Effects::BasicFX->SetCubeMap(mDynamicCubeMapSRV);
@@ -558,36 +558,36 @@ void DynamicCubeMapApp::DrawScene(const Camera& camera, bool drawCenterSphere)
 void DynamicCubeMapApp::BuildCubeFaceCamera(float x, float y, float z)
 {
 	// Generate the cube map about the given position.
-	XMFLOAT3 center(x, y, z);
-	XMFLOAT3 worldUp(0.0f, 1.0f, 0.0f);
+	DirectX::XMFLOAT3 center(x, y, z);
+	DirectX::XMFLOAT3 worldUp(0.0f, 1.0f, 0.0f);
 
 	// Look along each coordinate axis.
-	XMFLOAT3 targets[6] = 
+	DirectX::XMFLOAT3 targets[6] = 
 	{
-		XMFLOAT3(x+1.0f, y, z), // +X
-		XMFLOAT3(x-1.0f, y, z), // -X
-		XMFLOAT3(x, y+1.0f, z), // +Y
-		XMFLOAT3(x, y-1.0f, z), // -Y
-		XMFLOAT3(x, y, z+1.0f), // +Z
-		XMFLOAT3(x, y, z-1.0f)  // -Z
+		DirectX::XMFLOAT3(x+1.0f, y, z), // +X
+		DirectX::XMFLOAT3(x-1.0f, y, z), // -X
+		DirectX::XMFLOAT3(x, y+1.0f, z), // +Y
+		DirectX::XMFLOAT3(x, y-1.0f, z), // -Y
+		DirectX::XMFLOAT3(x, y, z+1.0f), // +Z
+		DirectX::XMFLOAT3(x, y, z-1.0f)  // -Z
 	};
 
 	// Use world up vector (0,1,0) for all directions except +Y/-Y.  In these cases, we
 	// are looking down +Y or -Y, so we need a different "up" vector.
-	XMFLOAT3 ups[6] = 
+	DirectX::XMFLOAT3 ups[6] = 
 	{
-		XMFLOAT3(0.0f, 1.0f, 0.0f),  // +X
-		XMFLOAT3(0.0f, 1.0f, 0.0f),  // -X
-		XMFLOAT3(0.0f, 0.0f, -1.0f), // +Y
-		XMFLOAT3(0.0f, 0.0f, +1.0f), // -Y
-		XMFLOAT3(0.0f, 1.0f, 0.0f),	 // +Z
-		XMFLOAT3(0.0f, 1.0f, 0.0f)	 // -Z
+		DirectX::XMFLOAT3(0.0f, 1.0f, 0.0f),  // +X
+		DirectX::XMFLOAT3(0.0f, 1.0f, 0.0f),  // -X
+		DirectX::XMFLOAT3(0.0f, 0.0f, -1.0f), // +Y
+		DirectX::XMFLOAT3(0.0f, 0.0f, +1.0f), // -Y
+		DirectX::XMFLOAT3(0.0f, 1.0f, 0.0f),	 // +Z
+		DirectX::XMFLOAT3(0.0f, 1.0f, 0.0f)	 // -Z
 	};
 
 	for(int i = 0; i < 6; ++i)
 	{
 		mCubeMapCamera[i].LookAt(center, targets[i], ups[i]);
-		mCubeMapCamera[i].SetLens(0.5f*XM_PI, 1.0f, 0.1f, 1000.0f);
+		mCubeMapCamera[i].SetLens(0.5f*DirectX::XM_PI, 1.0f, 0.1f, 1000.0f);
 		mCubeMapCamera[i].UpdateViewMatrix();
 	}
 }

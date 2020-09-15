@@ -21,12 +21,12 @@ Terrain::Terrain() :
 	mNumPatchVertRows(0),
 	mNumPatchVertCols(0)
 {
-	XMStoreFloat4x4(&mWorld, XMMatrixIdentity());
+	XMStoreFloat4x4(&mWorld, DirectX::XMMatrixIdentity());
 
-	mMat.Ambient  = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-	mMat.Diffuse  = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-	mMat.Specular = XMFLOAT4(0.0f, 0.0f, 0.0f, 64.0f);
-	mMat.Reflect  = XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
+	mMat.Ambient  = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+	mMat.Diffuse  = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+	mMat.Specular = DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 64.0f);
+	mMat.Reflect  = DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
 }
 
 Terrain::~Terrain()
@@ -89,12 +89,12 @@ float Terrain::GetHeight(float x, float z)const
 	}
 }
 
-XMMATRIX Terrain::GetWorld()const
+DirectX::XMMATRIX Terrain::GetWorld()const
 {
 	return XMLoadFloat4x4(&mWorld);
 }
 
-void Terrain::SetWorld(CXMMATRIX M)
+void Terrain::SetWorld(DirectX::CXMMATRIX M)
 {
 	XMStoreFloat4x4(&mWorld, M);
 }
@@ -140,12 +140,12 @@ void Terrain::Draw(ID3D11DeviceContext* dc, const Camera& cam, DirectionalLight 
     dc->IASetVertexBuffers(0, 1, &mQuadPatchVB, &stride, &offset);
 	dc->IASetIndexBuffer(mQuadPatchIB, DXGI_FORMAT_R16_UINT, 0);
 
-	XMMATRIX viewProj = cam.ViewProj();
-	XMMATRIX world  = XMLoadFloat4x4(&mWorld);
-	XMMATRIX worldInvTranspose = MathHelper::InverseTranspose(world);
-	XMMATRIX worldViewProj = world*viewProj;
+	DirectX::XMMATRIX viewProj = cam.ViewProj();
+	DirectX::XMMATRIX world  = XMLoadFloat4x4(&mWorld);
+	DirectX::XMMATRIX worldInvTranspose = MathHelper::InverseTranspose(world);
+	DirectX::XMMATRIX worldViewProj = world*viewProj;
 
-	XMFLOAT4 worldPlanes[6];
+	DirectX::XMFLOAT4 worldPlanes[6];
 	ExtractFrustumPlanes(worldPlanes, viewProj);
 
 	// Set per frame constants.
@@ -310,7 +310,7 @@ void Terrain::CalcPatchBoundsY(UINT i, UINT j)
 	}
 
 	UINT patchID = i*(mNumPatchVertCols-1)+j;
-	mPatchBoundsY[patchID] = XMFLOAT2(minY, maxY);
+	mPatchBoundsY[patchID] = DirectX::XMFLOAT2(minY, maxY);
 }
 
 void Terrain::BuildQuadPatchVB(ID3D11Device* device)
@@ -332,7 +332,7 @@ void Terrain::BuildQuadPatchVB(ID3D11Device* device)
 		{
 			float x = -halfWidth + j*patchWidth;
 
-			patchVertices[i*mNumPatchVertCols+j].Pos = XMFLOAT3(x, 0.0f, z);
+			patchVertices[i*mNumPatchVertCols+j].Pos = DirectX::XMFLOAT3(x, 0.0f, z);
 
 			// Stretch texture over grid.
 			patchVertices[i*mNumPatchVertCols+j].Tex.x = j*du;

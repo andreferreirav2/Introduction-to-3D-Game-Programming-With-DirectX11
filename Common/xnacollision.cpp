@@ -15,15 +15,15 @@
 namespace XNA
 {
 
-static const XMVECTOR g_UnitQuaternionEpsilon =
+static const DirectX::XMVECTOR g_UnitQuaternionEpsilon =
 {
     1.0e-4f, 1.0e-4f, 1.0e-4f, 1.0e-4f
 };
-static const XMVECTOR g_UnitVectorEpsilon =
+static const DirectX::XMVECTOR g_UnitVectorEpsilon =
 {
     1.0e-4f, 1.0e-4f, 1.0e-4f, 1.0e-4f
 };
-static const XMVECTOR g_UnitPlaneEpsilon =
+static const DirectX::XMVECTOR g_UnitPlaneEpsilon =
 {
     1.0e-4f, 1.0e-4f, 1.0e-4f, 1.0e-4f
 };
@@ -31,32 +31,32 @@ static const XMVECTOR g_UnitPlaneEpsilon =
 
 //-----------------------------------------------------------------------------
 // Return TRUE if any of the elements of a 3 vector are equal to 0xffffffff.
-// Slightly more efficient than using XMVector3EqualInt.
+// Slightly more efficient than using DirectX::XMVector3EqualInt.
 //-----------------------------------------------------------------------------
-static inline BOOL XMVector3AnyTrue( FXMVECTOR V )
+static inline BOOL DirectX::XMVector3AnyTrue( FXMVECTOR V )
 {
-    XMVECTOR C;
+    DirectX::XMVECTOR C;
 
     // Duplicate the fourth element from the first element.
-    C = XMVectorSwizzle( V, 0, 1, 2, 0 );
+    C = DirectX::XMVectorSwizzle( V, 0, 1, 2, 0 );
 
-    return XMComparisonAnyTrue( XMVector4EqualIntR( C, XMVectorTrueInt() ) );
+    return XMComparisonAnyTrue( DirectX::XMVector4EqualIntR( C, DirectX::XMVectorTrueInt() ) );
 }
 
 
 
 //-----------------------------------------------------------------------------
 // Return TRUE if all of the elements of a 3 vector are equal to 0xffffffff.
-// Slightly more efficient than using XMVector3EqualInt.
+// Slightly more efficient than using DirectX::XMVector3EqualInt.
 //-----------------------------------------------------------------------------
-static inline BOOL XMVector3AllTrue( FXMVECTOR V )
+static inline BOOL DirectX::XMVector3AllTrue( FXMVECTOR V )
 {
-    XMVECTOR C;
+    DirectX::XMVECTOR C;
 
     // Duplicate the fourth element from the first element.
-    C = XMVectorSwizzle( V, 0, 1, 2, 0 );
+    C = DirectX::XMVectorSwizzle( V, 0, 1, 2, 0 );
 
-    return XMComparisonAllTrue( XMVector4EqualIntR( C, XMVectorTrueInt() ) );
+    return XMComparisonAllTrue( DirectX::XMVector4EqualIntR( C, DirectX::XMVectorTrueInt() ) );
 }
 
 
@@ -64,11 +64,11 @@ static inline BOOL XMVector3AllTrue( FXMVECTOR V )
 //-----------------------------------------------------------------------------
 // Return TRUE if the vector is a unit vector (length == 1).
 //-----------------------------------------------------------------------------
-static inline BOOL XMVector3IsUnit( FXMVECTOR V )
+static inline BOOL DirectX::XMVector3IsUnit( FXMVECTOR V )
 {
-    XMVECTOR Difference = XMVector3Length( V ) - XMVectorSplatOne();
+    DirectX::XMVECTOR Difference = DirectX::XMVector3Length( V ) - DirectX::XMVectorSplatOne();
 
-    return XMVector4Less( XMVectorAbs( Difference ), g_UnitVectorEpsilon );
+    return DirectX::XMVector4Less( DirectX::XMVectorAbs( Difference ), g_UnitVectorEpsilon );
 }
 
 
@@ -78,9 +78,9 @@ static inline BOOL XMVector3IsUnit( FXMVECTOR V )
 //-----------------------------------------------------------------------------
 static inline BOOL XMQuaternionIsUnit( FXMVECTOR Q )
 {
-    XMVECTOR Difference = XMVector4Length( Q ) - XMVectorSplatOne();
+    DirectX::XMVECTOR Difference = DirectX::XMVector4Length( Q ) - DirectX::XMVectorSplatOne();
 
-    return XMVector4Less( XMVectorAbs( Difference ), g_UnitQuaternionEpsilon );
+    return DirectX::XMVector4Less( DirectX::XMVectorAbs( Difference ), g_UnitQuaternionEpsilon );
 }
 
 
@@ -90,9 +90,9 @@ static inline BOOL XMQuaternionIsUnit( FXMVECTOR Q )
 //-----------------------------------------------------------------------------
 static inline BOOL XMPlaneIsUnit( FXMVECTOR Plane )
 {
-    XMVECTOR Difference = XMVector3Length( Plane ) - XMVectorSplatOne();
+    DirectX::XMVECTOR Difference = DirectX::XMVector3Length( Plane ) - DirectX::XMVectorSplatOne();
 
-    return XMVector4Less( XMVectorAbs( Difference ), g_UnitPlaneEpsilon );
+    return DirectX::XMVector4Less( DirectX::XMVectorAbs( Difference ), g_UnitPlaneEpsilon );
 }
 
 
@@ -100,12 +100,12 @@ static inline BOOL XMPlaneIsUnit( FXMVECTOR Plane )
 //-----------------------------------------------------------------------------
 // Transform a plane by a rotation and translation.
 //-----------------------------------------------------------------------------
-static inline XMVECTOR TransformPlane( FXMVECTOR Plane, FXMVECTOR Rotation, FXMVECTOR Translation )
+static inline DirectX::XMVECTOR TransformPlane( FXMVECTOR Plane, DirectX::FXMVECTOR Rotation, DirectX::FXMVECTOR Translation )
 {
-    XMVECTOR Normal = XMVector3Rotate( Plane, Rotation );
-    XMVECTOR D = XMVectorSplatW( Plane ) - XMVector3Dot( Normal, Translation );
+    DirectX::XMVECTOR Normal = DirectX::XMVector3Rotate( Plane, Rotation );
+    DirectX::XMVECTOR D = DirectX::XMVectorSplatW( Plane ) - DirectX::XMVector3Dot( Normal, Translation );
 
-    return XMVectorInsert( Normal, D, 0, 0, 0, 0, 1 );
+    return DirectX::XMVectorInsert( Normal, D, 0, 0, 0, 0, 1 );
 }
 
 
@@ -113,22 +113,22 @@ static inline XMVECTOR TransformPlane( FXMVECTOR Plane, FXMVECTOR Rotation, FXMV
 //-----------------------------------------------------------------------------
 // Return the point on the line segement (S1, S2) nearest the point P.
 //-----------------------------------------------------------------------------
-static inline XMVECTOR PointOnLineSegmentNearestPoint( FXMVECTOR S1, FXMVECTOR S2, FXMVECTOR P )
+static inline DirectX::XMVECTOR PointOnLineSegmentNearestPoint( FXMVECTOR S1, DirectX::FXMVECTOR S2, DirectX::FXMVECTOR P )
 {
-    XMVECTOR Dir = S2 - S1;
-    XMVECTOR Projection = ( XMVector3Dot( P, Dir ) - XMVector3Dot( S1, Dir ) );
-    XMVECTOR LengthSq = XMVector3Dot( Dir, Dir );
+    DirectX::XMVECTOR Dir = S2 - S1;
+    DirectX::XMVECTOR Projection = ( DirectX::XMVector3Dot( P, Dir ) - DirectX::XMVector3Dot( S1, Dir ) );
+    DirectX::XMVECTOR LengthSq = DirectX::XMVector3Dot( Dir, Dir );
 
-    XMVECTOR t = Projection * XMVectorReciprocal( LengthSq );
-    XMVECTOR Point = S1 + t * Dir;
+    DirectX::XMVECTOR t = Projection * DirectX::XMVectorReciprocal( LengthSq );
+    DirectX::XMVECTOR Point = S1 + t * Dir;
 
     // t < 0
-    XMVECTOR SelectS1 = XMVectorLess( Projection, XMVectorZero() );
-    Point = XMVectorSelect( Point, S1, SelectS1 );
+    DirectX::XMVECTOR SelectS1 = DirectX::XMVectorLess( Projection, DirectX::XMVectorZero() );
+    Point = DirectX::XMVectorSelect( Point, S1, SelectS1 );
 
     // t > 1
-    XMVECTOR SelectS2 = XMVectorGreater( Projection, LengthSq );
-    Point = XMVectorSelect( Point, S2, SelectS2 );
+    DirectX::XMVECTOR SelectS2 = DirectX::XMVectorGreater( Projection, LengthSq );
+    Point = DirectX::XMVectorSelect( Point, S2, SelectS2 );
 
     return Point;
 }
@@ -139,26 +139,26 @@ static inline XMVECTOR PointOnLineSegmentNearestPoint( FXMVECTOR S1, FXMVECTOR S
 // Test if the point (P) on the plane of the triangle is inside the triangle 
 // (V0, V1, V2).
 //-----------------------------------------------------------------------------
-static inline XMVECTOR PointOnPlaneInsideTriangle( FXMVECTOR P, FXMVECTOR V0, FXMVECTOR V1, CXMVECTOR V2 )
+static inline DirectX::XMVECTOR PointOnPlaneInsideTriangle( FXMVECTOR P, DirectX::FXMVECTOR V0, DirectX::FXMVECTOR V1, CXMVECTOR V2 )
 {
     // Compute the triangle normal.
-    XMVECTOR N = XMVector3Cross( V2 - V0, V1 - V0 );
+    DirectX::XMVECTOR N = DirectX::XMVector3Cross( V2 - V0, V1 - V0 );
 
     // Compute the cross products of the vector from the base of each edge to 
     // the point with each edge vector.
-    XMVECTOR C0 = XMVector3Cross( P - V0, V1 - V0 );
-    XMVECTOR C1 = XMVector3Cross( P - V1, V2 - V1 );
-    XMVECTOR C2 = XMVector3Cross( P - V2, V0 - V2 );
+    DirectX::XMVECTOR C0 = DirectX::XMVector3Cross( P - V0, V1 - V0 );
+    DirectX::XMVECTOR C1 = DirectX::XMVector3Cross( P - V1, V2 - V1 );
+    DirectX::XMVECTOR C2 = DirectX::XMVector3Cross( P - V2, V0 - V2 );
 
     // If the cross product points in the same direction as the normal the the
     // point is inside the edge (it is zero if is on the edge).
-    XMVECTOR Zero = XMVectorZero();
-    XMVECTOR Inside0 = XMVectorGreaterOrEqual( XMVector3Dot( C0, N ), Zero );
-    XMVECTOR Inside1 = XMVectorGreaterOrEqual( XMVector3Dot( C1, N ), Zero );
-    XMVECTOR Inside2 = XMVectorGreaterOrEqual( XMVector3Dot( C2, N ), Zero );
+    DirectX::XMVECTOR Zero = DirectX::XMVectorZero();
+    DirectX::XMVECTOR Inside0 = DirectX::XMVectorGreaterOrEqual( DirectX::XMVector3Dot( C0, N ), Zero );
+    DirectX::XMVECTOR Inside1 = DirectX::XMVectorGreaterOrEqual( DirectX::XMVector3Dot( C1, N ), Zero );
+    DirectX::XMVECTOR Inside2 = DirectX::XMVectorGreaterOrEqual( DirectX::XMVector3Dot( C2, N ), Zero );
 
     // If the point inside all of the edges it is inside.
-    return XMVectorAndInt( XMVectorAndInt( Inside0, Inside1 ), Inside2 );
+    return DirectX::XMVectorAndInt( DirectX::XMVectorAndInt( Inside0, Inside1 ), Inside2 );
 }
 
 
@@ -170,60 +170,60 @@ static inline XMVECTOR PointOnPlaneInsideTriangle( FXMVECTOR P, FXMVECTOR V0, FX
 // The algorithm is based on  Jack Ritter, "An Efficient Bounding Sphere", 
 // Graphics Gems.
 //-----------------------------------------------------------------------------
-VOID ComputeBoundingSphereFromPoints( Sphere* pOut, UINT Count, const XMFLOAT3* pPoints, UINT Stride )
+VOID ComputeBoundingSphereFromPoints( Sphere* pOut, UINT Count, const DirectX::XMFLOAT3* pPoints, UINT Stride )
 {
     XMASSERT( pOut );
     XMASSERT( Count > 0 );
     XMASSERT( pPoints );
 
     // Find the points with minimum and maximum x, y, and z
-    XMVECTOR MinX, MaxX, MinY, MaxY, MinZ, MaxZ;
+    DirectX::XMVECTOR MinX, MaxX, MinY, MaxY, MinZ, MaxZ;
 
     MinX = MaxX = MinY = MaxY = MinZ = MaxZ = XMLoadFloat3( pPoints );
 
     for( UINT i = 1; i < Count; i++ )
     {
-        XMVECTOR Point = XMLoadFloat3( ( XMFLOAT3* )( ( BYTE* )pPoints + i * Stride ) );
+        DirectX::XMVECTOR Point = XMLoadFloat3( ( DirectX::XMFLOAT3* )( ( BYTE* )pPoints + i * Stride ) );
 
-        float px = XMVectorGetX( Point );
-        float py = XMVectorGetY( Point );
-        float pz = XMVectorGetZ( Point );
+        float px = DirectX::XMVectorGetX( Point );
+        float py = DirectX::XMVectorGetY( Point );
+        float pz = DirectX::XMVectorGetZ( Point );
 
-        if( px < XMVectorGetX( MinX ) )
+        if( px < DirectX::XMVectorGetX( MinX ) )
             MinX = Point;
 
-        if( px > XMVectorGetX( MaxX ) )
+        if( px > DirectX::XMVectorGetX( MaxX ) )
             MaxX = Point;
 
-        if( py < XMVectorGetY( MinY ) )
+        if( py < DirectX::XMVectorGetY( MinY ) )
             MinY = Point;
 
-        if( py > XMVectorGetY( MaxY ) )
+        if( py > DirectX::XMVectorGetY( MaxY ) )
             MaxY = Point;
 
-        if( pz < XMVectorGetZ( MinZ ) )
+        if( pz < DirectX::XMVectorGetZ( MinZ ) )
             MinZ = Point;
 
-        if( pz > XMVectorGetZ( MaxZ ) )
+        if( pz > DirectX::XMVectorGetZ( MaxZ ) )
             MaxZ = Point;
     }
 
     // Use the min/max pair that are farthest apart to form the initial sphere.
-    XMVECTOR DeltaX = MaxX - MinX;
-    XMVECTOR DistX = XMVector3Length( DeltaX );
+    DirectX::XMVECTOR DeltaX = MaxX - MinX;
+    DirectX::XMVECTOR DistX = DirectX::XMVector3Length( DeltaX );
 
-    XMVECTOR DeltaY = MaxY - MinY;
-    XMVECTOR DistY = XMVector3Length( DeltaY );
+    DirectX::XMVECTOR DeltaY = MaxY - MinY;
+    DirectX::XMVECTOR DistY = DirectX::XMVector3Length( DeltaY );
 
-    XMVECTOR DeltaZ = MaxZ - MinZ;
-    XMVECTOR DistZ = XMVector3Length( DeltaZ );
+    DirectX::XMVECTOR DeltaZ = MaxZ - MinZ;
+    DirectX::XMVECTOR DistZ = DirectX::XMVector3Length( DeltaZ );
 
-    XMVECTOR Center;
-    XMVECTOR Radius;
+    DirectX::XMVECTOR Center;
+    DirectX::XMVECTOR Radius;
 
-    if( XMVector3Greater( DistX, DistY ) )
+    if( DirectX::XMVector3Greater( DistX, DistY ) )
     {
-        if( XMVector3Greater( DistX, DistZ ) )
+        if( DirectX::XMVector3Greater( DistX, DistZ ) )
         {
             // Use min/max x.
             Center = ( MaxX + MinX ) * 0.5f;
@@ -238,7 +238,7 @@ VOID ComputeBoundingSphereFromPoints( Sphere* pOut, UINT Count, const XMFLOAT3* 
     }
     else // Y >= X
     {
-        if( XMVector3Greater( DistY, DistZ ) )
+        if( DirectX::XMVector3Greater( DistY, DistZ ) )
         {
             // Use min/max y.
             Center = ( MaxY + MinY ) * 0.5f;
@@ -255,17 +255,17 @@ VOID ComputeBoundingSphereFromPoints( Sphere* pOut, UINT Count, const XMFLOAT3* 
     // Add any points not inside the sphere.
     for( UINT i = 0; i < Count; i++ )
     {
-        XMVECTOR Point = XMLoadFloat3( ( XMFLOAT3* )( ( BYTE* )pPoints + i * Stride ) );
+        DirectX::XMVECTOR Point = XMLoadFloat3( ( DirectX::XMFLOAT3* )( ( BYTE* )pPoints + i * Stride ) );
 
-        XMVECTOR Delta = Point - Center;
+        DirectX::XMVECTOR Delta = Point - Center;
 
-        XMVECTOR Dist = XMVector3Length( Delta );
+        DirectX::XMVECTOR Dist = DirectX::XMVector3Length( Delta );
 
-        if( XMVector3Greater( Dist, Radius ) )
+        if( DirectX::XMVector3Greater( Dist, Radius ) )
         {
             // Adjust sphere to include the new point.
             Radius = ( Radius + Dist ) * 0.5f;
-            Center += ( XMVectorReplicate( 1.0f ) - Radius * XMVectorReciprocal( Dist ) ) * Delta;
+            Center += ( DirectX::XMVectorReplicate( 1.0f ) - Radius * DirectX::XMVectorReciprocal( Dist ) ) * Delta;
         }
     }
 
@@ -280,23 +280,23 @@ VOID ComputeBoundingSphereFromPoints( Sphere* pOut, UINT Count, const XMFLOAT3* 
 //-----------------------------------------------------------------------------
 // Find the minimum axis aligned bounding box containing a set of points.
 //-----------------------------------------------------------------------------
-VOID ComputeBoundingAxisAlignedBoxFromPoints( AxisAlignedBox* pOut, UINT Count, const XMFLOAT3* pPoints, UINT Stride )
+VOID ComputeBoundingAxisAlignedBoxFromPoints( AxisAlignedBox* pOut, UINT Count, const DirectX::XMFLOAT3* pPoints, UINT Stride )
 {
     XMASSERT( pOut );
     XMASSERT( Count > 0 );
     XMASSERT( pPoints );
 
     // Find the minimum and maximum x, y, and z
-    XMVECTOR vMin, vMax;
+    DirectX::XMVECTOR vMin, vMax;
 
     vMin = vMax = XMLoadFloat3( pPoints );
 
     for( UINT i = 1; i < Count; i++ )
     {
-        XMVECTOR Point = XMLoadFloat3( ( XMFLOAT3* )( ( BYTE* )pPoints + i * Stride ) );
+        DirectX::XMVECTOR Point = XMLoadFloat3( ( DirectX::XMFLOAT3* )( ( BYTE* )pPoints + i * Stride ) );
 
-        vMin = XMVectorMin( vMin, Point );
-        vMax = XMVectorMax( vMax, Point );
+        vMin = DirectX::XMVectorMin( vMin, Point );
+        vMax = DirectX::XMVectorMax( vMax, Point );
     }
 
     // Store center and extents.
@@ -350,7 +350,7 @@ static inline BOOL SolveCubic( FLOAT e, FLOAT f, FLOAT g, FLOAT* t, FLOAT* u, FL
 
 
 //-----------------------------------------------------------------------------
-static inline XMVECTOR CalculateEigenVector( FLOAT m11, FLOAT m12, FLOAT m13,
+static inline DirectX::XMVECTOR CalculateEigenVector( FLOAT m11, FLOAT m12, FLOAT m13,
                                              FLOAT m22, FLOAT m23, FLOAT m33, FLOAT e )
 {
     FLOAT f1, f2, f3;
@@ -360,9 +360,9 @@ static inline XMVECTOR CalculateEigenVector( FLOAT m11, FLOAT m12, FLOAT m13,
     fTmp[1] = ( FLOAT )( m13 * m12 - m23 * ( m11 - e ) );
     fTmp[2] = ( FLOAT )( ( m11 - e ) * ( m22 - e ) - m12 * m12 );
 
-    XMVECTOR vTmp = XMLoadFloat3( (XMFLOAT3*)fTmp );
+    DirectX::XMVECTOR vTmp = XMLoadFloat3( (DirectX::XMFLOAT3*)fTmp );
 
-    if( XMVector3Equal( vTmp, XMVectorZero() ) ) // planar or linear
+    if( DirectX::XMVector3Equal( vTmp, DirectX::XMVectorZero() ) ) // planar or linear
     {
         // we only have one equation - find a valid one
         if( ( m11 - e != 0.0 ) || ( m12 != 0.0 ) || ( m13 != 0.0 ) )
@@ -384,37 +384,37 @@ static inline XMVECTOR CalculateEigenVector( FLOAT m11, FLOAT m12, FLOAT m13,
         }
 
         if( f1 == 0.0 )
-            vTmp = XMVectorSetX( vTmp, 0.0f );
+            vTmp = DirectX::XMVectorSetX( vTmp, 0.0f );
         else
-            vTmp = XMVectorSetX( vTmp, 1.0f );
+            vTmp = DirectX::XMVectorSetX( vTmp, 1.0f );
 
         if( f2 == 0.0 )
-            vTmp = XMVectorSetY( vTmp, 0.0f );
+            vTmp = DirectX::XMVectorSetY( vTmp, 0.0f );
         else
-            vTmp = XMVectorSetY( vTmp, 1.0f );
+            vTmp = DirectX::XMVectorSetY( vTmp, 1.0f );
 
         if( f3 == 0.0 )
         {
-            vTmp = XMVectorSetZ( vTmp, 0.0f );
+            vTmp = DirectX::XMVectorSetZ( vTmp, 0.0f );
             // recalculate y to make equation work
             if( m12 != 0.0 )
-                vTmp = XMVectorSetY( vTmp, ( FLOAT )( -f1 / f2 ) );
+                vTmp = DirectX::XMVectorSetY( vTmp, ( FLOAT )( -f1 / f2 ) );
         }
         else
         {
-            vTmp = XMVectorSetZ( vTmp, ( FLOAT )( ( f2 - f1 ) / f3 ) );
+            vTmp = DirectX::XMVectorSetZ( vTmp, ( FLOAT )( ( f2 - f1 ) / f3 ) );
         }
     }
 
-    if( XMVectorGetX( XMVector3LengthSq( vTmp ) ) > 1e-5f )
+    if( DirectX::XMVectorGetX( DirectX::XMVector3LengthSq( vTmp ) ) > 1e-5f )
     {
-        return XMVector3Normalize( vTmp );
+        return DirectX::XMVector3Normalize( vTmp );
     }
     else
     {
         // Multiply by a value large enough to make the vector non-zero.
         vTmp *= 1e5f;
-        return XMVector3Normalize( vTmp );
+        return DirectX::XMVector3Normalize( vTmp );
     }
 }
 
@@ -424,14 +424,14 @@ static inline XMVECTOR CalculateEigenVector( FLOAT m11, FLOAT m12, FLOAT m13,
 static inline BOOL CalculateEigenVectors( FLOAT m11, FLOAT m12, FLOAT m13,
                                           FLOAT m22, FLOAT m23, FLOAT m33,
                                           FLOAT e1, FLOAT e2, FLOAT e3,
-                                          XMVECTOR* pV1, XMVECTOR* pV2, XMVECTOR* pV3 )
+                                          DirectX::XMVECTOR* pV1, DirectX::XMVECTOR* pV2, DirectX::XMVECTOR* pV3 )
 {
-    XMVECTOR vTmp, vUp, vRight;
+    DirectX::XMVECTOR vTmp, vUp, vRight;
 
     BOOL v1z, v2z, v3z, e12, e13, e23;
 
-    vUp = XMVectorSetBinaryConstant( 0, 1, 0, 0 );
-    vRight = XMVectorSetBinaryConstant( 1, 0, 0, 0 );
+    vUp = DirectX::XMVectorSetBinaryConstant( 0, 1, 0, 0 );
+    vRight = DirectX::XMVectorSetBinaryConstant( 1, 0, 0, 0 );
 
     *pV1 = CalculateEigenVector( m11, m12, m13, m22, m23, m33, e1 );
     *pV2 = CalculateEigenVector( m11, m12, m13, m22, m23, m33, e2 );
@@ -439,81 +439,81 @@ static inline BOOL CalculateEigenVectors( FLOAT m11, FLOAT m12, FLOAT m13,
 
     v1z = v2z = v3z = FALSE;
 
-    XMVECTOR Zero = XMVectorZero();
+    DirectX::XMVECTOR Zero = DirectX::XMVectorZero();
 
-    if ( XMVector3Equal( *pV1, Zero ) )
+    if ( DirectX::XMVector3Equal( *pV1, Zero ) )
         v1z = TRUE;
 
-    if ( XMVector3Equal( *pV2, Zero ) )
+    if ( DirectX::XMVector3Equal( *pV2, Zero ) )
         v2z = TRUE;
 
-    if ( XMVector3Equal( *pV3, Zero ))
+    if ( DirectX::XMVector3Equal( *pV3, Zero ))
         v3z = TRUE;
 
-    e12 = ( fabsf( XMVectorGetX( XMVector3Dot( *pV1, *pV2 ) ) ) > 0.1f ); // check for non-orthogonal vectors
-    e13 = ( fabsf( XMVectorGetX( XMVector3Dot( *pV1, *pV3 ) ) ) > 0.1f );
-    e23 = ( fabsf( XMVectorGetX( XMVector3Dot( *pV2, *pV3 ) ) ) > 0.1f );
+    e12 = ( fabsf( DirectX::XMVectorGetX( DirectX::XMVector3Dot( *pV1, *pV2 ) ) ) > 0.1f ); // check for non-orthogonal vectors
+    e13 = ( fabsf( DirectX::XMVectorGetX( DirectX::XMVector3Dot( *pV1, *pV3 ) ) ) > 0.1f );
+    e23 = ( fabsf( DirectX::XMVectorGetX( DirectX::XMVector3Dot( *pV2, *pV3 ) ) ) > 0.1f );
 
     if( ( v1z && v2z && v3z ) || ( e12 && e13 && e23 ) ||
         ( e12 && v3z ) || ( e13 && v2z ) || ( e23 && v1z ) ) // all eigenvectors are 0- any basis set
     {
-        *pV1 = XMVectorSetBinaryConstant( 1, 0, 0, 0 );
-        *pV2 = XMVectorSetBinaryConstant( 0, 1, 0, 0 );
-        *pV3 = XMVectorSetBinaryConstant( 0, 0, 1, 0 );
+        *pV1 = DirectX::XMVectorSetBinaryConstant( 1, 0, 0, 0 );
+        *pV2 = DirectX::XMVectorSetBinaryConstant( 0, 1, 0, 0 );
+        *pV3 = DirectX::XMVectorSetBinaryConstant( 0, 0, 1, 0 );
         return TRUE;
     }
 
     if( v1z && v2z )
     {
-        vTmp = XMVector3Cross( vUp, *pV3 );
-        if( XMVectorGetX( XMVector3LengthSq( vTmp ) ) < 1e-5f )
+        vTmp = DirectX::XMVector3Cross( vUp, *pV3 );
+        if( DirectX::XMVectorGetX( DirectX::XMVector3LengthSq( vTmp ) ) < 1e-5f )
         {
-            vTmp = XMVector3Cross( vRight, *pV3 );
+            vTmp = DirectX::XMVector3Cross( vRight, *pV3 );
         }
-        *pV1 = XMVector3Normalize( vTmp );
-        *pV2 = XMVector3Cross( *pV3, *pV1 );
+        *pV1 = DirectX::XMVector3Normalize( vTmp );
+        *pV2 = DirectX::XMVector3Cross( *pV3, *pV1 );
         return TRUE;
     }
 
     if( v3z && v1z )
     {
-        vTmp = XMVector3Cross( vUp, *pV2 );
-        if( XMVectorGetX( XMVector3LengthSq( vTmp ) ) < 1e-5f )
+        vTmp = DirectX::XMVector3Cross( vUp, *pV2 );
+        if( DirectX::XMVectorGetX( DirectX::XMVector3LengthSq( vTmp ) ) < 1e-5f )
         {
-            vTmp = XMVector3Cross( vRight, *pV2 );
+            vTmp = DirectX::XMVector3Cross( vRight, *pV2 );
         }
-        *pV3 = XMVector3Normalize( vTmp );
-        *pV1 = XMVector3Cross( *pV2, *pV3 );
+        *pV3 = DirectX::XMVector3Normalize( vTmp );
+        *pV1 = DirectX::XMVector3Cross( *pV2, *pV3 );
         return TRUE;
     }
 
     if( v2z && v3z )
     {
-        vTmp = XMVector3Cross( vUp, *pV1 );
-        if( XMVectorGetX( XMVector3LengthSq( vTmp ) ) < 1e-5f )
+        vTmp = DirectX::XMVector3Cross( vUp, *pV1 );
+        if( DirectX::XMVectorGetX( DirectX::XMVector3LengthSq( vTmp ) ) < 1e-5f )
         {
-            vTmp = XMVector3Cross( vRight, *pV1 );
+            vTmp = DirectX::XMVector3Cross( vRight, *pV1 );
         }
-        *pV2 = XMVector3Normalize( vTmp );
-        *pV3 = XMVector3Cross( *pV1, *pV2 );
+        *pV2 = DirectX::XMVector3Normalize( vTmp );
+        *pV3 = DirectX::XMVector3Cross( *pV1, *pV2 );
         return TRUE;
     }
 
     if( ( v1z ) || e12 )
     {
-        *pV1 = XMVector3Cross( *pV2, *pV3 );
+        *pV1 = DirectX::XMVector3Cross( *pV2, *pV3 );
         return TRUE;
     }
 
     if( ( v2z ) || e23 )
     {
-        *pV2 = XMVector3Cross( *pV3, *pV1 );
+        *pV2 = DirectX::XMVector3Cross( *pV3, *pV1 );
         return TRUE;
     }
 
     if( ( v3z ) || e13 )
     {
-        *pV3 = XMVector3Cross( *pV1, *pV2 );
+        *pV3 = DirectX::XMVector3Cross( *pV1, *pV2 );
         return TRUE;
     }
 
@@ -525,7 +525,7 @@ static inline BOOL CalculateEigenVectors( FLOAT m11, FLOAT m12, FLOAT m13,
 //-----------------------------------------------------------------------------
 static inline BOOL CalculateEigenVectorsFromCovarianceMatrix( FLOAT Cxx, FLOAT Cyy, FLOAT Czz,
                                                               FLOAT Cxy, FLOAT Cxz, FLOAT Cyz,
-                                                              XMVECTOR* pV1, XMVECTOR* pV2, XMVECTOR* pV3 )
+                                                              DirectX::XMVECTOR* pV1, DirectX::XMVECTOR* pV2, DirectX::XMVECTOR* pV3 )
 {
     FLOAT e, f, g, ev1, ev2, ev3;
 
@@ -537,9 +537,9 @@ static inline BOOL CalculateEigenVectorsFromCovarianceMatrix( FLOAT Cxx, FLOAT C
     if( !SolveCubic( e, f, g, &ev1, &ev2, &ev3 ) )
     {
         // set them to arbitrary orthonormal basis set
-        *pV1 = XMVectorSetBinaryConstant( 1, 0, 0, 0 );
-        *pV2 = XMVectorSetBinaryConstant( 0, 1, 0, 0 );
-        *pV3 = XMVectorSetBinaryConstant( 0, 0, 1, 0 );
+        *pV1 = DirectX::XMVectorSetBinaryConstant( 1, 0, 0, 0 );
+        *pV2 = DirectX::XMVectorSetBinaryConstant( 0, 1, 0, 0 );
+        *pV3 = DirectX::XMVectorSetBinaryConstant( 0, 0, 1, 0 );
         return FALSE;
     }
 
@@ -559,75 +559,75 @@ static inline BOOL CalculateEigenVectorsFromCovarianceMatrix( FLOAT Cxx, FLOAT C
 // Exact computation of the minimum oriented bounding box is possible but the
 // best know algorithm is O(N^3) and is significanly more complex to implement.
 //-----------------------------------------------------------------------------
-VOID ComputeBoundingOrientedBoxFromPoints( OrientedBox* pOut, UINT Count, const XMFLOAT3* pPoints, UINT Stride )
+VOID ComputeBoundingOrientedBoxFromPoints( OrientedBox* pOut, UINT Count, const DirectX::XMFLOAT3* pPoints, UINT Stride )
 {
     static CONST XMVECTORI32 PermuteXXY =
                  {
-                    XM_PERMUTE_0X, XM_PERMUTE_0X, XM_PERMUTE_0Y, XM_PERMUTE_0W
+                    DirectX::XM_PERMUTE_0X, DirectX::XM_PERMUTE_0X, DirectX::XM_PERMUTE_0Y, DirectX::XM_PERMUTE_0W
                  };
     static CONST XMVECTORI32 PermuteYZZ =
                  {
-                    XM_PERMUTE_0Y, XM_PERMUTE_0Z, XM_PERMUTE_0Z, XM_PERMUTE_0W
+                    DirectX::XM_PERMUTE_0Y, DirectX::XM_PERMUTE_0Z, DirectX::XM_PERMUTE_0Z, DirectX::XM_PERMUTE_0W
                  };
 
     XMASSERT( pOut );
     XMASSERT( Count > 0 );
     XMASSERT( pPoints );
 
-    XMVECTOR CenterOfMass = XMVectorZero();
+    DirectX::XMVECTOR CenterOfMass = DirectX::XMVectorZero();
 
     // Compute the center of mass and inertia tensor of the points.
     for( UINT i = 0; i < Count; i++ )
     {
-        XMVECTOR Point = XMLoadFloat3( ( XMFLOAT3* )( ( BYTE* )pPoints + i * Stride ) );
+        DirectX::XMVECTOR Point = XMLoadFloat3( ( DirectX::XMFLOAT3* )( ( BYTE* )pPoints + i * Stride ) );
 
         CenterOfMass += Point;
     }
 
-    CenterOfMass *= XMVectorReciprocal( XMVectorReplicate( FLOAT( Count ) ) );
+    CenterOfMass *= DirectX::XMVectorReciprocal( DirectX::XMVectorReplicate( FLOAT( Count ) ) );
 
     // Compute the inertia tensor of the points around the center of mass.
     // Using the center of mass is not strictly necessary, but will hopefully
     // improve the stability of finding the eigenvectors.
-    XMVECTOR XX_YY_ZZ = XMVectorZero();
-    XMVECTOR XY_XZ_YZ = XMVectorZero();
+    DirectX::XMVECTOR XX_YY_ZZ = DirectX::XMVectorZero();
+    DirectX::XMVECTOR XY_XZ_YZ = DirectX::XMVectorZero();
 
     for( UINT i = 0; i < Count; i++ )
     {
-        XMVECTOR Point = XMLoadFloat3( ( XMFLOAT3* )( ( BYTE* )pPoints + i * Stride ) ) - CenterOfMass;
+        DirectX::XMVECTOR Point = XMLoadFloat3( ( DirectX::XMFLOAT3* )( ( BYTE* )pPoints + i * Stride ) ) - CenterOfMass;
 
         XX_YY_ZZ += Point * Point;
 
-        XMVECTOR XXY = XMVectorPermute( Point, Point, PermuteXXY );
-        XMVECTOR YZZ = XMVectorPermute( Point, Point, PermuteYZZ );
+        DirectX::XMVECTOR XXY = DirectX::XMVectorPermute( Point, Point, PermuteXXY );
+        DirectX::XMVECTOR YZZ = DirectX::XMVectorPermute( Point, Point, PermuteYZZ );
 
         XY_XZ_YZ += XXY * YZZ;
     }
 
-    XMVECTOR v1, v2, v3;
+    DirectX::XMVECTOR v1, v2, v3;
 
     // Compute the eigenvectors of the inertia tensor.
-    CalculateEigenVectorsFromCovarianceMatrix( XMVectorGetX( XX_YY_ZZ ), XMVectorGetY( XX_YY_ZZ ),
-                                               XMVectorGetZ( XX_YY_ZZ ),
-                                               XMVectorGetX( XY_XZ_YZ ), XMVectorGetY( XY_XZ_YZ ),
-                                               XMVectorGetZ( XY_XZ_YZ ),
+    CalculateEigenVectorsFromCovarianceMatrix( DirectX::XMVectorGetX( XX_YY_ZZ ), DirectX::XMVectorGetY( XX_YY_ZZ ),
+                                               DirectX::XMVectorGetZ( XX_YY_ZZ ),
+                                               DirectX::XMVectorGetX( XY_XZ_YZ ), DirectX::XMVectorGetY( XY_XZ_YZ ),
+                                               DirectX::XMVectorGetZ( XY_XZ_YZ ),
                                                &v1, &v2, &v3 );
 
     // Put them in a matrix.
-    XMMATRIX R;
+    DirectX::XMMATRIX R;
 
-    R.r[0] = XMVectorSetW( v1, 0.f );
-    R.r[1] = XMVectorSetW( v2, 0.f );
-    R.r[2] = XMVectorSetW( v3, 0.f );
-    R.r[3] = XMVectorSetBinaryConstant( 0, 0, 0, 1 );
+    R.r[0] = DirectX::XMVectorSetW( v1, 0.f );
+    R.r[1] = DirectX::XMVectorSetW( v2, 0.f );
+    R.r[2] = DirectX::XMVectorSetW( v3, 0.f );
+    R.r[3] = DirectX::XMVectorSetBinaryConstant( 0, 0, 0, 1 );
 
     // Multiply by -1 to convert the matrix into a right handed coordinate 
     // system (Det ~= 1) in case the eigenvectors form a left handed 
     // coordinate system (Det ~= -1) because XMQuaternionRotationMatrix only 
     // works on right handed matrices.
-    XMVECTOR Det = XMMatrixDeterminant( R );
+    DirectX::XMVECTOR Det = DirectX::XMMatrixDeterminant( R );
 
-    if( XMVector4Less( Det, XMVectorZero() ) )
+    if( DirectX::XMVector4Less( Det, DirectX::XMVectorZero() ) )
     {
         const XMVECTORF32 VectorNegativeOne =
         {
@@ -640,34 +640,34 @@ VOID ComputeBoundingOrientedBoxFromPoints( OrientedBox* pOut, UINT Count, const 
     }
 
     // Get the rotation quaternion from the matrix.
-    XMVECTOR Orientation = XMQuaternionRotationMatrix( R );
+    DirectX::XMVECTOR Orientation = XMQuaternionRotationMatrix( R );
 
     // Make sure it is normal (in case the vectors are slightly non-orthogonal).
     Orientation = XMQuaternionNormalize( Orientation );
 
     // Rebuild the rotation matrix from the quaternion.
-    R = XMMatrixRotationQuaternion( Orientation );
+    R = DirectX::XMMatrixRotationQuaternion( Orientation );
 
     // Build the rotation into the rotated space.
-    XMMATRIX InverseR = XMMatrixTranspose( R );
+    DirectX::XMMATRIX InverseR = DirectX::XMMatrixTranspose( R );
 
     // Find the minimum OBB using the eigenvectors as the axes.
-    XMVECTOR vMin, vMax;
+    DirectX::XMVECTOR vMin, vMax;
 
-    vMin = vMax = XMVector3TransformNormal( XMLoadFloat3( pPoints ), InverseR );
+    vMin = vMax = DirectX::XMVector3TransformNormal( XMLoadFloat3( pPoints ), InverseR );
 
     for( UINT i = 1; i < Count; i++ )
     {
-        XMVECTOR Point = XMVector3TransformNormal( XMLoadFloat3( ( XMFLOAT3* )( ( BYTE* )pPoints + i * Stride ) ),
+        DirectX::XMVECTOR Point = DirectX::XMVector3TransformNormal( XMLoadFloat3( ( DirectX::XMFLOAT3* )( ( BYTE* )pPoints + i * Stride ) ),
                                                    InverseR );
 
-        vMin = XMVectorMin( vMin, Point );
-        vMax = XMVectorMax( vMax, Point );
+        vMin = DirectX::XMVectorMin( vMin, Point );
+        vMax = DirectX::XMVectorMax( vMax, Point );
     }
 
     // Rotate the center into world space.
-    XMVECTOR Center = ( vMin + vMax ) * 0.5f;
-    Center = XMVector3TransformNormal( Center, R );
+    DirectX::XMVECTOR Center = ( vMin + vMax ) * 0.5f;
+    Center = DirectX::XMVector3TransformNormal( Center, R );
 
     // Store center, extents, and orientation.
     XMStoreFloat3( &pOut->Center, Center );
@@ -684,13 +684,13 @@ VOID ComputeBoundingOrientedBoxFromPoints( OrientedBox* pOut, UINT Count, const 
 // contain a projection; any rotation, translation or scale will cause the
 // constructed frustum to be incorrect.
 //-----------------------------------------------------------------------------
-VOID ComputeFrustumFromProjection( Frustum* pOut, XMMATRIX* pProjection )
+VOID ComputeFrustumFromProjection( Frustum* pOut, DirectX::XMMATRIX* pProjection )
 {
     XMASSERT( pOut );
     XMASSERT( pProjection );
 
     // Corners of the projection frustum in homogenous space.
-    static XMVECTOR HomogenousPoints[6] =
+    static DirectX::XMVECTOR HomogenousPoints[6] =
     {
         {  1.0f,  0.0f, 1.0f, 1.0f },   // right (at far plane)
         { -1.0f,  0.0f, 1.0f, 1.0f },   // left
@@ -701,38 +701,38 @@ VOID ComputeFrustumFromProjection( Frustum* pOut, XMMATRIX* pProjection )
         { 0.0f, 0.0f, 1.0f, 1.0f }      // far
     };
 
-    XMVECTOR Determinant;
-    XMMATRIX matInverse = XMMatrixInverse( &Determinant, *pProjection );
+    DirectX::XMVECTOR Determinant;
+    DirectX::XMMATRIX matInverse = DirectX::XMMatrixInverse( &Determinant, *pProjection );
 
     // Compute the frustum corners in world space.
-    XMVECTOR Points[6];
+    DirectX::XMVECTOR Points[6];
 
     for( INT i = 0; i < 6; i++ )
     {
         // Transform point.
-        Points[i] = XMVector4Transform( HomogenousPoints[i], matInverse );
+        Points[i] = DirectX::XMVector4Transform( HomogenousPoints[i], matInverse );
     }
 
-    pOut->Origin = XMFLOAT3( 0.0f, 0.0f, 0.0f );
-    pOut->Orientation = XMFLOAT4( 0.0f, 0.0f, 0.0f, 1.0f );
+    pOut->Origin = DirectX::XMFLOAT3( 0.0f, 0.0f, 0.0f );
+    pOut->Orientation = DirectX::XMFLOAT4( 0.0f, 0.0f, 0.0f, 1.0f );
 
     // Compute the slopes.
-    Points[0] = Points[0] * XMVectorReciprocal( XMVectorSplatZ( Points[0] ) );
-    Points[1] = Points[1] * XMVectorReciprocal( XMVectorSplatZ( Points[1] ) );
-    Points[2] = Points[2] * XMVectorReciprocal( XMVectorSplatZ( Points[2] ) );
-    Points[3] = Points[3] * XMVectorReciprocal( XMVectorSplatZ( Points[3] ) );
+    Points[0] = Points[0] * DirectX::XMVectorReciprocal( DirectX::XMVectorSplatZ( Points[0] ) );
+    Points[1] = Points[1] * DirectX::XMVectorReciprocal( DirectX::XMVectorSplatZ( Points[1] ) );
+    Points[2] = Points[2] * DirectX::XMVectorReciprocal( DirectX::XMVectorSplatZ( Points[2] ) );
+    Points[3] = Points[3] * DirectX::XMVectorReciprocal( DirectX::XMVectorSplatZ( Points[3] ) );
 
-    pOut->RightSlope = XMVectorGetX( Points[0] );
-    pOut->LeftSlope = XMVectorGetX( Points[1] );
-    pOut->TopSlope = XMVectorGetY( Points[2] );
-    pOut->BottomSlope = XMVectorGetY( Points[3] );
+    pOut->RightSlope = DirectX::XMVectorGetX( Points[0] );
+    pOut->LeftSlope = DirectX::XMVectorGetX( Points[1] );
+    pOut->TopSlope = DirectX::XMVectorGetY( Points[2] );
+    pOut->BottomSlope = DirectX::XMVectorGetY( Points[3] );
 
     // Compute near and far.
-    Points[4] = Points[4] * XMVectorReciprocal( XMVectorSplatW( Points[4] ) );
-    Points[5] = Points[5] * XMVectorReciprocal( XMVectorSplatW( Points[5] ) );
+    Points[4] = Points[4] * DirectX::XMVectorReciprocal( DirectX::XMVectorSplatW( Points[4] ) );
+    Points[5] = Points[5] * DirectX::XMVectorReciprocal( DirectX::XMVectorSplatW( Points[5] ) );
 
-    pOut->Near = XMVectorGetZ( Points[4] );
-    pOut->Far = XMVectorGetZ( Points[5] );
+    pOut->Near = DirectX::XMVectorGetZ( Points[4] );
+    pOut->Far = DirectX::XMVectorGetZ( Points[5] );
 
     return;
 }
@@ -742,8 +742,8 @@ VOID ComputeFrustumFromProjection( Frustum* pOut, XMMATRIX* pProjection )
 //-----------------------------------------------------------------------------
 // Build the 6 frustum planes from a frustum.
 //-----------------------------------------------------------------------------
-VOID ComputePlanesFromFrustum( const Frustum* pVolume, XMVECTOR* pPlane0, XMVECTOR* pPlane1, XMVECTOR* pPlane2,
-                               XMVECTOR* pPlane3, XMVECTOR* pPlane4, XMVECTOR* pPlane5 )
+VOID ComputePlanesFromFrustum( const Frustum* pVolume, DirectX::XMVECTOR* pPlane0, DirectX::XMVECTOR* pPlane1, DirectX::XMVECTOR* pPlane2,
+                               DirectX::XMVECTOR* pPlane3, DirectX::XMVECTOR* pPlane4, DirectX::XMVECTOR* pPlane5 )
 {
     XMASSERT( pVolume );
     XMASSERT( pPlane0 );
@@ -754,16 +754,16 @@ VOID ComputePlanesFromFrustum( const Frustum* pVolume, XMVECTOR* pPlane0, XMVECT
     XMASSERT( pPlane5 );
 
     // Load origin and orientation of the frustum.
-    XMVECTOR Origin = XMLoadFloat3( &pVolume->Origin );
-    XMVECTOR Orientation = XMLoadFloat4( &pVolume->Orientation );
+    DirectX::XMVECTOR Origin = XMLoadFloat3( &pVolume->Origin );
+    DirectX::XMVECTOR Orientation = XMLoadFloat4( &pVolume->Orientation );
 
     // Build the frustum planes.
-    XMVECTOR Plane0 = XMVectorSet( 0.0f, 0.0f, -1.0f, pVolume->Near );
-    XMVECTOR Plane1 = XMVectorSet( 0.0f, 0.0f, 1.0f, -pVolume->Far );
-    XMVECTOR Plane2 = XMVectorSet( 1.0f, 0.0f, -pVolume->RightSlope, 0.0f );
-    XMVECTOR Plane3 = XMVectorSet( -1.0f, 0.0f, pVolume->LeftSlope, 0.0f );
-    XMVECTOR Plane4 = XMVectorSet( 0.0f, 1.0f, -pVolume->TopSlope, 0.0f );
-    XMVECTOR Plane5 = XMVectorSet( 0.0f, -1.0f, pVolume->BottomSlope, 0.0f );
+    DirectX::XMVECTOR Plane0 = DirectX::XMVectorSet( 0.0f, 0.0f, -1.0f, pVolume->Near );
+    DirectX::XMVECTOR Plane1 = DirectX::XMVectorSet( 0.0f, 0.0f, 1.0f, -pVolume->Far );
+    DirectX::XMVECTOR Plane2 = DirectX::XMVectorSet( 1.0f, 0.0f, -pVolume->RightSlope, 0.0f );
+    DirectX::XMVECTOR Plane3 = DirectX::XMVectorSet( -1.0f, 0.0f, pVolume->LeftSlope, 0.0f );
+    DirectX::XMVECTOR Plane4 = DirectX::XMVectorSet( 0.0f, 1.0f, -pVolume->TopSlope, 0.0f );
+    DirectX::XMVECTOR Plane5 = DirectX::XMVectorSet( 0.0f, -1.0f, pVolume->BottomSlope, 0.0f );
 
     Plane0 = TransformPlane( Plane0, Orientation, Origin );
     Plane1 = TransformPlane( Plane1, Orientation, Origin );
@@ -785,17 +785,17 @@ VOID ComputePlanesFromFrustum( const Frustum* pVolume, XMVECTOR* pPlane0, XMVECT
 //-----------------------------------------------------------------------------
 // Transform a sphere by an angle preserving transform.
 //-----------------------------------------------------------------------------
-VOID TransformSphere( Sphere* pOut, const Sphere* pIn, FLOAT Scale, FXMVECTOR Rotation, FXMVECTOR Translation )
+VOID TransformSphere( Sphere* pOut, const Sphere* pIn, FLOAT Scale, DirectX::FXMVECTOR Rotation, DirectX::FXMVECTOR Translation )
 {
     XMASSERT( pOut );
     XMASSERT( pIn );
     XMASSERT( XMQuaternionIsUnit( Rotation ) );
 
     // Load the center of the sphere.
-    XMVECTOR Center = XMLoadFloat3( &pIn->Center );
+    DirectX::XMVECTOR Center = XMLoadFloat3( &pIn->Center );
 
     // Transform the center of the sphere.
-    Center = XMVector3Rotate( Center * XMVectorReplicate( Scale ), Rotation ) + Translation;
+    Center = DirectX::XMVector3Rotate( Center * DirectX::XMVectorReplicate( Scale ), Rotation ) + Translation;
 
     // Store the center sphere.
     XMStoreFloat3( &pOut->Center, Center );
@@ -811,14 +811,14 @@ VOID TransformSphere( Sphere* pOut, const Sphere* pIn, FLOAT Scale, FXMVECTOR Ro
 //-----------------------------------------------------------------------------
 // Transform an axis aligned box by an angle preserving transform.
 //-----------------------------------------------------------------------------
-VOID TransformAxisAlignedBox( AxisAlignedBox* pOut, const AxisAlignedBox* pIn, FLOAT Scale, FXMVECTOR Rotation,
+VOID TransformAxisAlignedBox( AxisAlignedBox* pOut, const AxisAlignedBox* pIn, FLOAT Scale, DirectX::FXMVECTOR Rotation,
                               FXMVECTOR Translation )
 {
     XMASSERT( pOut );
     XMASSERT( pIn );
     XMASSERT( XMQuaternionIsUnit( Rotation ) );
 
-    static XMVECTOR Offset[8] =
+    static DirectX::XMVECTOR Offset[8] =
     {
         { -1.0f, -1.0f, -1.0f, 0.0f },
         { -1.0f, -1.0f,  1.0f, 0.0f },
@@ -831,25 +831,25 @@ VOID TransformAxisAlignedBox( AxisAlignedBox* pOut, const AxisAlignedBox* pIn, F
     };
 
     // Load center and extents.
-    XMVECTOR Center = XMLoadFloat3( &pIn->Center );
-    XMVECTOR Extents = XMLoadFloat3( &pIn->Extents );
+    DirectX::XMVECTOR Center = XMLoadFloat3( &pIn->Center );
+    DirectX::XMVECTOR Extents = XMLoadFloat3( &pIn->Extents );
 
-    XMVECTOR VectorScale = XMVectorReplicate( Scale );
+    DirectX::XMVECTOR VectorScale = DirectX::XMVectorReplicate( Scale );
 
     // Compute and transform the corners and find new min/max bounds.
-    XMVECTOR Corner = Center + Extents * Offset[0];
-    Corner = XMVector3Rotate( Corner * VectorScale, Rotation ) + Translation;
+    DirectX::XMVECTOR Corner = Center + Extents * Offset[0];
+    Corner = DirectX::XMVector3Rotate( Corner * VectorScale, Rotation ) + Translation;
 
-    XMVECTOR Min, Max;
+    DirectX::XMVECTOR Min, Max;
     Min = Max = Corner;
 
     for( INT i = 1; i < 8; i++ )
     {
         Corner = Center + Extents * Offset[i];
-        Corner = XMVector3Rotate( Corner * VectorScale, Rotation ) + Translation;
+        Corner = DirectX::XMVector3Rotate( Corner * VectorScale, Rotation ) + Translation;
 
-        Min = XMVectorMin( Min, Corner );
-        Max = XMVectorMax( Max, Corner );
+        Min = DirectX::XMVectorMin( Min, Corner );
+        Max = DirectX::XMVectorMax( Max, Corner );
     }
 
     // Store center and extents.
@@ -864,7 +864,7 @@ VOID TransformAxisAlignedBox( AxisAlignedBox* pOut, const AxisAlignedBox* pIn, F
 //-----------------------------------------------------------------------------
 // Transform an oriented box by an angle preserving transform.
 //-----------------------------------------------------------------------------
-VOID TransformOrientedBox( OrientedBox* pOut, const OrientedBox* pIn, FLOAT Scale, FXMVECTOR Rotation,
+VOID TransformOrientedBox( OrientedBox* pOut, const OrientedBox* pIn, FLOAT Scale, DirectX::FXMVECTOR Rotation,
                            FXMVECTOR Translation )
 {
     XMASSERT( pOut );
@@ -872,9 +872,9 @@ VOID TransformOrientedBox( OrientedBox* pOut, const OrientedBox* pIn, FLOAT Scal
     XMASSERT( XMQuaternionIsUnit( Rotation ) );
 
     // Load the box.
-    XMVECTOR Center = XMLoadFloat3( &pIn->Center );
-    XMVECTOR Extents = XMLoadFloat3( &pIn->Extents );
-    XMVECTOR Orientation = XMLoadFloat4( &pIn->Orientation );
+    DirectX::XMVECTOR Center = XMLoadFloat3( &pIn->Center );
+    DirectX::XMVECTOR Extents = XMLoadFloat3( &pIn->Extents );
+    DirectX::XMVECTOR Orientation = XMLoadFloat4( &pIn->Orientation );
 
     XMASSERT( XMQuaternionIsUnit( Orientation ) );
 
@@ -882,8 +882,8 @@ VOID TransformOrientedBox( OrientedBox* pOut, const OrientedBox* pIn, FLOAT Scal
     Orientation = XMQuaternionMultiply( Orientation, Rotation );
 
     // Transform the center.
-    XMVECTOR VectorScale = XMVectorReplicate( Scale );
-    Center = XMVector3Rotate( Center * VectorScale, Rotation ) + Translation;
+    DirectX::XMVECTOR VectorScale = DirectX::XMVectorReplicate( Scale );
+    Center = DirectX::XMVector3Rotate( Center * VectorScale, Rotation ) + Translation;
 
     // Scale the box extents.
     Extents = Extents * VectorScale;
@@ -901,15 +901,15 @@ VOID TransformOrientedBox( OrientedBox* pOut, const OrientedBox* pIn, FLOAT Scal
 //-----------------------------------------------------------------------------
 // Transform a frustum by an angle preserving transform.
 //-----------------------------------------------------------------------------
-VOID TransformFrustum( Frustum* pOut, const Frustum* pIn, FLOAT Scale, FXMVECTOR Rotation, FXMVECTOR Translation )
+VOID TransformFrustum( Frustum* pOut, const Frustum* pIn, FLOAT Scale, DirectX::FXMVECTOR Rotation, DirectX::FXMVECTOR Translation )
 {
     XMASSERT( pOut );
     XMASSERT( pIn );
     XMASSERT( XMQuaternionIsUnit( Rotation ) );
 
     // Load the frustum.
-    XMVECTOR Origin = XMLoadFloat3( &pIn->Origin );
-    XMVECTOR Orientation = XMLoadFloat4( &pIn->Orientation );
+    DirectX::XMVECTOR Origin = XMLoadFloat3( &pIn->Origin );
+    DirectX::XMVECTOR Orientation = XMLoadFloat4( &pIn->Orientation );
 
     XMASSERT( XMQuaternionIsUnit( Orientation ) );
 
@@ -917,7 +917,7 @@ VOID TransformFrustum( Frustum* pOut, const Frustum* pIn, FLOAT Scale, FXMVECTOR
     Orientation = XMQuaternionMultiply( Orientation, Rotation );
 
     // Transform the origin.
-    Origin = XMVector3Rotate( Origin * XMVectorReplicate( Scale ), Rotation ) + Translation;
+    Origin = DirectX::XMVector3Rotate( Origin * DirectX::XMVectorReplicate( Scale ), Rotation ) + Translation;
 
     // Store the frustum.
     XMStoreFloat3( &pOut->Origin, Origin );
@@ -945,13 +945,13 @@ BOOL IntersectPointSphere( FXMVECTOR Point, const Sphere* pVolume )
 {
     XMASSERT( pVolume );
 
-    XMVECTOR Center = XMLoadFloat3( &pVolume->Center );
-    XMVECTOR Radius = XMVectorReplicatePtr( &pVolume->Radius );
+    DirectX::XMVECTOR Center = XMLoadFloat3( &pVolume->Center );
+    DirectX::XMVECTOR Radius = DirectX::XMVectorReplicatePtr( &pVolume->Radius );
 
-    XMVECTOR DistanceSquared = XMVector3LengthSq( Point - Center );
-    XMVECTOR RadiusSquared = Radius * Radius;
+    DirectX::XMVECTOR DistanceSquared = DirectX::XMVector3LengthSq( Point - Center );
+    DirectX::XMVECTOR RadiusSquared = Radius * Radius;
 
-    return XMVector4LessOrEqual( DistanceSquared, RadiusSquared );
+    return DirectX::XMVector4LessOrEqual( DistanceSquared, RadiusSquared );
 }
 
 
@@ -963,10 +963,10 @@ BOOL IntersectPointAxisAlignedBox( FXMVECTOR Point, const AxisAlignedBox* pVolum
 {
     XMASSERT( pVolume );
 
-    XMVECTOR Center = XMLoadFloat3( &pVolume->Center );
-    XMVECTOR Extents = XMLoadFloat3( &pVolume->Extents );
+    DirectX::XMVECTOR Center = XMLoadFloat3( &pVolume->Center );
+    DirectX::XMVECTOR Extents = XMLoadFloat3( &pVolume->Extents );
 
-    return XMVector3InBounds( Point - Center, Extents );
+    return DirectX::XMVector3InBounds( Point - Center, Extents );
 }
 
 
@@ -978,16 +978,16 @@ BOOL IntersectPointOrientedBox( FXMVECTOR Point, const OrientedBox* pVolume )
 {
     XMASSERT( pVolume );
 
-    XMVECTOR Center = XMLoadFloat3( &pVolume->Center );
-    XMVECTOR Extents = XMLoadFloat3( &pVolume->Extents );
-    XMVECTOR Orientation = XMLoadFloat4( &pVolume->Orientation );
+    DirectX::XMVECTOR Center = XMLoadFloat3( &pVolume->Center );
+    DirectX::XMVECTOR Extents = XMLoadFloat3( &pVolume->Extents );
+    DirectX::XMVECTOR Orientation = XMLoadFloat4( &pVolume->Orientation );
 
     XMASSERT( XMQuaternionIsUnit( Orientation ) );
 
     // Transform the point to be local to the box.
-    XMVECTOR TPoint = XMVector3InverseRotate( Point - Center, Orientation );
+    DirectX::XMVECTOR TPoint = DirectX::XMVector3InverseRotate( Point - Center, Orientation );
 
-    return XMVector3InBounds( TPoint, Extents );
+    return DirectX::XMVector3InBounds( TPoint, Extents );
 }
 
 
@@ -997,10 +997,10 @@ BOOL IntersectPointOrientedBox( FXMVECTOR Point, const OrientedBox* pVolume )
 //-----------------------------------------------------------------------------
 BOOL IntersectPointFrustum( FXMVECTOR Point, const Frustum* pVolume )
 {
-    static const XMVECTORU32 SelectW = {XM_SELECT_0, XM_SELECT_0, XM_SELECT_0, XM_SELECT_1};
-    static const XMVECTORU32 SelectZ = {XM_SELECT_0, XM_SELECT_0, XM_SELECT_1, XM_SELECT_0};
+    static const XMVECTORU32 SelectW = {DirectX::XM_SELECT_0, DirectX::XM_SELECT_0, DirectX::XM_SELECT_0, DirectX::XM_SELECT_1};
+    static const XMVECTORU32 SelectZ = {DirectX::XM_SELECT_0, DirectX::XM_SELECT_0, DirectX::XM_SELECT_1, DirectX::XM_SELECT_0};
 
-    static const XMVECTOR BasePlanes[6] = 
+    static const DirectX::XMVECTOR BasePlanes[6] = 
     {
         {  0.0f,  0.0f, -1.0f, 0.0f },
         {  0.0f,  0.0f,  1.0f, 0.0f },
@@ -1013,43 +1013,43 @@ BOOL IntersectPointFrustum( FXMVECTOR Point, const Frustum* pVolume )
     XMASSERT( pVolume );
 
     // Build frustum planes.
-    XMVECTOR Planes[6];
-    Planes[0] = XMVectorSelect( BasePlanes[0], XMVectorSplatX(  XMLoadFloat( &pVolume->Near ) ),
+    DirectX::XMVECTOR Planes[6];
+    Planes[0] = DirectX::XMVectorSelect( BasePlanes[0], DirectX::XMVectorSplatX(  XMLoadFloat( &pVolume->Near ) ),
                                 SelectW );
-    Planes[1] = XMVectorSelect( BasePlanes[1], XMVectorSplatX( -XMLoadFloat( &pVolume->Far ) ),
+    Planes[1] = DirectX::XMVectorSelect( BasePlanes[1], DirectX::XMVectorSplatX( -XMLoadFloat( &pVolume->Far ) ),
                                 SelectW );
-    Planes[2] = XMVectorSelect( BasePlanes[2], XMVectorSplatX( -XMLoadFloat( &pVolume->RightSlope ) ),
+    Planes[2] = DirectX::XMVectorSelect( BasePlanes[2], DirectX::XMVectorSplatX( -XMLoadFloat( &pVolume->RightSlope ) ),
                                 SelectZ );
-    Planes[3] = XMVectorSelect( BasePlanes[3], XMVectorSplatX(  XMLoadFloat( &pVolume->LeftSlope ) ),
+    Planes[3] = DirectX::XMVectorSelect( BasePlanes[3], DirectX::XMVectorSplatX(  XMLoadFloat( &pVolume->LeftSlope ) ),
                                 SelectZ );
-    Planes[4] = XMVectorSelect( BasePlanes[4], XMVectorSplatX( -XMLoadFloat( &pVolume->TopSlope ) ),
+    Planes[4] = DirectX::XMVectorSelect( BasePlanes[4], DirectX::XMVectorSplatX( -XMLoadFloat( &pVolume->TopSlope ) ),
                                 SelectZ );
-    Planes[5] = XMVectorSelect( BasePlanes[5], XMVectorSplatX(  XMLoadFloat( &pVolume->BottomSlope ) ),
+    Planes[5] = DirectX::XMVectorSelect( BasePlanes[5], DirectX::XMVectorSplatX(  XMLoadFloat( &pVolume->BottomSlope ) ),
                                 SelectZ );
 
     // Load origin and orientation.
-    XMVECTOR Origin = XMLoadFloat3( &pVolume->Origin );
-    XMVECTOR Orientation = XMLoadFloat4( &pVolume->Orientation );
+    DirectX::XMVECTOR Origin = XMLoadFloat3( &pVolume->Origin );
+    DirectX::XMVECTOR Orientation = XMLoadFloat4( &pVolume->Orientation );
 
     XMASSERT( XMQuaternionIsUnit( Orientation ) );
 
     // Transform point into local space of frustum.
-    XMVECTOR TPoint = XMVector3InverseRotate( Point - Origin, Orientation );
+    DirectX::XMVECTOR TPoint = DirectX::XMVector3InverseRotate( Point - Origin, Orientation );
 
     // Set w to one.
-    TPoint = XMVectorInsert( TPoint, XMVectorSplatOne(), 0, 0, 0, 0, 1);
+    TPoint = DirectX::XMVectorInsert( TPoint, DirectX::XMVectorSplatOne(), 0, 0, 0, 0, 1);
 
-    XMVECTOR Zero = XMVectorZero();
-    XMVECTOR Outside = Zero;
+    DirectX::XMVECTOR Zero = DirectX::XMVectorZero();
+    DirectX::XMVECTOR Outside = Zero;
 
     // Test point against each plane of the frustum.
     for( INT i = 0; i < 6; i++ )
     {
-        XMVECTOR Dot = XMVector4Dot( TPoint, Planes[i] );
-        Outside = XMVectorOrInt( Outside, XMVectorGreater( Dot, Zero ) );
+        DirectX::XMVECTOR Dot = DirectX::XMVector4Dot( TPoint, Planes[i] );
+        Outside = DirectX::XMVectorOrInt( Outside, DirectX::XMVectorGreater( Dot, Zero ) );
     }
 
-    return XMVector4NotEqualInt( Outside, XMVectorTrueInt() );
+    return DirectX::XMVector4NotEqualInt( Outside, DirectX::XMVectorTrueInt() );
 }
 
 
@@ -1063,84 +1063,84 @@ BOOL IntersectPointFrustum( FXMVECTOR Point, const Frustum* pVolume )
 // Ray-Triangle Intersection", Journal of Graphics Tools, vol. 2, no. 1, 
 // pp 21-28, 1997.
 //-----------------------------------------------------------------------------
-BOOL IntersectRayTriangle( FXMVECTOR Origin, FXMVECTOR Direction, FXMVECTOR V0, CXMVECTOR V1, CXMVECTOR V2,
+BOOL IntersectRayTriangle( FXMVECTOR Origin, DirectX::FXMVECTOR Direction, DirectX::FXMVECTOR V0, CXMVECTOR V1, CXMVECTOR V2,
                            FLOAT* pDist )
 {
     XMASSERT( pDist );
-    XMASSERT( XMVector3IsUnit( Direction ) );
+    XMASSERT( DirectX::XMVector3IsUnit( Direction ) );
 
-    static const XMVECTOR Epsilon =
+    static const DirectX::XMVECTOR Epsilon =
     {
         1e-20f, 1e-20f, 1e-20f, 1e-20f
     };
 
-    XMVECTOR Zero = XMVectorZero();
+    DirectX::XMVECTOR Zero = DirectX::XMVectorZero();
 
-    XMVECTOR e1 = V1 - V0;
-    XMVECTOR e2 = V2 - V0;
+    DirectX::XMVECTOR e1 = V1 - V0;
+    DirectX::XMVECTOR e2 = V2 - V0;
 
     // p = Direction ^ e2;
-    XMVECTOR p = XMVector3Cross( Direction, e2 );
+    DirectX::XMVECTOR p = DirectX::XMVector3Cross( Direction, e2 );
 
     // det = e1 * p;
-    XMVECTOR det = XMVector3Dot( e1, p );
+    DirectX::XMVECTOR det = DirectX::XMVector3Dot( e1, p );
 
-    XMVECTOR u, v, t;
+    DirectX::XMVECTOR u, v, t;
 
-    if( XMVector3GreaterOrEqual( det, Epsilon ) )
+    if( DirectX::XMVector3GreaterOrEqual( det, Epsilon ) )
     {
         // Determinate is positive (front side of the triangle).
-        XMVECTOR s = Origin - V0;
+        DirectX::XMVECTOR s = Origin - V0;
 
         // u = s * p;
-        u = XMVector3Dot( s, p );
+        u = DirectX::XMVector3Dot( s, p );
 
-        XMVECTOR NoIntersection = XMVectorLess( u, Zero );
-        NoIntersection = XMVectorOrInt( NoIntersection, XMVectorGreater( u, det ) );
+        DirectX::XMVECTOR NoIntersection = DirectX::XMVectorLess( u, Zero );
+        NoIntersection = DirectX::XMVectorOrInt( NoIntersection, DirectX::XMVectorGreater( u, det ) );
 
         // q = s ^ e1;
-        XMVECTOR q = XMVector3Cross( s, e1 );
+        DirectX::XMVECTOR q = DirectX::XMVector3Cross( s, e1 );
 
         // v = Direction * q;
-        v = XMVector3Dot( Direction, q );
+        v = DirectX::XMVector3Dot( Direction, q );
 
-        NoIntersection = XMVectorOrInt( NoIntersection, XMVectorLess( v, Zero ) );
-        NoIntersection = XMVectorOrInt( NoIntersection, XMVectorGreater( u + v, det ) );
+        NoIntersection = DirectX::XMVectorOrInt( NoIntersection, DirectX::XMVectorLess( v, Zero ) );
+        NoIntersection = DirectX::XMVectorOrInt( NoIntersection, DirectX::XMVectorGreater( u + v, det ) );
 
         // t = e2 * q;
-        t = XMVector3Dot( e2, q );
+        t = DirectX::XMVector3Dot( e2, q );
 
-        NoIntersection = XMVectorOrInt( NoIntersection, XMVectorLess( t, Zero ) );
+        NoIntersection = DirectX::XMVectorOrInt( NoIntersection, DirectX::XMVectorLess( t, Zero ) );
 
-        if( XMVector4EqualInt( NoIntersection, XMVectorTrueInt() ) )
+        if( DirectX::XMVector4EqualInt( NoIntersection, DirectX::XMVectorTrueInt() ) )
             return FALSE;
     }
-    else if( XMVector3LessOrEqual( det, -Epsilon ) )
+    else if( DirectX::XMVector3LessOrEqual( det, -Epsilon ) )
     {
         // Determinate is negative (back side of the triangle).
-        XMVECTOR s = Origin - V0;
+        DirectX::XMVECTOR s = Origin - V0;
 
         // u = s * p;
-        u = XMVector3Dot( s, p );
+        u = DirectX::XMVector3Dot( s, p );
 
-        XMVECTOR NoIntersection = XMVectorGreater( u, Zero );
-        NoIntersection = XMVectorOrInt( NoIntersection, XMVectorLess( u, det ) );
+        DirectX::XMVECTOR NoIntersection = DirectX::XMVectorGreater( u, Zero );
+        NoIntersection = DirectX::XMVectorOrInt( NoIntersection, DirectX::XMVectorLess( u, det ) );
 
         // q = s ^ e1;
-        XMVECTOR q = XMVector3Cross( s, e1 );
+        DirectX::XMVECTOR q = DirectX::XMVector3Cross( s, e1 );
 
         // v = Direction * q;
-        v = XMVector3Dot( Direction, q );
+        v = DirectX::XMVector3Dot( Direction, q );
 
-        NoIntersection = XMVectorOrInt( NoIntersection, XMVectorGreater( v, Zero ) );
-        NoIntersection = XMVectorOrInt( NoIntersection, XMVectorLess( u + v, det ) );
+        NoIntersection = DirectX::XMVectorOrInt( NoIntersection, DirectX::XMVectorGreater( v, Zero ) );
+        NoIntersection = DirectX::XMVectorOrInt( NoIntersection, DirectX::XMVectorLess( u + v, det ) );
 
         // t = e2 * q;
-        t = XMVector3Dot( e2, q );
+        t = DirectX::XMVector3Dot( e2, q );
 
-        NoIntersection = XMVectorOrInt( NoIntersection, XMVectorGreater( t, Zero ) );
+        NoIntersection = DirectX::XMVectorOrInt( NoIntersection, DirectX::XMVectorGreater( t, Zero ) );
 
-        if ( XMVector4EqualInt( NoIntersection, XMVectorTrueInt() ) )
+        if ( DirectX::XMVector4EqualInt( NoIntersection, DirectX::XMVectorTrueInt() ) )
             return FALSE;
     }
     else
@@ -1149,7 +1149,7 @@ BOOL IntersectRayTriangle( FXMVECTOR Origin, FXMVECTOR Direction, FXMVECTOR V0, 
         return FALSE;
     }
 
-    XMVECTOR inv_det = XMVectorReciprocal( det );
+    DirectX::XMVECTOR inv_det = DirectX::XMVectorReciprocal( det );
 
     t *= inv_det;
 
@@ -1166,47 +1166,47 @@ BOOL IntersectRayTriangle( FXMVECTOR Origin, FXMVECTOR Direction, FXMVECTOR V0, 
 //-----------------------------------------------------------------------------
 // Compute the intersection of a ray (Origin, Direction) with a sphere.
 //-----------------------------------------------------------------------------
-BOOL IntersectRaySphere( FXMVECTOR Origin, FXMVECTOR Direction, const Sphere* pVolume, FLOAT* pDist )
+BOOL IntersectRaySphere( FXMVECTOR Origin, DirectX::FXMVECTOR Direction, const Sphere* pVolume, FLOAT* pDist )
 {
     XMASSERT( pVolume );
     XMASSERT( pDist );
-    XMASSERT( XMVector3IsUnit( Direction ) );
+    XMASSERT( DirectX::XMVector3IsUnit( Direction ) );
 
-    XMVECTOR Center = XMLoadFloat3( &pVolume->Center );
-    XMVECTOR Radius = XMVectorReplicatePtr( &pVolume->Radius );
+    DirectX::XMVECTOR Center = XMLoadFloat3( &pVolume->Center );
+    DirectX::XMVECTOR Radius = DirectX::XMVectorReplicatePtr( &pVolume->Radius );
 
     // l is the vector from the ray origin to the center of the sphere.
-    XMVECTOR l = Center - Origin;
+    DirectX::XMVECTOR l = Center - Origin;
 
     // s is the projection of the l onto the ray direction.
-    XMVECTOR s = XMVector3Dot( l, Direction );
+    DirectX::XMVECTOR s = DirectX::XMVector3Dot( l, Direction );
 
-    XMVECTOR l2 = XMVector3Dot( l, l );
+    DirectX::XMVECTOR l2 = DirectX::XMVector3Dot( l, l );
 
-    XMVECTOR r2 = Radius * Radius;
+    DirectX::XMVECTOR r2 = Radius * Radius;
 
     // m2 is squared distance from the center of the sphere to the projection.
-    XMVECTOR m2 = l2 - s * s;
+    DirectX::XMVECTOR m2 = l2 - s * s;
 
-    XMVECTOR NoIntersection;
+    DirectX::XMVECTOR NoIntersection;
 
     // If the ray origin is outside the sphere and the center of the sphere is 
     // behind the ray origin there is no intersection.
-    NoIntersection = XMVectorAndInt( XMVectorLess( s, XMVectorZero() ), XMVectorGreater( l2, r2 ) );
+    NoIntersection = DirectX::XMVectorAndInt( DirectX::XMVectorLess( s, DirectX::XMVectorZero() ), DirectX::XMVectorGreater( l2, r2 ) );
 
     // If the squared distance from the center of the sphere to the projection
     // is greater than the radius squared the ray will miss the sphere.
-    NoIntersection = XMVectorOrInt( NoIntersection, XMVectorGreater( m2, r2 ) );
+    NoIntersection = DirectX::XMVectorOrInt( NoIntersection, DirectX::XMVectorGreater( m2, r2 ) );
 
     // The ray hits the sphere, compute the nearest intersection point.
-    XMVECTOR q = XMVectorSqrt( r2 - m2 );
-    XMVECTOR t1 = s - q;
-    XMVECTOR t2 = s + q;
+    DirectX::XMVECTOR q = DirectX::XMVectorSqrt( r2 - m2 );
+    DirectX::XMVECTOR t1 = s - q;
+    DirectX::XMVECTOR t2 = s + q;
 
-    XMVECTOR OriginInside = XMVectorLessOrEqual( l2, r2 );
-    XMVECTOR t = XMVectorSelect( t1, t2, OriginInside );
+    DirectX::XMVECTOR OriginInside = DirectX::XMVectorLessOrEqual( l2, r2 );
+    DirectX::XMVECTOR t = DirectX::XMVectorSelect( t1, t2, OriginInside );
 
-    if( XMVector4NotEqualInt( NoIntersection, XMVectorTrueInt() ) )
+    if( DirectX::XMVector4NotEqualInt( NoIntersection, DirectX::XMVectorTrueInt() ) )
     {
         // Store the x-component to *pDist.
         XMStoreFloat( pDist, t );
@@ -1222,68 +1222,68 @@ BOOL IntersectRaySphere( FXMVECTOR Origin, FXMVECTOR Direction, const Sphere* pV
 // Compute the intersection of a ray (Origin, Direction) with an axis aligned 
 // box using the slabs method.
 //-----------------------------------------------------------------------------
-BOOL IntersectRayAxisAlignedBox( FXMVECTOR Origin, FXMVECTOR Direction, const AxisAlignedBox* pVolume, FLOAT* pDist )
+BOOL IntersectRayAxisAlignedBox( FXMVECTOR Origin, DirectX::FXMVECTOR Direction, const AxisAlignedBox* pVolume, FLOAT* pDist )
 {
     XMASSERT( pVolume );
     XMASSERT( pDist );
-    XMASSERT( XMVector3IsUnit( Direction ) );
+    XMASSERT( DirectX::XMVector3IsUnit( Direction ) );
 
-    static const XMVECTOR Epsilon =
+    static const DirectX::XMVECTOR Epsilon =
     {
         1e-20f, 1e-20f, 1e-20f, 1e-20f
     };
-    static const XMVECTOR FltMin =
+    static const DirectX::XMVECTOR FltMin =
     {
         -FLT_MAX, -FLT_MAX, -FLT_MAX, -FLT_MAX
     };
-    static const XMVECTOR FltMax =
+    static const DirectX::XMVECTOR FltMax =
     {
         FLT_MAX, FLT_MAX, FLT_MAX, FLT_MAX
     };
 
     // Load the box.
-    XMVECTOR Center = XMLoadFloat3( &pVolume->Center );
-    XMVECTOR Extents = XMLoadFloat3( &pVolume->Extents );
+    DirectX::XMVECTOR Center = XMLoadFloat3( &pVolume->Center );
+    DirectX::XMVECTOR Extents = XMLoadFloat3( &pVolume->Extents );
 
     // Adjust ray origin to be relative to center of the box.
-    XMVECTOR TOrigin = Center - Origin;
+    DirectX::XMVECTOR TOrigin = Center - Origin;
 
     // Compute the dot product againt each axis of the box.
     // Since the axii are (1,0,0), (0,1,0), (0,0,1) no computation is necessary.
-    XMVECTOR AxisDotOrigin = TOrigin;
-    XMVECTOR AxisDotDirection = Direction;
+    DirectX::XMVECTOR AxisDotOrigin = TOrigin;
+    DirectX::XMVECTOR AxisDotDirection = Direction;
 
     // if (fabs(AxisDotDirection) <= Epsilon) the ray is nearly parallel to the slab.
-    XMVECTOR IsParallel = XMVectorLessOrEqual( XMVectorAbs( AxisDotDirection ), Epsilon );
+    DirectX::XMVECTOR IsParallel = DirectX::XMVectorLessOrEqual( DirectX::XMVectorAbs( AxisDotDirection ), Epsilon );
 
     // Test against all three axii simultaneously.
-    XMVECTOR InverseAxisDotDirection = XMVectorReciprocal( AxisDotDirection );
-    XMVECTOR t1 = ( AxisDotOrigin - Extents ) * InverseAxisDotDirection;
-    XMVECTOR t2 = ( AxisDotOrigin + Extents ) * InverseAxisDotDirection;
+    DirectX::XMVECTOR InverseAxisDotDirection = DirectX::XMVectorReciprocal( AxisDotDirection );
+    DirectX::XMVECTOR t1 = ( AxisDotOrigin - Extents ) * InverseAxisDotDirection;
+    DirectX::XMVECTOR t2 = ( AxisDotOrigin + Extents ) * InverseAxisDotDirection;
 
     // Compute the max of min(t1,t2) and the min of max(t1,t2) ensuring we don't
     // use the results from any directions parallel to the slab.
-    XMVECTOR t_min = XMVectorSelect( XMVectorMin( t1, t2 ), FltMin, IsParallel );
-    XMVECTOR t_max = XMVectorSelect( XMVectorMax( t1, t2 ), FltMax, IsParallel );
+    DirectX::XMVECTOR t_min = DirectX::XMVectorSelect( DirectX::XMVectorMin( t1, t2 ), FltMin, IsParallel );
+    DirectX::XMVECTOR t_max = DirectX::XMVectorSelect( DirectX::XMVectorMax( t1, t2 ), FltMax, IsParallel );
 
     // t_min.x = maximum( t_min.x, t_min.y, t_min.z );
     // t_max.x = minimum( t_max.x, t_max.y, t_max.z );
-    t_min = XMVectorMax( t_min, XMVectorSplatY( t_min ) );  // x = max(x,y)
-    t_min = XMVectorMax( t_min, XMVectorSplatZ( t_min ) );  // x = max(max(x,y),z)
-    t_max = XMVectorMin( t_max, XMVectorSplatY( t_max ) );  // x = min(x,y)
-    t_max = XMVectorMin( t_max, XMVectorSplatZ( t_max ) );  // x = min(min(x,y),z)
+    t_min = DirectX::XMVectorMax( t_min, DirectX::XMVectorSplatY( t_min ) );  // x = max(x,y)
+    t_min = DirectX::XMVectorMax( t_min, DirectX::XMVectorSplatZ( t_min ) );  // x = max(max(x,y),z)
+    t_max = DirectX::XMVectorMin( t_max, DirectX::XMVectorSplatY( t_max ) );  // x = min(x,y)
+    t_max = DirectX::XMVectorMin( t_max, DirectX::XMVectorSplatZ( t_max ) );  // x = min(min(x,y),z)
 
     // if ( t_min > t_max ) return FALSE;
-    XMVECTOR NoIntersection = XMVectorGreater( XMVectorSplatX( t_min ), XMVectorSplatX( t_max ) );
+    DirectX::XMVECTOR NoIntersection = DirectX::XMVectorGreater( DirectX::XMVectorSplatX( t_min ), DirectX::XMVectorSplatX( t_max ) );
 
     // if ( t_max < 0.0f ) return FALSE;
-    NoIntersection = XMVectorOrInt( NoIntersection, XMVectorLess( XMVectorSplatX( t_max ), XMVectorZero() ) );
+    NoIntersection = DirectX::XMVectorOrInt( NoIntersection, DirectX::XMVectorLess( DirectX::XMVectorSplatX( t_max ), DirectX::XMVectorZero() ) );
 
     // if (IsParallel && (-Extents > AxisDotOrigin || Extents < AxisDotOrigin)) return FALSE;
-    XMVECTOR ParallelOverlap = XMVectorInBounds( AxisDotOrigin, Extents );
-    NoIntersection = XMVectorOrInt( NoIntersection, XMVectorAndCInt( IsParallel, ParallelOverlap ) );
+    DirectX::XMVECTOR ParallelOverlap = DirectX::XMVectorInBounds( AxisDotOrigin, Extents );
+    NoIntersection = DirectX::XMVectorOrInt( NoIntersection, DirectX::XMVectorAndCInt( IsParallel, ParallelOverlap ) );
 
-    if( !XMVector3AnyTrue( NoIntersection ) )
+    if( !DirectX::XMVector3AnyTrue( NoIntersection ) )
     {
         // Store the x-component to *pDist
         XMStoreFloat( pDist, t_min );
@@ -1299,86 +1299,86 @@ BOOL IntersectRayAxisAlignedBox( FXMVECTOR Origin, FXMVECTOR Direction, const Ax
 // Compute the intersection of a ray (Origin, Direction) with an oriented box
 // using the slabs method.
 //-----------------------------------------------------------------------------
-BOOL IntersectRayOrientedBox( FXMVECTOR Origin, FXMVECTOR Direction, const OrientedBox* pVolume, FLOAT* pDist )
+BOOL IntersectRayOrientedBox( FXMVECTOR Origin, DirectX::FXMVECTOR Direction, const OrientedBox* pVolume, FLOAT* pDist )
 {
     XMASSERT( pVolume );
     XMASSERT( pDist );
-    XMASSERT( XMVector3IsUnit( Direction ) );
+    XMASSERT( DirectX::XMVector3IsUnit( Direction ) );
 
-    static const XMVECTOR Epsilon =
+    static const DirectX::XMVECTOR Epsilon =
     {
         1e-20f, 1e-20f, 1e-20f, 1e-20f
     };
-    static const XMVECTOR FltMin =
+    static const DirectX::XMVECTOR FltMin =
     {
         -FLT_MAX, -FLT_MAX, -FLT_MAX, -FLT_MAX
     };
-    static const XMVECTOR FltMax =
+    static const DirectX::XMVECTOR FltMax =
     {
         FLT_MAX, FLT_MAX, FLT_MAX, FLT_MAX
     };
     static const XMVECTORI32 SelectY =
     {
-        XM_SELECT_0, XM_SELECT_1, XM_SELECT_0, XM_SELECT_0
+        DirectX::XM_SELECT_0, DirectX::XM_SELECT_1, DirectX::XM_SELECT_0, DirectX::XM_SELECT_0
     };
     static const XMVECTORI32 SelectZ =
     {
-        XM_SELECT_0, XM_SELECT_0, XM_SELECT_1, XM_SELECT_0
+        DirectX::XM_SELECT_0, DirectX::XM_SELECT_0, DirectX::XM_SELECT_1, DirectX::XM_SELECT_0
     };
 
     // Load the box.
-    XMVECTOR Center = XMLoadFloat3( &pVolume->Center );
-    XMVECTOR Extents = XMLoadFloat3( &pVolume->Extents );
-    XMVECTOR Orientation = XMLoadFloat4( &pVolume->Orientation );
+    DirectX::XMVECTOR Center = XMLoadFloat3( &pVolume->Center );
+    DirectX::XMVECTOR Extents = XMLoadFloat3( &pVolume->Extents );
+    DirectX::XMVECTOR Orientation = XMLoadFloat4( &pVolume->Orientation );
 
     XMASSERT( XMQuaternionIsUnit( Orientation ) );
 
     // Get the boxes normalized side directions.
-    XMMATRIX R = XMMatrixRotationQuaternion( Orientation );
+    DirectX::XMMATRIX R = DirectX::XMMatrixRotationQuaternion( Orientation );
 
     // Adjust ray origin to be relative to center of the box.
-    XMVECTOR TOrigin = Center - Origin;
+    DirectX::XMVECTOR TOrigin = Center - Origin;
 
     // Compute the dot product againt each axis of the box.
-    XMVECTOR AxisDotOrigin = XMVector3Dot( R.r[0], TOrigin );
-    AxisDotOrigin = XMVectorSelect( AxisDotOrigin, XMVector3Dot( R.r[1], TOrigin ), SelectY );
-    AxisDotOrigin = XMVectorSelect( AxisDotOrigin, XMVector3Dot( R.r[2], TOrigin ), SelectZ );
+    DirectX::XMVECTOR AxisDotOrigin = DirectX::XMVector3Dot( R.r[0], TOrigin );
+    AxisDotOrigin = DirectX::XMVectorSelect( AxisDotOrigin, DirectX::XMVector3Dot( R.r[1], TOrigin ), SelectY );
+    AxisDotOrigin = DirectX::XMVectorSelect( AxisDotOrigin, DirectX::XMVector3Dot( R.r[2], TOrigin ), SelectZ );
 
-    XMVECTOR AxisDotDirection = XMVector3Dot( R.r[0], Direction );
-    AxisDotDirection = XMVectorSelect( AxisDotDirection, XMVector3Dot( R.r[1], Direction ), SelectY );
-    AxisDotDirection = XMVectorSelect( AxisDotDirection, XMVector3Dot( R.r[2], Direction ), SelectZ );
+    DirectX::XMVECTOR AxisDotDirection = DirectX::XMVector3Dot( R.r[0], Direction );
+    AxisDotDirection = DirectX::XMVectorSelect( AxisDotDirection, DirectX::XMVector3Dot( R.r[1], Direction ), SelectY );
+    AxisDotDirection = DirectX::XMVectorSelect( AxisDotDirection, DirectX::XMVector3Dot( R.r[2], Direction ), SelectZ );
 
     // if (fabs(AxisDotDirection) <= Epsilon) the ray is nearly parallel to the slab.
-    XMVECTOR IsParallel = XMVectorLessOrEqual( XMVectorAbs( AxisDotDirection ), Epsilon );
+    DirectX::XMVECTOR IsParallel = DirectX::XMVectorLessOrEqual( DirectX::XMVectorAbs( AxisDotDirection ), Epsilon );
 
     // Test against all three axes simultaneously.
-    XMVECTOR InverseAxisDotDirection = XMVectorReciprocal( AxisDotDirection );
-    XMVECTOR t1 = ( AxisDotOrigin - Extents ) * InverseAxisDotDirection;
-    XMVECTOR t2 = ( AxisDotOrigin + Extents ) * InverseAxisDotDirection;
+    DirectX::XMVECTOR InverseAxisDotDirection = DirectX::XMVectorReciprocal( AxisDotDirection );
+    DirectX::XMVECTOR t1 = ( AxisDotOrigin - Extents ) * InverseAxisDotDirection;
+    DirectX::XMVECTOR t2 = ( AxisDotOrigin + Extents ) * InverseAxisDotDirection;
 
     // Compute the max of min(t1,t2) and the min of max(t1,t2) ensuring we don't
     // use the results from any directions parallel to the slab.
-    XMVECTOR t_min = XMVectorSelect( XMVectorMin( t1, t2 ), FltMin, IsParallel );
-    XMVECTOR t_max = XMVectorSelect( XMVectorMax( t1, t2 ), FltMax, IsParallel );
+    DirectX::XMVECTOR t_min = DirectX::XMVectorSelect( DirectX::XMVectorMin( t1, t2 ), FltMin, IsParallel );
+    DirectX::XMVECTOR t_max = DirectX::XMVectorSelect( DirectX::XMVectorMax( t1, t2 ), FltMax, IsParallel );
 
     // t_min.x = maximum( t_min.x, t_min.y, t_min.z );
     // t_max.x = minimum( t_max.x, t_max.y, t_max.z );
-    t_min = XMVectorMax( t_min, XMVectorSplatY( t_min ) );  // x = max(x,y)
-    t_min = XMVectorMax( t_min, XMVectorSplatZ( t_min ) );  // x = max(max(x,y),z)
-    t_max = XMVectorMin( t_max, XMVectorSplatY( t_max ) );  // x = min(x,y)
-    t_max = XMVectorMin( t_max, XMVectorSplatZ( t_max ) );  // x = min(min(x,y),z)
+    t_min = DirectX::XMVectorMax( t_min, DirectX::XMVectorSplatY( t_min ) );  // x = max(x,y)
+    t_min = DirectX::XMVectorMax( t_min, DirectX::XMVectorSplatZ( t_min ) );  // x = max(max(x,y),z)
+    t_max = DirectX::XMVectorMin( t_max, DirectX::XMVectorSplatY( t_max ) );  // x = min(x,y)
+    t_max = DirectX::XMVectorMin( t_max, DirectX::XMVectorSplatZ( t_max ) );  // x = min(min(x,y),z)
 
     // if ( t_min > t_max ) return FALSE;
-    XMVECTOR NoIntersection = XMVectorGreater( XMVectorSplatX( t_min ), XMVectorSplatX( t_max ) );
+    DirectX::XMVECTOR NoIntersection = DirectX::XMVectorGreater( DirectX::XMVectorSplatX( t_min ), DirectX::XMVectorSplatX( t_max ) );
 
     // if ( t_max < 0.0f ) return FALSE;
-    NoIntersection = XMVectorOrInt( NoIntersection, XMVectorLess( XMVectorSplatX( t_max ), XMVectorZero() ) );
+    NoIntersection = DirectX::XMVectorOrInt( NoIntersection, DirectX::XMVectorLess( DirectX::XMVectorSplatX( t_max ), DirectX::XMVectorZero() ) );
 
     // if (IsParallel && (-Extents > AxisDotOrigin || Extents < AxisDotOrigin)) return FALSE;
-    XMVECTOR ParallelOverlap = XMVectorInBounds( AxisDotOrigin, Extents );
-    NoIntersection = XMVectorOrInt( NoIntersection, XMVectorAndCInt( IsParallel, ParallelOverlap ) );
+    DirectX::XMVECTOR ParallelOverlap = DirectX::XMVectorInBounds( AxisDotOrigin, Extents );
+    NoIntersection = DirectX::XMVectorOrInt( NoIntersection, DirectX::XMVectorAndCInt( IsParallel, ParallelOverlap ) );
 
-    if( !XMVector3AnyTrue( NoIntersection ) )
+    if( !DirectX::XMVector3AnyTrue( NoIntersection ) )
     {
         // Store the x-component to *pDist
         XMStoreFloat( pDist, t_min );
@@ -1403,82 +1403,82 @@ BOOL IntersectRayOrientedBox( FXMVECTOR Origin, FXMVECTOR Direction, const Orien
 // the 9 possible cases narrowed down to the only two pairs of edges that can 
 // actaully result in a seperation.
 //-----------------------------------------------------------------------------
-BOOL IntersectTriangleTriangle( FXMVECTOR A0, FXMVECTOR A1, FXMVECTOR A2, CXMVECTOR B0, CXMVECTOR B1, CXMVECTOR B2 )
+BOOL IntersectTriangleTriangle( FXMVECTOR A0, DirectX::FXMVECTOR A1, DirectX::FXMVECTOR A2, CXMVECTOR B0, CXMVECTOR B1, CXMVECTOR B2 )
 {
-    static const XMVECTOR Epsilon =
+    static const DirectX::XMVECTOR Epsilon =
     {
         1e-20f, 1e-20f, 1e-20f, 1e-20f
     };
     static const XMVECTORI32 SelectY =
     {
-        XM_SELECT_0, XM_SELECT_1, XM_SELECT_0, XM_SELECT_0
+        DirectX::XM_SELECT_0, DirectX::XM_SELECT_1, DirectX::XM_SELECT_0, DirectX::XM_SELECT_0
     };
     static const XMVECTORI32 SelectZ =
     {
-        XM_SELECT_0, XM_SELECT_0, XM_SELECT_1, XM_SELECT_0
+        DirectX::XM_SELECT_0, DirectX::XM_SELECT_0, DirectX::XM_SELECT_1, DirectX::XM_SELECT_0
     };
     static const XMVECTORI32 Select0111 =
     {
-        XM_SELECT_0, XM_SELECT_1, XM_SELECT_1, XM_SELECT_1
+        DirectX::XM_SELECT_0, DirectX::XM_SELECT_1, DirectX::XM_SELECT_1, DirectX::XM_SELECT_1
     };
     static const XMVECTORI32 Select1011 =
     {
-        XM_SELECT_1, XM_SELECT_0, XM_SELECT_1, XM_SELECT_1
+        DirectX::XM_SELECT_1, DirectX::XM_SELECT_0, DirectX::XM_SELECT_1, DirectX::XM_SELECT_1
     };
     static const XMVECTORI32 Select1101 =
     {
-        XM_SELECT_1, XM_SELECT_1, XM_SELECT_0, XM_SELECT_1
+        DirectX::XM_SELECT_1, DirectX::XM_SELECT_1, DirectX::XM_SELECT_0, DirectX::XM_SELECT_1
     };
 
-    XMVECTOR Zero = XMVectorZero();
+    DirectX::XMVECTOR Zero = DirectX::XMVectorZero();
 
     // Compute the normal of triangle A.
-    XMVECTOR N1 = XMVector3Cross( A1 - A0, A2 - A0 );
+    DirectX::XMVECTOR N1 = DirectX::XMVector3Cross( A1 - A0, A2 - A0 );
 
     // Assert that the triangle is not degenerate.
-    XMASSERT( !XMVector3Equal( N1, Zero ) );
+    XMASSERT( !DirectX::XMVector3Equal( N1, Zero ) );
 
     // Test points of B against the plane of A.
-    XMVECTOR BDist = XMVector3Dot( N1, B0 - A0 );
-    BDist = XMVectorSelect( BDist, XMVector3Dot( N1, B1 - A0 ), SelectY );
-    BDist = XMVectorSelect( BDist, XMVector3Dot( N1, B2 - A0 ), SelectZ );
+    DirectX::XMVECTOR BDist = DirectX::XMVector3Dot( N1, B0 - A0 );
+    BDist = DirectX::XMVectorSelect( BDist, DirectX::XMVector3Dot( N1, B1 - A0 ), SelectY );
+    BDist = DirectX::XMVectorSelect( BDist, DirectX::XMVector3Dot( N1, B2 - A0 ), SelectZ );
 
     // Ensure robustness with co-planar triangles by zeroing small distances.
     UINT BDistIsZeroCR;
-    XMVECTOR BDistIsZero = XMVectorGreaterR( &BDistIsZeroCR, Epsilon, XMVectorAbs( BDist ) );
-    BDist = XMVectorSelect( BDist, Zero, BDistIsZero );
+    DirectX::XMVECTOR BDistIsZero = DirectX::XMVectorGreaterR( &BDistIsZeroCR, Epsilon, DirectX::XMVectorAbs( BDist ) );
+    BDist = DirectX::XMVectorSelect( BDist, Zero, BDistIsZero );
 
     UINT BDistIsLessCR;
-    XMVECTOR BDistIsLess = XMVectorGreaterR( &BDistIsLessCR, Zero, BDist );
+    DirectX::XMVECTOR BDistIsLess = DirectX::XMVectorGreaterR( &BDistIsLessCR, Zero, BDist );
 
     UINT BDistIsGreaterCR;
-    XMVECTOR BDistIsGreater = XMVectorGreaterR( &BDistIsGreaterCR, BDist, Zero );
+    DirectX::XMVECTOR BDistIsGreater = DirectX::XMVectorGreaterR( &BDistIsGreaterCR, BDist, Zero );
 
     // If all the points are on the same side we don't intersect.
     if( XMComparisonAllTrue( BDistIsLessCR ) || XMComparisonAllTrue( BDistIsGreaterCR ) )
         return FALSE;
 
     // Compute the normal of triangle B.
-    XMVECTOR N2 = XMVector3Cross( B1 - B0, B2 - B0 );
+    DirectX::XMVECTOR N2 = DirectX::XMVector3Cross( B1 - B0, B2 - B0 );
 
     // Assert that the triangle is not degenerate.
-    XMASSERT( !XMVector3Equal( N2, Zero ) );
+    XMASSERT( !DirectX::XMVector3Equal( N2, Zero ) );
 
     // Test points of A against the plane of B.
-    XMVECTOR ADist = XMVector3Dot( N2, A0 - B0 );
-    ADist = XMVectorSelect( ADist, XMVector3Dot( N2, A1 - B0 ), SelectY );
-    ADist = XMVectorSelect( ADist, XMVector3Dot( N2, A2 - B0 ), SelectZ );
+    DirectX::XMVECTOR ADist = DirectX::XMVector3Dot( N2, A0 - B0 );
+    ADist = DirectX::XMVectorSelect( ADist, DirectX::XMVector3Dot( N2, A1 - B0 ), SelectY );
+    ADist = DirectX::XMVectorSelect( ADist, DirectX::XMVector3Dot( N2, A2 - B0 ), SelectZ );
 
     // Ensure robustness with co-planar triangles by zeroing small distances.
     UINT ADistIsZeroCR;
-    XMVECTOR ADistIsZero = XMVectorGreaterR( &ADistIsZeroCR, Epsilon, XMVectorAbs( BDist ) );
-    ADist = XMVectorSelect( ADist, Zero, ADistIsZero );
+    DirectX::XMVECTOR ADistIsZero = DirectX::XMVectorGreaterR( &ADistIsZeroCR, Epsilon, DirectX::XMVectorAbs( BDist ) );
+    ADist = DirectX::XMVectorSelect( ADist, Zero, ADistIsZero );
 
     UINT ADistIsLessCR;
-    XMVECTOR ADistIsLess = XMVectorGreaterR( &ADistIsLessCR, Zero, ADist );
+    DirectX::XMVECTOR ADistIsLess = DirectX::XMVectorGreaterR( &ADistIsLessCR, Zero, ADist );
 
     UINT ADistIsGreaterCR;
-    XMVECTOR ADistIsGreater = XMVectorGreaterR( &ADistIsGreaterCR, ADist, Zero );
+    DirectX::XMVECTOR ADistIsGreater = DirectX::XMVectorGreaterR( &ADistIsGreaterCR, ADist, Zero );
 
     // If all the points are on the same side we don't intersect.
     if( XMComparisonAllTrue( ADistIsLessCR ) || XMComparisonAllTrue( ADistIsGreaterCR ) )
@@ -1487,67 +1487,67 @@ BOOL IntersectTriangleTriangle( FXMVECTOR A0, FXMVECTOR A1, FXMVECTOR A2, CXMVEC
     // Special case for co-planar triangles.
     if( XMComparisonAllTrue( ADistIsZeroCR ) || XMComparisonAllTrue( BDistIsZeroCR ) )
     {
-        XMVECTOR Axis, Dist, MinDist;
+        DirectX::XMVECTOR Axis, Dist, MinDist;
 
         // Compute an axis perpindicular to the edge (points out).
-        Axis = XMVector3Cross( N1, A1 - A0 );
-        Dist = XMVector3Dot( Axis, A0 );
+        Axis = DirectX::XMVector3Cross( N1, A1 - A0 );
+        Dist = DirectX::XMVector3Dot( Axis, A0 );
 
         // Test points of B against the axis.
-        MinDist = XMVector3Dot( B0, Axis );
-        MinDist = XMVectorMin( MinDist, XMVector3Dot( B1, Axis ) );
-        MinDist = XMVectorMin( MinDist, XMVector3Dot( B2, Axis ) );
-        if( XMVector4GreaterOrEqual( MinDist, Dist ) )
+        MinDist = DirectX::XMVector3Dot( B0, Axis );
+        MinDist = DirectX::XMVectorMin( MinDist, DirectX::XMVector3Dot( B1, Axis ) );
+        MinDist = DirectX::XMVectorMin( MinDist, DirectX::XMVector3Dot( B2, Axis ) );
+        if( DirectX::XMVector4GreaterOrEqual( MinDist, Dist ) )
             return FALSE;
 
         // Edge (A1, A2)
-        Axis = XMVector3Cross( N1, A2 - A1 );
-        Dist = XMVector3Dot( Axis, A1 );
+        Axis = DirectX::XMVector3Cross( N1, A2 - A1 );
+        Dist = DirectX::XMVector3Dot( Axis, A1 );
 
-        MinDist = XMVector3Dot( B0, Axis );
-        MinDist = XMVectorMin( MinDist, XMVector3Dot( B1, Axis ) );
-        MinDist = XMVectorMin( MinDist, XMVector3Dot( B2, Axis ) );
-        if( XMVector4GreaterOrEqual( MinDist, Dist ) )
+        MinDist = DirectX::XMVector3Dot( B0, Axis );
+        MinDist = DirectX::XMVectorMin( MinDist, DirectX::XMVector3Dot( B1, Axis ) );
+        MinDist = DirectX::XMVectorMin( MinDist, DirectX::XMVector3Dot( B2, Axis ) );
+        if( DirectX::XMVector4GreaterOrEqual( MinDist, Dist ) )
             return FALSE;
 
         // Edge (A2, A0)
-        Axis = XMVector3Cross( N1, A0 - A2 );
-        Dist = XMVector3Dot( Axis, A2 );
+        Axis = DirectX::XMVector3Cross( N1, A0 - A2 );
+        Dist = DirectX::XMVector3Dot( Axis, A2 );
 
-        MinDist = XMVector3Dot( B0, Axis );
-        MinDist = XMVectorMin( MinDist, XMVector3Dot( B1, Axis ) );
-        MinDist = XMVectorMin( MinDist, XMVector3Dot( B2, Axis ) );
-        if( XMVector4GreaterOrEqual( MinDist, Dist ) )
+        MinDist = DirectX::XMVector3Dot( B0, Axis );
+        MinDist = DirectX::XMVectorMin( MinDist, DirectX::XMVector3Dot( B1, Axis ) );
+        MinDist = DirectX::XMVectorMin( MinDist, DirectX::XMVector3Dot( B2, Axis ) );
+        if( DirectX::XMVector4GreaterOrEqual( MinDist, Dist ) )
             return FALSE;
 
         // Edge (B0, B1)
-        Axis = XMVector3Cross( N2, B1 - B0 );
-        Dist = XMVector3Dot( Axis, B0 );
+        Axis = DirectX::XMVector3Cross( N2, B1 - B0 );
+        Dist = DirectX::XMVector3Dot( Axis, B0 );
 
-        MinDist = XMVector3Dot( A0, Axis );
-        MinDist = XMVectorMin( MinDist, XMVector3Dot( A1, Axis ) );
-        MinDist = XMVectorMin( MinDist, XMVector3Dot( A2, Axis ) );
-        if( XMVector4GreaterOrEqual( MinDist, Dist ) )
+        MinDist = DirectX::XMVector3Dot( A0, Axis );
+        MinDist = DirectX::XMVectorMin( MinDist, DirectX::XMVector3Dot( A1, Axis ) );
+        MinDist = DirectX::XMVectorMin( MinDist, DirectX::XMVector3Dot( A2, Axis ) );
+        if( DirectX::XMVector4GreaterOrEqual( MinDist, Dist ) )
             return FALSE;
 
         // Edge (B1, B2)
-        Axis = XMVector3Cross( N2, B2 - B1 );
-        Dist = XMVector3Dot( Axis, B1 );
+        Axis = DirectX::XMVector3Cross( N2, B2 - B1 );
+        Dist = DirectX::XMVector3Dot( Axis, B1 );
 
-        MinDist = XMVector3Dot( A0, Axis );
-        MinDist = XMVectorMin( MinDist, XMVector3Dot( A1, Axis ) );
-        MinDist = XMVectorMin( MinDist, XMVector3Dot( A2, Axis ) );
-        if( XMVector4GreaterOrEqual( MinDist, Dist ) )
+        MinDist = DirectX::XMVector3Dot( A0, Axis );
+        MinDist = DirectX::XMVectorMin( MinDist, DirectX::XMVector3Dot( A1, Axis ) );
+        MinDist = DirectX::XMVectorMin( MinDist, DirectX::XMVector3Dot( A2, Axis ) );
+        if( DirectX::XMVector4GreaterOrEqual( MinDist, Dist ) )
             return FALSE;
 
         // Edge (B2,B0)
-        Axis = XMVector3Cross( N2, B0 - B2 );
-        Dist = XMVector3Dot( Axis, B2 );
+        Axis = DirectX::XMVector3Cross( N2, B0 - B2 );
+        Dist = DirectX::XMVector3Dot( Axis, B2 );
 
-        MinDist = XMVector3Dot( A0, Axis );
-        MinDist = XMVectorMin( MinDist, XMVector3Dot( A1, Axis ) );
-        MinDist = XMVectorMin( MinDist, XMVector3Dot( A2, Axis ) );
-        if( XMVector4GreaterOrEqual( MinDist, Dist ) )
+        MinDist = DirectX::XMVector3Dot( A0, Axis );
+        MinDist = DirectX::XMVectorMin( MinDist, DirectX::XMVector3Dot( A1, Axis ) );
+        MinDist = DirectX::XMVectorMin( MinDist, DirectX::XMVector3Dot( A2, Axis ) );
+        if( DirectX::XMVector4GreaterOrEqual( MinDist, Dist ) )
             return FALSE;
 
         return TRUE;
@@ -1567,49 +1567,49 @@ BOOL IntersectTriangleTriangle( FXMVECTOR A0, FXMVECTOR A1, FXMVECTOR A2, CXMVEC
     // the triangle winding so that the overlap comparisons will compare the 
     // correct edges with the correct signs.
     //
-    XMVECTOR ADistIsLessEqual = XMVectorOrInt( ADistIsLess, ADistIsZero );
-    XMVECTOR ADistIsGreaterEqual = XMVectorOrInt( ADistIsGreater, ADistIsZero );
+    DirectX::XMVECTOR ADistIsLessEqual = DirectX::XMVectorOrInt( ADistIsLess, ADistIsZero );
+    DirectX::XMVECTOR ADistIsGreaterEqual = DirectX::XMVectorOrInt( ADistIsGreater, ADistIsZero );
 
-    XMVECTOR AA0, AA1, AA2;
+    DirectX::XMVECTOR AA0, AA1, AA2;
     bool bPositiveA;
 
-    if( XMVector3AllTrue( XMVectorSelect( ADistIsGreaterEqual, ADistIsLess, Select0111 ) ) ||
-        XMVector3AllTrue( XMVectorSelect( ADistIsGreater, ADistIsLessEqual, Select0111 ) ) )
+    if( DirectX::XMVector3AllTrue( DirectX::XMVectorSelect( ADistIsGreaterEqual, ADistIsLess, Select0111 ) ) ||
+        DirectX::XMVector3AllTrue( DirectX::XMVectorSelect( ADistIsGreater, ADistIsLessEqual, Select0111 ) ) )
     {
         // A0 is singular, crossing from positive to negative.
         AA0 = A0; AA1 = A1; AA2 = A2;
         bPositiveA = true;
     }
-    else if( XMVector3AllTrue( XMVectorSelect( ADistIsLessEqual, ADistIsGreater, Select0111 ) ) ||
-             XMVector3AllTrue( XMVectorSelect( ADistIsLess, ADistIsGreaterEqual, Select0111 ) ) )
+    else if( DirectX::XMVector3AllTrue( DirectX::XMVectorSelect( ADistIsLessEqual, ADistIsGreater, Select0111 ) ) ||
+             DirectX::XMVector3AllTrue( DirectX::XMVectorSelect( ADistIsLess, ADistIsGreaterEqual, Select0111 ) ) )
     {
         // A0 is singular, crossing from negative to positive.
         AA0 = A0; AA1 = A2; AA2 = A1;
         bPositiveA = false;
     }
-    else if( XMVector3AllTrue( XMVectorSelect( ADistIsGreaterEqual, ADistIsLess, Select1011 ) ) ||
-             XMVector3AllTrue( XMVectorSelect( ADistIsGreater, ADistIsLessEqual, Select1011 ) ) )
+    else if( DirectX::XMVector3AllTrue( DirectX::XMVectorSelect( ADistIsGreaterEqual, ADistIsLess, Select1011 ) ) ||
+             DirectX::XMVector3AllTrue( DirectX::XMVectorSelect( ADistIsGreater, ADistIsLessEqual, Select1011 ) ) )
     {
         // A1 is singular, crossing from positive to negative.
         AA0 = A1; AA1 = A2; AA2 = A0;
         bPositiveA = true;
     }
-    else if( XMVector3AllTrue( XMVectorSelect( ADistIsLessEqual, ADistIsGreater, Select1011 ) ) ||
-             XMVector3AllTrue( XMVectorSelect( ADistIsLess, ADistIsGreaterEqual, Select1011 ) ) )
+    else if( DirectX::XMVector3AllTrue( DirectX::XMVectorSelect( ADistIsLessEqual, ADistIsGreater, Select1011 ) ) ||
+             DirectX::XMVector3AllTrue( DirectX::XMVectorSelect( ADistIsLess, ADistIsGreaterEqual, Select1011 ) ) )
     {
         // A1 is singular, crossing from negative to positive.
         AA0 = A1; AA1 = A0; AA2 = A2;
         bPositiveA = false;
     }
-    else if( XMVector3AllTrue( XMVectorSelect( ADistIsGreaterEqual, ADistIsLess, Select1101 ) ) ||
-             XMVector3AllTrue( XMVectorSelect( ADistIsGreater, ADistIsLessEqual, Select1101 ) ) )
+    else if( DirectX::XMVector3AllTrue( DirectX::XMVectorSelect( ADistIsGreaterEqual, ADistIsLess, Select1101 ) ) ||
+             DirectX::XMVector3AllTrue( DirectX::XMVectorSelect( ADistIsGreater, ADistIsLessEqual, Select1101 ) ) )
     {
         // A2 is singular, crossing from positive to negative.
         AA0 = A2; AA1 = A0; AA2 = A1;
         bPositiveA = true;
     }
-    else if( XMVector3AllTrue( XMVectorSelect( ADistIsLessEqual, ADistIsGreater, Select1101 ) ) ||
-             XMVector3AllTrue( XMVectorSelect( ADistIsLess, ADistIsGreaterEqual, Select1101 ) ) )
+    else if( DirectX::XMVector3AllTrue( DirectX::XMVectorSelect( ADistIsLessEqual, ADistIsGreater, Select1101 ) ) ||
+             DirectX::XMVector3AllTrue( DirectX::XMVectorSelect( ADistIsLess, ADistIsGreaterEqual, Select1101 ) ) )
     {
         // A2 is singular, crossing from negative to positive.
         AA0 = A2; AA1 = A1; AA2 = A0;
@@ -1621,49 +1621,49 @@ BOOL IntersectTriangleTriangle( FXMVECTOR A0, FXMVECTOR A1, FXMVECTOR A2, CXMVEC
         return FALSE;
     }
 
-    XMVECTOR BDistIsLessEqual = XMVectorOrInt( BDistIsLess, BDistIsZero );
-    XMVECTOR BDistIsGreaterEqual = XMVectorOrInt( BDistIsGreater, BDistIsZero );
+    DirectX::XMVECTOR BDistIsLessEqual = DirectX::XMVectorOrInt( BDistIsLess, BDistIsZero );
+    DirectX::XMVECTOR BDistIsGreaterEqual = DirectX::XMVectorOrInt( BDistIsGreater, BDistIsZero );
 
-    XMVECTOR BB0, BB1, BB2;
+    DirectX::XMVECTOR BB0, BB1, BB2;
     bool bPositiveB;
 
-    if( XMVector3AllTrue( XMVectorSelect( BDistIsGreaterEqual, BDistIsLess, Select0111 ) ) ||
-        XMVector3AllTrue( XMVectorSelect( BDistIsGreater, BDistIsLessEqual, Select0111 ) ) )
+    if( DirectX::XMVector3AllTrue( DirectX::XMVectorSelect( BDistIsGreaterEqual, BDistIsLess, Select0111 ) ) ||
+        DirectX::XMVector3AllTrue( DirectX::XMVectorSelect( BDistIsGreater, BDistIsLessEqual, Select0111 ) ) )
     {
         // B0 is singular, crossing from positive to negative.
         BB0 = B0; BB1 = B1; BB2 = B2;
         bPositiveB = true;
     }
-    else if( XMVector3AllTrue( XMVectorSelect( BDistIsLessEqual, BDistIsGreater, Select0111 ) ) ||
-             XMVector3AllTrue( XMVectorSelect( BDistIsLess, BDistIsGreaterEqual, Select0111 ) ) )
+    else if( DirectX::XMVector3AllTrue( DirectX::XMVectorSelect( BDistIsLessEqual, BDistIsGreater, Select0111 ) ) ||
+             DirectX::XMVector3AllTrue( DirectX::XMVectorSelect( BDistIsLess, BDistIsGreaterEqual, Select0111 ) ) )
     {
         // B0 is singular, crossing from negative to positive.
         BB0 = B0; BB1 = B2; BB2 = B1;
         bPositiveB = false;
     }
-    else if( XMVector3AllTrue( XMVectorSelect( BDistIsGreaterEqual, BDistIsLess, Select1011 ) ) ||
-             XMVector3AllTrue( XMVectorSelect( BDistIsGreater, BDistIsLessEqual, Select1011 ) ) )
+    else if( DirectX::XMVector3AllTrue( DirectX::XMVectorSelect( BDistIsGreaterEqual, BDistIsLess, Select1011 ) ) ||
+             DirectX::XMVector3AllTrue( DirectX::XMVectorSelect( BDistIsGreater, BDistIsLessEqual, Select1011 ) ) )
     {
         // B1 is singular, crossing from positive to negative.
         BB0 = B1; BB1 = B2; BB2 = B0;
         bPositiveB = true;
     }
-    else if( XMVector3AllTrue( XMVectorSelect( BDistIsLessEqual, BDistIsGreater, Select1011 ) ) ||
-             XMVector3AllTrue( XMVectorSelect( BDistIsLess, BDistIsGreaterEqual, Select1011 ) ) )
+    else if( DirectX::XMVector3AllTrue( DirectX::XMVectorSelect( BDistIsLessEqual, BDistIsGreater, Select1011 ) ) ||
+             DirectX::XMVector3AllTrue( DirectX::XMVectorSelect( BDistIsLess, BDistIsGreaterEqual, Select1011 ) ) )
     {
         // B1 is singular, crossing from negative to positive.
         BB0 = B1; BB1 = B0; BB2 = B2;
         bPositiveB = false;
     }
-    else if( XMVector3AllTrue( XMVectorSelect( BDistIsGreaterEqual, BDistIsLess, Select1101 ) ) ||
-             XMVector3AllTrue( XMVectorSelect( BDistIsGreater, BDistIsLessEqual, Select1101 ) ) )
+    else if( DirectX::XMVector3AllTrue( DirectX::XMVectorSelect( BDistIsGreaterEqual, BDistIsLess, Select1101 ) ) ||
+             DirectX::XMVector3AllTrue( DirectX::XMVectorSelect( BDistIsGreater, BDistIsLessEqual, Select1101 ) ) )
     {
         // B2 is singular, crossing from positive to negative.
         BB0 = B2; BB1 = B0; BB2 = B1;
         bPositiveB = true;
     }
-    else if( XMVector3AllTrue( XMVectorSelect( BDistIsLessEqual, BDistIsGreater, Select1101 ) ) ||
-             XMVector3AllTrue( XMVectorSelect( BDistIsLess, BDistIsGreaterEqual, Select1101 ) ) )
+    else if( DirectX::XMVector3AllTrue( DirectX::XMVectorSelect( BDistIsLessEqual, BDistIsGreater, Select1101 ) ) ||
+             DirectX::XMVector3AllTrue( DirectX::XMVectorSelect( BDistIsLess, BDistIsGreaterEqual, Select1101 ) ) )
     {
         // B2 is singular, crossing from negative to positive.
         BB0 = B2; BB1 = B1; BB2 = B0;
@@ -1675,7 +1675,7 @@ BOOL IntersectTriangleTriangle( FXMVECTOR A0, FXMVECTOR A1, FXMVECTOR A2, CXMVEC
         return FALSE;
     }
 
-    XMVECTOR Delta0, Delta1;
+    DirectX::XMVECTOR Delta0, Delta1;
 
     // Reverse the direction of the test depending on whether the singular vertices are
     // the same sign or different signs.
@@ -1692,12 +1692,12 @@ BOOL IntersectTriangleTriangle( FXMVECTOR A0, FXMVECTOR A1, FXMVECTOR A2, CXMVEC
 
     // Check if the triangles overlap on the line of intersection between the
     // planes of the two triangles by finding the signed line distances.
-    XMVECTOR Dist0 = XMVector3Dot( Delta0, XMVector3Cross( ( BB2 - BB0 ), ( AA2 - AA0 ) ) );
-    if( XMVector4Greater( Dist0, Zero ) )
+    DirectX::XMVECTOR Dist0 = DirectX::XMVector3Dot( Delta0, DirectX::XMVector3Cross( ( BB2 - BB0 ), ( AA2 - AA0 ) ) );
+    if( DirectX::XMVector4Greater( Dist0, Zero ) )
         return FALSE;
 
-    XMVECTOR Dist1 = XMVector3Dot( Delta1, XMVector3Cross( ( BB1 - BB0 ), ( AA1 - AA0 ) ) );
-    if( XMVector4Greater( Dist1, Zero ) )
+    DirectX::XMVECTOR Dist1 = DirectX::XMVector3Dot( Delta1, DirectX::XMVector3Cross( ( BB1 - BB0 ), ( AA1 - AA0 ) ) );
+    if( DirectX::XMVector4Greater( Dist1, Zero ) )
         return FALSE;
 
     return TRUE;
@@ -1706,263 +1706,263 @@ BOOL IntersectTriangleTriangle( FXMVECTOR A0, FXMVECTOR A1, FXMVECTOR A2, CXMVEC
 
 
 //-----------------------------------------------------------------------------
-BOOL IntersectTriangleSphere( FXMVECTOR V0, FXMVECTOR V1, FXMVECTOR V2, const Sphere* pVolume )
+BOOL IntersectTriangleSphere( FXMVECTOR V0, DirectX::FXMVECTOR V1, DirectX::FXMVECTOR V2, const Sphere* pVolume )
 {
     XMASSERT( pVolume );
 
     // Load the sphere.    
-    XMVECTOR Center = XMLoadFloat3( &pVolume->Center );
-    XMVECTOR Radius = XMVectorReplicatePtr( &pVolume->Radius );
+    DirectX::XMVECTOR Center = XMLoadFloat3( &pVolume->Center );
+    DirectX::XMVECTOR Radius = DirectX::XMVectorReplicatePtr( &pVolume->Radius );
 
     // Compute the plane of the triangle (has to be normalized).
-    XMVECTOR N = XMVector3Normalize( XMVector3Cross( V1 - V0, V2 - V0 ) );
+    DirectX::XMVECTOR N = DirectX::XMVector3Normalize( DirectX::XMVector3Cross( V1 - V0, V2 - V0 ) );
 
     // Assert that the triangle is not degenerate.
-    XMASSERT( !XMVector3Equal( N, XMVectorZero() ) );
+    XMASSERT( !DirectX::XMVector3Equal( N, DirectX::XMVectorZero() ) );
 
     // Find the nearest feature on the triangle to the sphere.
-    XMVECTOR Dist = XMVector3Dot( Center - V0, N );
+    DirectX::XMVECTOR Dist = DirectX::XMVector3Dot( Center - V0, N );
 
     // If the center of the sphere is farther from the plane of the triangle than
     // the radius of the sphere, then there cannot be an intersection.
-    XMVECTOR NoIntersection = XMVectorLess( Dist, -Radius );
-    NoIntersection = XMVectorOrInt( NoIntersection, XMVectorGreater( Dist, Radius ) );
+    DirectX::XMVECTOR NoIntersection = DirectX::XMVectorLess( Dist, -Radius );
+    NoIntersection = DirectX::XMVectorOrInt( NoIntersection, DirectX::XMVectorGreater( Dist, Radius ) );
 
     // Project the center of the sphere onto the plane of the triangle.
-    XMVECTOR Point = Center - ( N * Dist );
+    DirectX::XMVECTOR Point = Center - ( N * Dist );
 
     // Is it inside all the edges? If so we intersect because the distance 
     // to the plane is less than the radius.
-    XMVECTOR Intersection = PointOnPlaneInsideTriangle( Point, V0, V1, V2 );
+    DirectX::XMVECTOR Intersection = PointOnPlaneInsideTriangle( Point, V0, V1, V2 );
 
     // Find the nearest point on each edge.
-    XMVECTOR RadiusSq = Radius * Radius;
+    DirectX::XMVECTOR RadiusSq = Radius * Radius;
 
     // Edge 0,1
     Point = PointOnLineSegmentNearestPoint( V0, V1, Center );
 
     // If the distance to the center of the sphere to the point is less than 
     // the radius of the sphere then it must intersect.
-    Intersection = XMVectorOrInt( Intersection, XMVectorLessOrEqual( XMVector3LengthSq( Center - Point ), RadiusSq ) );
+    Intersection = DirectX::XMVectorOrInt( Intersection, DirectX::XMVectorLessOrEqual( DirectX::XMVector3LengthSq( Center - Point ), RadiusSq ) );
 
     // Edge 1,2
     Point = PointOnLineSegmentNearestPoint( V1, V2, Center );
 
     // If the distance to the center of the sphere to the point is less than 
     // the radius of the sphere then it must intersect.
-    Intersection = XMVectorOrInt( Intersection, XMVectorLessOrEqual( XMVector3LengthSq( Center - Point ), RadiusSq ) );
+    Intersection = DirectX::XMVectorOrInt( Intersection, DirectX::XMVectorLessOrEqual( DirectX::XMVector3LengthSq( Center - Point ), RadiusSq ) );
 
     // Edge 2,0
     Point = PointOnLineSegmentNearestPoint( V2, V0, Center );
 
     // If the distance to the center of the sphere to the point is less than 
     // the radius of the sphere then it must intersect.
-    Intersection = XMVectorOrInt( Intersection, XMVectorLessOrEqual( XMVector3LengthSq( Center - Point ), RadiusSq ) );
+    Intersection = DirectX::XMVectorOrInt( Intersection, DirectX::XMVectorLessOrEqual( DirectX::XMVector3LengthSq( Center - Point ), RadiusSq ) );
 
-    return XMVector4EqualInt( XMVectorAndCInt( Intersection, NoIntersection ), XMVectorTrueInt() );
+    return DirectX::XMVector4EqualInt( DirectX::XMVectorAndCInt( Intersection, NoIntersection ), DirectX::XMVectorTrueInt() );
 }
 
 
 
 //-----------------------------------------------------------------------------
-BOOL IntersectTriangleAxisAlignedBox( FXMVECTOR V0, FXMVECTOR V1, FXMVECTOR V2, const AxisAlignedBox* pVolume )
+BOOL IntersectTriangleAxisAlignedBox( FXMVECTOR V0, DirectX::FXMVECTOR V1, DirectX::FXMVECTOR V2, const AxisAlignedBox* pVolume )
 {
     XMASSERT( pVolume );
 
     static CONST XMVECTORI32 Permute0W1Z0Y0X =
                  {
-                    XM_PERMUTE_0W, XM_PERMUTE_1Z, XM_PERMUTE_0Y, XM_PERMUTE_0X
+                    DirectX::XM_PERMUTE_0W, DirectX::XM_PERMUTE_1Z, DirectX::XM_PERMUTE_0Y, DirectX::XM_PERMUTE_0X
                  };
     static CONST XMVECTORI32 Permute0Z0W1X0Y =
                  {
-                    XM_PERMUTE_0Z, XM_PERMUTE_0W, XM_PERMUTE_1X, XM_PERMUTE_0Y
+                    DirectX::XM_PERMUTE_0Z, DirectX::XM_PERMUTE_0W, DirectX::XM_PERMUTE_1X, DirectX::XM_PERMUTE_0Y
                  };
     static CONST XMVECTORI32 Permute1Y0X0W0Z =
                  {
-                    XM_PERMUTE_1Y, XM_PERMUTE_0X, XM_PERMUTE_0W, XM_PERMUTE_0Z
+                    DirectX::XM_PERMUTE_1Y, DirectX::XM_PERMUTE_0X, DirectX::XM_PERMUTE_0W, DirectX::XM_PERMUTE_0Z
                  };
 
-    XMVECTOR Zero = XMVectorZero();
+    DirectX::XMVECTOR Zero = DirectX::XMVectorZero();
 
     // Load the box.
-    XMVECTOR Center = XMLoadFloat3( &pVolume->Center );
-    XMVECTOR Extents = XMLoadFloat3( &pVolume->Extents );
+    DirectX::XMVECTOR Center = XMLoadFloat3( &pVolume->Center );
+    DirectX::XMVECTOR Extents = XMLoadFloat3( &pVolume->Extents );
 
-    XMVECTOR BoxMin = Center - Extents;
-    XMVECTOR BoxMax = Center + Extents;
+    DirectX::XMVECTOR BoxMin = Center - Extents;
+    DirectX::XMVECTOR BoxMax = Center + Extents;
 
     // Test the axes of the box (in effect test the AAB against the minimal AAB 
     // around the triangle).
-    XMVECTOR TriMin = XMVectorMin( XMVectorMin( V0, V1 ), V2 );
-    XMVECTOR TriMax = XMVectorMax( XMVectorMax( V0, V1 ), V2 );
+    DirectX::XMVECTOR TriMin = DirectX::XMVectorMin( DirectX::XMVectorMin( V0, V1 ), V2 );
+    DirectX::XMVECTOR TriMax = DirectX::XMVectorMax( DirectX::XMVectorMax( V0, V1 ), V2 );
 
     // for each i in (x, y, z) if a_min(i) > b_max(i) or b_min(i) > a_max(i) then disjoint
-    XMVECTOR Disjoint = XMVectorOrInt( XMVectorGreater( TriMin, BoxMax ), XMVectorGreater( BoxMin, TriMax ) );
-    if( XMVector3AnyTrue( Disjoint ) )
+    DirectX::XMVECTOR Disjoint = DirectX::XMVectorOrInt( DirectX::XMVectorGreater( TriMin, BoxMax ), DirectX::XMVectorGreater( BoxMin, TriMax ) );
+    if( DirectX::XMVector3AnyTrue( Disjoint ) )
         return FALSE;
 
     // Test the plane of the triangle.
-    XMVECTOR Normal = XMVector3Cross( V1 - V0, V2 - V0 );
-    XMVECTOR Dist = XMVector3Dot( Normal, V0 );
+    DirectX::XMVECTOR Normal = DirectX::XMVector3Cross( V1 - V0, V2 - V0 );
+    DirectX::XMVECTOR Dist = DirectX::XMVector3Dot( Normal, V0 );
 
     // Assert that the triangle is not degenerate.
-    XMASSERT( !XMVector3Equal( Normal, Zero ) );
+    XMASSERT( !DirectX::XMVector3Equal( Normal, Zero ) );
 
     // for each i in (x, y, z) if n(i) >= 0 then v_min(i)=b_min(i), v_max(i)=b_max(i)
     // else v_min(i)=b_max(i), v_max(i)=b_min(i)
-    XMVECTOR NormalSelect = XMVectorGreater( Normal, Zero );
-    XMVECTOR V_Min = XMVectorSelect( BoxMax, BoxMin, NormalSelect );
-    XMVECTOR V_Max = XMVectorSelect( BoxMin, BoxMax, NormalSelect );
+    DirectX::XMVECTOR NormalSelect = DirectX::XMVectorGreater( Normal, Zero );
+    DirectX::XMVECTOR V_Min = DirectX::XMVectorSelect( BoxMax, BoxMin, NormalSelect );
+    DirectX::XMVECTOR V_Max = DirectX::XMVectorSelect( BoxMin, BoxMax, NormalSelect );
 
     // if n dot v_min + d > 0 || n dot v_max + d < 0 then disjoint
-    XMVECTOR MinDist = XMVector3Dot( V_Min, Normal );
-    XMVECTOR MaxDist = XMVector3Dot( V_Max, Normal );
+    DirectX::XMVECTOR MinDist = DirectX::XMVector3Dot( V_Min, Normal );
+    DirectX::XMVECTOR MaxDist = DirectX::XMVector3Dot( V_Max, Normal );
 
-    XMVECTOR NoIntersection = XMVectorGreater( MinDist, Dist );
-    NoIntersection = XMVectorOrInt( NoIntersection, XMVectorLess( MaxDist, Dist ) );
+    DirectX::XMVECTOR NoIntersection = DirectX::XMVectorGreater( MinDist, Dist );
+    NoIntersection = DirectX::XMVectorOrInt( NoIntersection, DirectX::XMVectorLess( MaxDist, Dist ) );
 
     // Move the box center to zero to simplify the following tests.
-    XMVECTOR TV0 = V0 - Center;
-    XMVECTOR TV1 = V1 - Center;
-    XMVECTOR TV2 = V2 - Center;
+    DirectX::XMVECTOR TV0 = V0 - Center;
+    DirectX::XMVECTOR TV1 = V1 - Center;
+    DirectX::XMVECTOR TV2 = V2 - Center;
 
     // Test the edge/edge axes (3*3).
-    XMVECTOR e0 = TV1 - TV0;
-    XMVECTOR e1 = TV2 - TV1;
-    XMVECTOR e2 = TV0 - TV2;
+    DirectX::XMVECTOR e0 = TV1 - TV0;
+    DirectX::XMVECTOR e1 = TV2 - TV1;
+    DirectX::XMVECTOR e2 = TV0 - TV2;
 
     // Make w zero.
-    e0 = XMVectorInsert( e0, Zero, 0, 0, 0, 0, 1 );
-    e1 = XMVectorInsert( e1, Zero, 0, 0, 0, 0, 1 );
-    e2 = XMVectorInsert( e2, Zero, 0, 0, 0, 0, 1 );
+    e0 = DirectX::XMVectorInsert( e0, Zero, 0, 0, 0, 0, 1 );
+    e1 = DirectX::XMVectorInsert( e1, Zero, 0, 0, 0, 0, 1 );
+    e2 = DirectX::XMVectorInsert( e2, Zero, 0, 0, 0, 0, 1 );
 
-    XMVECTOR Axis;
-    XMVECTOR p0, p1, p2;
-    XMVECTOR Min, Max;
-    XMVECTOR Radius;
+    DirectX::XMVECTOR Axis;
+    DirectX::XMVECTOR p0, p1, p2;
+    DirectX::XMVECTOR Min, Max;
+    DirectX::XMVECTOR Radius;
 
     // Axis == (1,0,0) x e0 = (0, -e0.z, e0.y)
-    Axis = XMVectorPermute( e0, -e0, Permute0W1Z0Y0X );
-    p0 = XMVector3Dot( TV0, Axis );
-    // p1 = XMVector3Dot( V1, Axis ); // p1 = p0;
-    p2 = XMVector3Dot( TV2, Axis );
-    Min = XMVectorMin( p0, p2 );
-    Max = XMVectorMax( p0, p2 );
-    Radius = XMVector3Dot( Extents, XMVectorAbs( Axis ) );
-    NoIntersection = XMVectorOrInt( NoIntersection, XMVectorGreater( Min, Radius ) );
-    NoIntersection = XMVectorOrInt( NoIntersection, XMVectorLess( Max, -Radius ) );
+    Axis = DirectX::XMVectorPermute( e0, -e0, Permute0W1Z0Y0X );
+    p0 = DirectX::XMVector3Dot( TV0, Axis );
+    // p1 = DirectX::XMVector3Dot( V1, Axis ); // p1 = p0;
+    p2 = DirectX::XMVector3Dot( TV2, Axis );
+    Min = DirectX::XMVectorMin( p0, p2 );
+    Max = DirectX::XMVectorMax( p0, p2 );
+    Radius = DirectX::XMVector3Dot( Extents, DirectX::XMVectorAbs( Axis ) );
+    NoIntersection = DirectX::XMVectorOrInt( NoIntersection, DirectX::XMVectorGreater( Min, Radius ) );
+    NoIntersection = DirectX::XMVectorOrInt( NoIntersection, DirectX::XMVectorLess( Max, -Radius ) );
 
     // Axis == (1,0,0) x e1 = (0, -e1.z, e1.y)
-    Axis = XMVectorPermute( e1, -e1, Permute0W1Z0Y0X );
-    p0 = XMVector3Dot( TV0, Axis );
-    p1 = XMVector3Dot( TV1, Axis );
-    // p2 = XMVector3Dot( V2, Axis ); // p2 = p1;
-    Min = XMVectorMin( p0, p1 );
-    Max = XMVectorMax( p0, p1 );
-    Radius = XMVector3Dot( Extents, XMVectorAbs( Axis ) );
-    NoIntersection = XMVectorOrInt( NoIntersection, XMVectorGreater( Min, Radius ) );
-    NoIntersection = XMVectorOrInt( NoIntersection, XMVectorLess( Max, -Radius ) );
+    Axis = DirectX::XMVectorPermute( e1, -e1, Permute0W1Z0Y0X );
+    p0 = DirectX::XMVector3Dot( TV0, Axis );
+    p1 = DirectX::XMVector3Dot( TV1, Axis );
+    // p2 = DirectX::XMVector3Dot( V2, Axis ); // p2 = p1;
+    Min = DirectX::XMVectorMin( p0, p1 );
+    Max = DirectX::XMVectorMax( p0, p1 );
+    Radius = DirectX::XMVector3Dot( Extents, DirectX::XMVectorAbs( Axis ) );
+    NoIntersection = DirectX::XMVectorOrInt( NoIntersection, DirectX::XMVectorGreater( Min, Radius ) );
+    NoIntersection = DirectX::XMVectorOrInt( NoIntersection, DirectX::XMVectorLess( Max, -Radius ) );
 
     // Axis == (1,0,0) x e2 = (0, -e2.z, e2.y)
-    Axis = XMVectorPermute( e2, -e2, Permute0W1Z0Y0X );
-    p0 = XMVector3Dot( TV0, Axis );
-    p1 = XMVector3Dot( TV1, Axis );
-    // p2 = XMVector3Dot( V2, Axis ); // p2 = p0;
-    Min = XMVectorMin( p0, p1 );
-    Max = XMVectorMax( p0, p1 );
-    Radius = XMVector3Dot( Extents, XMVectorAbs( Axis ) );
-    NoIntersection = XMVectorOrInt( NoIntersection, XMVectorGreater( Min, Radius ) );
-    NoIntersection = XMVectorOrInt( NoIntersection, XMVectorLess( Max, -Radius ) );
+    Axis = DirectX::XMVectorPermute( e2, -e2, Permute0W1Z0Y0X );
+    p0 = DirectX::XMVector3Dot( TV0, Axis );
+    p1 = DirectX::XMVector3Dot( TV1, Axis );
+    // p2 = DirectX::XMVector3Dot( V2, Axis ); // p2 = p0;
+    Min = DirectX::XMVectorMin( p0, p1 );
+    Max = DirectX::XMVectorMax( p0, p1 );
+    Radius = DirectX::XMVector3Dot( Extents, DirectX::XMVectorAbs( Axis ) );
+    NoIntersection = DirectX::XMVectorOrInt( NoIntersection, DirectX::XMVectorGreater( Min, Radius ) );
+    NoIntersection = DirectX::XMVectorOrInt( NoIntersection, DirectX::XMVectorLess( Max, -Radius ) );
 
     // Axis == (0,1,0) x e0 = (e0.z, 0, -e0.x)
-    Axis = XMVectorPermute( e0, -e0, Permute0Z0W1X0Y );
-    p0 = XMVector3Dot( TV0, Axis );
-    // p1 = XMVector3Dot( V1, Axis ); // p1 = p0;
-    p2 = XMVector3Dot( TV2, Axis );
-    Min = XMVectorMin( p0, p2 );
-    Max = XMVectorMax( p0, p2 );
-    Radius = XMVector3Dot( Extents, XMVectorAbs( Axis ) );
-    NoIntersection = XMVectorOrInt( NoIntersection, XMVectorGreater( Min, Radius ) );
-    NoIntersection = XMVectorOrInt( NoIntersection, XMVectorLess( Max, -Radius ) );
+    Axis = DirectX::XMVectorPermute( e0, -e0, Permute0Z0W1X0Y );
+    p0 = DirectX::XMVector3Dot( TV0, Axis );
+    // p1 = DirectX::XMVector3Dot( V1, Axis ); // p1 = p0;
+    p2 = DirectX::XMVector3Dot( TV2, Axis );
+    Min = DirectX::XMVectorMin( p0, p2 );
+    Max = DirectX::XMVectorMax( p0, p2 );
+    Radius = DirectX::XMVector3Dot( Extents, DirectX::XMVectorAbs( Axis ) );
+    NoIntersection = DirectX::XMVectorOrInt( NoIntersection, DirectX::XMVectorGreater( Min, Radius ) );
+    NoIntersection = DirectX::XMVectorOrInt( NoIntersection, DirectX::XMVectorLess( Max, -Radius ) );
 
     // Axis == (0,1,0) x e1 = (e1.z, 0, -e1.x)
-    Axis = XMVectorPermute( e1, -e1, Permute0Z0W1X0Y );
-    p0 = XMVector3Dot( TV0, Axis );
-    p1 = XMVector3Dot( TV1, Axis );
-    // p2 = XMVector3Dot( V2, Axis ); // p2 = p1;
-    Min = XMVectorMin( p0, p1 );
-    Max = XMVectorMax( p0, p1 );
-    Radius = XMVector3Dot( Extents, XMVectorAbs( Axis ) );
-    NoIntersection = XMVectorOrInt( NoIntersection, XMVectorGreater( Min, Radius ) );
-    NoIntersection = XMVectorOrInt( NoIntersection, XMVectorLess( Max, -Radius ) );
+    Axis = DirectX::XMVectorPermute( e1, -e1, Permute0Z0W1X0Y );
+    p0 = DirectX::XMVector3Dot( TV0, Axis );
+    p1 = DirectX::XMVector3Dot( TV1, Axis );
+    // p2 = DirectX::XMVector3Dot( V2, Axis ); // p2 = p1;
+    Min = DirectX::XMVectorMin( p0, p1 );
+    Max = DirectX::XMVectorMax( p0, p1 );
+    Radius = DirectX::XMVector3Dot( Extents, DirectX::XMVectorAbs( Axis ) );
+    NoIntersection = DirectX::XMVectorOrInt( NoIntersection, DirectX::XMVectorGreater( Min, Radius ) );
+    NoIntersection = DirectX::XMVectorOrInt( NoIntersection, DirectX::XMVectorLess( Max, -Radius ) );
 
     // Axis == (0,0,1) x e2 = (e2.z, 0, -e2.x)
-    Axis = XMVectorPermute( e2, -e2, Permute0Z0W1X0Y );
-    p0 = XMVector3Dot( TV0, Axis );
-    p1 = XMVector3Dot( TV1, Axis );
-    // p2 = XMVector3Dot( V2, Axis ); // p2 = p0;
-    Min = XMVectorMin( p0, p1 );
-    Max = XMVectorMax( p0, p1 );
-    Radius = XMVector3Dot( Extents, XMVectorAbs( Axis ) );
-    NoIntersection = XMVectorOrInt( NoIntersection, XMVectorGreater( Min, Radius ) );
-    NoIntersection = XMVectorOrInt( NoIntersection, XMVectorLess( Max, -Radius ) );
+    Axis = DirectX::XMVectorPermute( e2, -e2, Permute0Z0W1X0Y );
+    p0 = DirectX::XMVector3Dot( TV0, Axis );
+    p1 = DirectX::XMVector3Dot( TV1, Axis );
+    // p2 = DirectX::XMVector3Dot( V2, Axis ); // p2 = p0;
+    Min = DirectX::XMVectorMin( p0, p1 );
+    Max = DirectX::XMVectorMax( p0, p1 );
+    Radius = DirectX::XMVector3Dot( Extents, DirectX::XMVectorAbs( Axis ) );
+    NoIntersection = DirectX::XMVectorOrInt( NoIntersection, DirectX::XMVectorGreater( Min, Radius ) );
+    NoIntersection = DirectX::XMVectorOrInt( NoIntersection, DirectX::XMVectorLess( Max, -Radius ) );
 
     // Axis == (0,0,1) x e0 = (-e0.y, e0.x, 0)
-    Axis = XMVectorPermute( e0, -e0, Permute1Y0X0W0Z );
-    p0 = XMVector3Dot( TV0, Axis );
-    // p1 = XMVector3Dot( V1, Axis ); // p1 = p0;
-    p2 = XMVector3Dot( TV2, Axis );
-    Min = XMVectorMin( p0, p2 );
-    Max = XMVectorMax( p0, p2 );
-    Radius = XMVector3Dot( Extents, XMVectorAbs( Axis ) );
-    NoIntersection = XMVectorOrInt( NoIntersection, XMVectorGreater( Min, Radius ) );
-    NoIntersection = XMVectorOrInt( NoIntersection, XMVectorLess( Max, -Radius ) );
+    Axis = DirectX::XMVectorPermute( e0, -e0, Permute1Y0X0W0Z );
+    p0 = DirectX::XMVector3Dot( TV0, Axis );
+    // p1 = DirectX::XMVector3Dot( V1, Axis ); // p1 = p0;
+    p2 = DirectX::XMVector3Dot( TV2, Axis );
+    Min = DirectX::XMVectorMin( p0, p2 );
+    Max = DirectX::XMVectorMax( p0, p2 );
+    Radius = DirectX::XMVector3Dot( Extents, DirectX::XMVectorAbs( Axis ) );
+    NoIntersection = DirectX::XMVectorOrInt( NoIntersection, DirectX::XMVectorGreater( Min, Radius ) );
+    NoIntersection = DirectX::XMVectorOrInt( NoIntersection, DirectX::XMVectorLess( Max, -Radius ) );
 
     // Axis == (0,0,1) x e1 = (-e1.y, e1.x, 0)
-    Axis = XMVectorPermute( e1, -e1, Permute1Y0X0W0Z );
-    p0 = XMVector3Dot( TV0, Axis );
-    p1 = XMVector3Dot( TV1, Axis );
-    // p2 = XMVector3Dot( V2, Axis ); // p2 = p1;
-    Min = XMVectorMin( p0, p1 );
-    Max = XMVectorMax( p0, p1 );
-    Radius = XMVector3Dot( Extents, XMVectorAbs( Axis ) );
-    NoIntersection = XMVectorOrInt( NoIntersection, XMVectorGreater( Min, Radius ) );
-    NoIntersection = XMVectorOrInt( NoIntersection, XMVectorLess( Max, -Radius ) );
+    Axis = DirectX::XMVectorPermute( e1, -e1, Permute1Y0X0W0Z );
+    p0 = DirectX::XMVector3Dot( TV0, Axis );
+    p1 = DirectX::XMVector3Dot( TV1, Axis );
+    // p2 = DirectX::XMVector3Dot( V2, Axis ); // p2 = p1;
+    Min = DirectX::XMVectorMin( p0, p1 );
+    Max = DirectX::XMVectorMax( p0, p1 );
+    Radius = DirectX::XMVector3Dot( Extents, DirectX::XMVectorAbs( Axis ) );
+    NoIntersection = DirectX::XMVectorOrInt( NoIntersection, DirectX::XMVectorGreater( Min, Radius ) );
+    NoIntersection = DirectX::XMVectorOrInt( NoIntersection, DirectX::XMVectorLess( Max, -Radius ) );
 
     // Axis == (0,0,1) x e2 = (-e2.y, e2.x, 0)
-    Axis = XMVectorPermute( e2, -e2, Permute1Y0X0W0Z );
-    p0 = XMVector3Dot( TV0, Axis );
-    p1 = XMVector3Dot( TV1, Axis );
-    // p2 = XMVector3Dot( V2, Axis ); // p2 = p0;
-    Min = XMVectorMin( p0, p1 );
-    Max = XMVectorMax( p0, p1 );
-    Radius = XMVector3Dot( Extents, XMVectorAbs( Axis ) );
-    NoIntersection = XMVectorOrInt( NoIntersection, XMVectorGreater( Min, Radius ) );
-    NoIntersection = XMVectorOrInt( NoIntersection, XMVectorLess( Max, -Radius ) );
+    Axis = DirectX::XMVectorPermute( e2, -e2, Permute1Y0X0W0Z );
+    p0 = DirectX::XMVector3Dot( TV0, Axis );
+    p1 = DirectX::XMVector3Dot( TV1, Axis );
+    // p2 = DirectX::XMVector3Dot( V2, Axis ); // p2 = p0;
+    Min = DirectX::XMVectorMin( p0, p1 );
+    Max = DirectX::XMVectorMax( p0, p1 );
+    Radius = DirectX::XMVector3Dot( Extents, DirectX::XMVectorAbs( Axis ) );
+    NoIntersection = DirectX::XMVectorOrInt( NoIntersection, DirectX::XMVectorGreater( Min, Radius ) );
+    NoIntersection = DirectX::XMVectorOrInt( NoIntersection, DirectX::XMVectorLess( Max, -Radius ) );
 
-    return XMVector4NotEqualInt( NoIntersection, XMVectorTrueInt() );
+    return DirectX::XMVector4NotEqualInt( NoIntersection, DirectX::XMVectorTrueInt() );
 }
 
 
 
 //-----------------------------------------------------------------------------
-BOOL IntersectTriangleOrientedBox( FXMVECTOR V0, FXMVECTOR V1, FXMVECTOR V2, const OrientedBox* pVolume )
+BOOL IntersectTriangleOrientedBox( FXMVECTOR V0, DirectX::FXMVECTOR V1, DirectX::FXMVECTOR V2, const OrientedBox* pVolume )
 {
     XMASSERT( pVolume );
 
     // Load the box center & orientation.
-    XMVECTOR Center = XMLoadFloat3( &pVolume->Center );
-    XMVECTOR Orientation = XMLoadFloat4( &pVolume->Orientation );
+    DirectX::XMVECTOR Center = XMLoadFloat3( &pVolume->Center );
+    DirectX::XMVECTOR Orientation = XMLoadFloat4( &pVolume->Orientation );
 
     XMASSERT( XMQuaternionIsUnit( Orientation ) );
 
     // Transform the triangle vertices into the space of the box.
-    XMVECTOR TV0 = XMVector3InverseRotate( V0 - Center, Orientation );
-    XMVECTOR TV1 = XMVector3InverseRotate( V1 - Center, Orientation );
-    XMVECTOR TV2 = XMVector3InverseRotate( V2 - Center, Orientation );
+    DirectX::XMVECTOR TV0 = DirectX::XMVector3InverseRotate( V0 - Center, Orientation );
+    DirectX::XMVECTOR TV1 = DirectX::XMVector3InverseRotate( V1 - Center, Orientation );
+    DirectX::XMVECTOR TV2 = DirectX::XMVector3InverseRotate( V2 - Center, Orientation );
 
     AxisAlignedBox Box;
-    Box.Center = XMFLOAT3( 0.0f, 0.0f, 0.0f );
+    Box.Center = DirectX::XMFLOAT3( 0.0f, 0.0f, 0.0f );
     Box.Extents = pVolume->Extents;
 
     // Use the triangle vs axis aligned box intersection routine.
@@ -1978,22 +1978,22 @@ BOOL IntersectSphereSphere( const Sphere* pVolumeA, const Sphere* pVolumeB )
     XMASSERT( pVolumeB );
 
     // Load A.
-    XMVECTOR CenterA = XMLoadFloat3( &pVolumeA->Center );
-    XMVECTOR RadiusA = XMVectorReplicatePtr( &pVolumeA->Radius );
+    DirectX::XMVECTOR CenterA = XMLoadFloat3( &pVolumeA->Center );
+    DirectX::XMVECTOR RadiusA = DirectX::XMVectorReplicatePtr( &pVolumeA->Radius );
 
     // Load B.
-    XMVECTOR CenterB = XMLoadFloat3( &pVolumeB->Center );
-    XMVECTOR RadiusB = XMVectorReplicatePtr( &pVolumeB->Radius );
+    DirectX::XMVECTOR CenterB = XMLoadFloat3( &pVolumeB->Center );
+    DirectX::XMVECTOR RadiusB = DirectX::XMVectorReplicatePtr( &pVolumeB->Radius );
 
     // Distance squared between centers.    
-    XMVECTOR Delta = CenterB - CenterA;
-    XMVECTOR DistanceSquared = XMVector3LengthSq( Delta );
+    DirectX::XMVECTOR Delta = CenterB - CenterA;
+    DirectX::XMVECTOR DistanceSquared = DirectX::XMVector3LengthSq( Delta );
 
     // Sum of the radii sqaured.
-    XMVECTOR RadiusSquared = RadiusA + RadiusB;
+    DirectX::XMVECTOR RadiusSquared = RadiusA + RadiusB;
     RadiusSquared = RadiusSquared * RadiusSquared;
 
-    return XMVector4LessOrEqual( DistanceSquared, RadiusSquared );
+    return DirectX::XMVector4LessOrEqual( DistanceSquared, RadiusSquared );
 }
 
 
@@ -2004,37 +2004,37 @@ BOOL IntersectSphereAxisAlignedBox( const Sphere* pVolumeA, const AxisAlignedBox
     XMASSERT( pVolumeA );
     XMASSERT( pVolumeB );
 
-    XMVECTOR SphereCenter = XMLoadFloat3( &pVolumeA->Center );
-    XMVECTOR SphereRadius = XMVectorReplicatePtr( &pVolumeA->Radius );
+    DirectX::XMVECTOR SphereCenter = XMLoadFloat3( &pVolumeA->Center );
+    DirectX::XMVECTOR SphereRadius = DirectX::XMVectorReplicatePtr( &pVolumeA->Radius );
 
-    XMVECTOR BoxCenter = XMLoadFloat3( &pVolumeB->Center );
-    XMVECTOR BoxExtents = XMLoadFloat3( &pVolumeB->Extents );
+    DirectX::XMVECTOR BoxCenter = XMLoadFloat3( &pVolumeB->Center );
+    DirectX::XMVECTOR BoxExtents = XMLoadFloat3( &pVolumeB->Extents );
 
-    XMVECTOR BoxMin = BoxCenter - BoxExtents;
-    XMVECTOR BoxMax = BoxCenter + BoxExtents;
+    DirectX::XMVECTOR BoxMin = BoxCenter - BoxExtents;
+    DirectX::XMVECTOR BoxMax = BoxCenter + BoxExtents;
 
     // Find the distance to the nearest point on the box.
     // for each i in (x, y, z)
     // if (SphereCenter(i) < BoxMin(i)) d2 += (SphereCenter(i) - BoxMin(i)) ^ 2
     // else if (SphereCenter(i) > BoxMax(i)) d2 += (SphereCenter(i) - BoxMax(i)) ^ 2
 
-    XMVECTOR d = XMVectorZero();
+    DirectX::XMVECTOR d = DirectX::XMVectorZero();
 
     // Compute d for each dimension.
-    XMVECTOR LessThanMin = XMVectorLess( SphereCenter, BoxMin );
-    XMVECTOR GreaterThanMax = XMVectorGreater( SphereCenter, BoxMax );
+    DirectX::XMVECTOR LessThanMin = DirectX::XMVectorLess( SphereCenter, BoxMin );
+    DirectX::XMVECTOR GreaterThanMax = DirectX::XMVectorGreater( SphereCenter, BoxMax );
 
-    XMVECTOR MinDelta = SphereCenter - BoxMin;
-    XMVECTOR MaxDelta = SphereCenter - BoxMax;
+    DirectX::XMVECTOR MinDelta = SphereCenter - BoxMin;
+    DirectX::XMVECTOR MaxDelta = SphereCenter - BoxMax;
 
     // Choose value for each dimension based on the comparison.
-    d = XMVectorSelect( d, MinDelta, LessThanMin );
-    d = XMVectorSelect( d, MaxDelta, GreaterThanMax );
+    d = DirectX::XMVectorSelect( d, MinDelta, LessThanMin );
+    d = DirectX::XMVectorSelect( d, MaxDelta, GreaterThanMax );
 
     // Use a dot-product to square them and sum them together.
-    XMVECTOR d2 = XMVector3Dot( d, d );
+    DirectX::XMVECTOR d2 = DirectX::XMVector3Dot( d, d );
 
-    return XMVector4LessOrEqual( d2, XMVectorMultiply( SphereRadius, SphereRadius ) );
+    return DirectX::XMVector4LessOrEqual( d2, DirectX::XMVectorMultiply( SphereRadius, SphereRadius ) );
 }
 
 
@@ -2045,42 +2045,42 @@ BOOL IntersectSphereOrientedBox( const Sphere* pVolumeA, const OrientedBox* pVol
     XMASSERT( pVolumeA );
     XMASSERT( pVolumeB );
 
-    XMVECTOR SphereCenter = XMLoadFloat3( &pVolumeA->Center );
-    XMVECTOR SphereRadius = XMVectorReplicatePtr( &pVolumeA->Radius );
+    DirectX::XMVECTOR SphereCenter = XMLoadFloat3( &pVolumeA->Center );
+    DirectX::XMVECTOR SphereRadius = DirectX::XMVectorReplicatePtr( &pVolumeA->Radius );
 
-    XMVECTOR BoxCenter = XMLoadFloat3( &pVolumeB->Center );
-    XMVECTOR BoxExtents = XMLoadFloat3( &pVolumeB->Extents );
-    XMVECTOR BoxOrientation = XMLoadFloat4( &pVolumeB->Orientation );
+    DirectX::XMVECTOR BoxCenter = XMLoadFloat3( &pVolumeB->Center );
+    DirectX::XMVECTOR BoxExtents = XMLoadFloat3( &pVolumeB->Extents );
+    DirectX::XMVECTOR BoxOrientation = XMLoadFloat4( &pVolumeB->Orientation );
 
     XMASSERT( XMQuaternionIsUnit( BoxOrientation ) );
 
     // Transform the center of the sphere to be local to the box.
     // BoxMin = -BoxExtents
     // BoxMax = +BoxExtents
-    SphereCenter = XMVector3InverseRotate( SphereCenter - BoxCenter, BoxOrientation );
+    SphereCenter = DirectX::XMVector3InverseRotate( SphereCenter - BoxCenter, BoxOrientation );
 
     // Find the distance to the nearest point on the box.
     // for each i in (x, y, z)
     // if (SphereCenter(i) < BoxMin(i)) d2 += (SphereCenter(i) - BoxMin(i)) ^ 2
     // else if (SphereCenter(i) > BoxMax(i)) d2 += (SphereCenter(i) - BoxMax(i)) ^ 2
 
-    XMVECTOR d = XMVectorZero();
+    DirectX::XMVECTOR d = DirectX::XMVectorZero();
 
     // Compute d for each dimension.
-    XMVECTOR LessThanMin = XMVectorLess( SphereCenter, -BoxExtents );
-    XMVECTOR GreaterThanMax = XMVectorGreater( SphereCenter, BoxExtents );
+    DirectX::XMVECTOR LessThanMin = DirectX::XMVectorLess( SphereCenter, -BoxExtents );
+    DirectX::XMVECTOR GreaterThanMax = DirectX::XMVectorGreater( SphereCenter, BoxExtents );
 
-    XMVECTOR MinDelta = SphereCenter + BoxExtents;
-    XMVECTOR MaxDelta = SphereCenter - BoxExtents;
+    DirectX::XMVECTOR MinDelta = SphereCenter + BoxExtents;
+    DirectX::XMVECTOR MaxDelta = SphereCenter - BoxExtents;
 
     // Choose value for each dimension based on the comparison.
-    d = XMVectorSelect( d, MinDelta, LessThanMin );
-    d = XMVectorSelect( d, MaxDelta, GreaterThanMax );
+    d = DirectX::XMVectorSelect( d, MinDelta, LessThanMin );
+    d = DirectX::XMVectorSelect( d, MaxDelta, GreaterThanMax );
 
     // Use a dot-product to square them and sum them together.
-    XMVECTOR d2 = XMVector3Dot( d, d );
+    DirectX::XMVECTOR d2 = DirectX::XMVector3Dot( d, d );
 
-    return XMVector4LessOrEqual( d2, XMVectorMultiply( SphereRadius, SphereRadius ) );
+    return DirectX::XMVector4LessOrEqual( d2, DirectX::XMVectorMultiply( SphereRadius, SphereRadius ) );
 }
 
 
@@ -2091,22 +2091,22 @@ BOOL IntersectAxisAlignedBoxAxisAlignedBox( const AxisAlignedBox* pVolumeA, cons
     XMASSERT( pVolumeA );
     XMASSERT( pVolumeB );
 
-    XMVECTOR CenterA = XMLoadFloat3( &pVolumeA->Center );
-    XMVECTOR ExtentsA = XMLoadFloat3( &pVolumeA->Extents );
+    DirectX::XMVECTOR CenterA = XMLoadFloat3( &pVolumeA->Center );
+    DirectX::XMVECTOR ExtentsA = XMLoadFloat3( &pVolumeA->Extents );
 
-    XMVECTOR CenterB = XMLoadFloat3( &pVolumeB->Center );
-    XMVECTOR ExtentsB = XMLoadFloat3( &pVolumeB->Extents );
+    DirectX::XMVECTOR CenterB = XMLoadFloat3( &pVolumeB->Center );
+    DirectX::XMVECTOR ExtentsB = XMLoadFloat3( &pVolumeB->Extents );
 
-    XMVECTOR MinA = CenterA - ExtentsA;
-    XMVECTOR MaxA = CenterA + ExtentsA;
+    DirectX::XMVECTOR MinA = CenterA - ExtentsA;
+    DirectX::XMVECTOR MaxA = CenterA + ExtentsA;
 
-    XMVECTOR MinB = CenterB - ExtentsB;
-    XMVECTOR MaxB = CenterB + ExtentsB;
+    DirectX::XMVECTOR MinB = CenterB - ExtentsB;
+    DirectX::XMVECTOR MaxB = CenterB + ExtentsB;
 
     // for each i in (x, y, z) if a_min(i) > b_max(i) or b_min(i) > a_max(i) then return FALSE
-    XMVECTOR Disjoint = XMVectorOrInt( XMVectorGreater( MinA, MaxB ), XMVectorGreater( MinB, MaxA ) );
+    DirectX::XMVECTOR Disjoint = DirectX::XMVectorOrInt( DirectX::XMVectorGreater( MinA, MaxB ), DirectX::XMVectorGreater( MinB, MaxA ) );
 
-    return !XMVector3AnyTrue( Disjoint );
+    return !DirectX::XMVector3AnyTrue( Disjoint );
 }
 
 
@@ -2140,46 +2140,46 @@ BOOL IntersectOrientedBoxOrientedBox( const OrientedBox* pVolumeA, const Oriente
 {
     static CONST XMVECTORI32 Permute0W1Z0Y0X =
                  {
-                    XM_PERMUTE_0W, XM_PERMUTE_1Z, XM_PERMUTE_0Y, XM_PERMUTE_0X
+                    DirectX::XM_PERMUTE_0W, DirectX::XM_PERMUTE_1Z, DirectX::XM_PERMUTE_0Y, DirectX::XM_PERMUTE_0X
                  };
     static CONST XMVECTORI32 Permute0Z0W1X0Y =
                  {
-                    XM_PERMUTE_0Z, XM_PERMUTE_0W, XM_PERMUTE_1X, XM_PERMUTE_0Y
+                    DirectX::XM_PERMUTE_0Z, DirectX::XM_PERMUTE_0W, DirectX::XM_PERMUTE_1X, DirectX::XM_PERMUTE_0Y
                  };
     static CONST XMVECTORI32 Permute1Y0X0W0Z =
                  {
-                    XM_PERMUTE_1Y, XM_PERMUTE_0X, XM_PERMUTE_0W, XM_PERMUTE_0Z
+                    DirectX::XM_PERMUTE_1Y, DirectX::XM_PERMUTE_0X, DirectX::XM_PERMUTE_0W, DirectX::XM_PERMUTE_0Z
                  };
     static CONST XMVECTORI32 PermuteWZYX =
                  {
-                    XM_PERMUTE_0W, XM_PERMUTE_0Z, XM_PERMUTE_0Y, XM_PERMUTE_0X
+                    DirectX::XM_PERMUTE_0W, DirectX::XM_PERMUTE_0Z, DirectX::XM_PERMUTE_0Y, DirectX::XM_PERMUTE_0X
                  };
     static CONST XMVECTORI32 PermuteZWXY =
                  {
-                    XM_PERMUTE_0Z, XM_PERMUTE_0W, XM_PERMUTE_0X, XM_PERMUTE_0Y
+                    DirectX::XM_PERMUTE_0Z, DirectX::XM_PERMUTE_0W, DirectX::XM_PERMUTE_0X, DirectX::XM_PERMUTE_0Y
                  };
     static CONST XMVECTORI32 PermuteYXWZ =
                  {
-                    XM_PERMUTE_0Y, XM_PERMUTE_0X, XM_PERMUTE_0W, XM_PERMUTE_0Z
+                    DirectX::XM_PERMUTE_0Y, DirectX::XM_PERMUTE_0X, DirectX::XM_PERMUTE_0W, DirectX::XM_PERMUTE_0Z
                  };
 
     XMASSERT( pVolumeA );
     XMASSERT( pVolumeB );
 
     // Build the 3x3 rotation matrix that defines the orientation of B relative to A.
-    XMVECTOR A_quat = XMLoadFloat4( &pVolumeA->Orientation );
-    XMVECTOR B_quat = XMLoadFloat4( &pVolumeB->Orientation );
+    DirectX::XMVECTOR A_quat = XMLoadFloat4( &pVolumeA->Orientation );
+    DirectX::XMVECTOR B_quat = XMLoadFloat4( &pVolumeB->Orientation );
 
     XMASSERT( XMQuaternionIsUnit( A_quat ) );
     XMASSERT( XMQuaternionIsUnit( B_quat ) );
 
-    XMVECTOR Q = XMQuaternionMultiply( A_quat, XMQuaternionConjugate( B_quat ) );
-    XMMATRIX R = XMMatrixRotationQuaternion( Q );
+    DirectX::XMVECTOR Q = XMQuaternionMultiply( A_quat, XMQuaternionConjugate( B_quat ) );
+    DirectX::XMMATRIX R = DirectX::XMMatrixRotationQuaternion( Q );
 
     // Compute the translation of B relative to A.
-    XMVECTOR A_cent = XMLoadFloat3( &pVolumeA->Center );
-    XMVECTOR B_cent = XMLoadFloat3( &pVolumeB->Center );
-    XMVECTOR t = XMVector3InverseRotate( B_cent - A_cent, A_quat );
+    DirectX::XMVECTOR A_cent = XMLoadFloat3( &pVolumeA->Center );
+    DirectX::XMVECTOR B_cent = XMLoadFloat3( &pVolumeB->Center );
+    DirectX::XMVECTOR t = DirectX::XMVector3InverseRotate( B_cent - A_cent, A_quat );
 
     //
     // h(A) = extents of A.
@@ -2195,173 +2195,173 @@ BOOL IntersectOrientedBoxOrientedBox( const OrientedBox* pVolumeA, const Oriente
     //
 
     // Load extents of A and B.
-    XMVECTOR h_A = XMLoadFloat3( &pVolumeA->Extents );
-    XMVECTOR h_B = XMLoadFloat3( &pVolumeB->Extents );
+    DirectX::XMVECTOR h_A = XMLoadFloat3( &pVolumeA->Extents );
+    DirectX::XMVECTOR h_B = XMLoadFloat3( &pVolumeB->Extents );
 
     // Rows. Note R[0,1,2]X.w = 0.
-    XMVECTOR R0X = R.r[0];
-    XMVECTOR R1X = R.r[1];
-    XMVECTOR R2X = R.r[2];
+    DirectX::XMVECTOR R0X = R.r[0];
+    DirectX::XMVECTOR R1X = R.r[1];
+    DirectX::XMVECTOR R2X = R.r[2];
 
-    R = XMMatrixTranspose( R );
+    R = DirectX::XMMatrixTranspose( R );
 
     // Columns. Note RX[0,1,2].w = 0.
-    XMVECTOR RX0 = R.r[0];
-    XMVECTOR RX1 = R.r[1];
-    XMVECTOR RX2 = R.r[2];
+    DirectX::XMVECTOR RX0 = R.r[0];
+    DirectX::XMVECTOR RX1 = R.r[1];
+    DirectX::XMVECTOR RX2 = R.r[2];
 
     // Absolute value of rows.
-    XMVECTOR AR0X = XMVectorAbs( R0X );
-    XMVECTOR AR1X = XMVectorAbs( R1X );
-    XMVECTOR AR2X = XMVectorAbs( R2X );
+    DirectX::XMVECTOR AR0X = DirectX::XMVectorAbs( R0X );
+    DirectX::XMVECTOR AR1X = DirectX::XMVectorAbs( R1X );
+    DirectX::XMVECTOR AR2X = DirectX::XMVectorAbs( R2X );
 
     // Absolute value of columns.
-    XMVECTOR ARX0 = XMVectorAbs( RX0 );
-    XMVECTOR ARX1 = XMVectorAbs( RX1 );
-    XMVECTOR ARX2 = XMVectorAbs( RX2 );
+    DirectX::XMVECTOR ARX0 = DirectX::XMVectorAbs( RX0 );
+    DirectX::XMVECTOR ARX1 = DirectX::XMVectorAbs( RX1 );
+    DirectX::XMVECTOR ARX2 = DirectX::XMVectorAbs( RX2 );
 
     // Test each of the 15 possible seperating axii.
-    XMVECTOR d, d_A, d_B;
+    DirectX::XMVECTOR d, d_A, d_B;
 
     // l = a(u) = (1, 0, 0)
     // t dot l = t.x
     // d(A) = h(A).x
     // d(B) = h(B) dot abs(r00, r01, r02)
-    d = XMVectorSplatX( t );
-    d_A = XMVectorSplatX( h_A );
-    d_B = XMVector3Dot( h_B, AR0X );
-    XMVECTOR NoIntersection = XMVectorGreater( XMVectorAbs(d), XMVectorAdd( d_A, d_B ) );
+    d = DirectX::XMVectorSplatX( t );
+    d_A = DirectX::XMVectorSplatX( h_A );
+    d_B = DirectX::XMVector3Dot( h_B, AR0X );
+    DirectX::XMVECTOR NoIntersection = DirectX::XMVectorGreater( DirectX::XMVectorAbs(d), DirectX::XMVectorAdd( d_A, d_B ) );
 
     // l = a(v) = (0, 1, 0)
     // t dot l = t.y
     // d(A) = h(A).y
     // d(B) = h(B) dot abs(r10, r11, r12)
-    d = XMVectorSplatY( t );
-    d_A = XMVectorSplatY( h_A );
-    d_B = XMVector3Dot( h_B, AR1X );
-    NoIntersection = XMVectorOrInt( NoIntersection, 
-                                    XMVectorGreater( XMVectorAbs(d), XMVectorAdd( d_A, d_B ) ) );
+    d = DirectX::XMVectorSplatY( t );
+    d_A = DirectX::XMVectorSplatY( h_A );
+    d_B = DirectX::XMVector3Dot( h_B, AR1X );
+    NoIntersection = DirectX::XMVectorOrInt( NoIntersection, 
+                                    DirectX::XMVectorGreater( DirectX::XMVectorAbs(d), DirectX::XMVectorAdd( d_A, d_B ) ) );
 
     // l = a(w) = (0, 0, 1)
     // t dot l = t.z
     // d(A) = h(A).z
     // d(B) = h(B) dot abs(r20, r21, r22)
-    d = XMVectorSplatZ( t );
-    d_A = XMVectorSplatZ( h_A );
-    d_B = XMVector3Dot( h_B, AR2X );
-    NoIntersection = XMVectorOrInt( NoIntersection, 
-                                    XMVectorGreater( XMVectorAbs(d), XMVectorAdd( d_A, d_B ) ) );
+    d = DirectX::XMVectorSplatZ( t );
+    d_A = DirectX::XMVectorSplatZ( h_A );
+    d_B = DirectX::XMVector3Dot( h_B, AR2X );
+    NoIntersection = DirectX::XMVectorOrInt( NoIntersection, 
+                                    DirectX::XMVectorGreater( DirectX::XMVectorAbs(d), DirectX::XMVectorAdd( d_A, d_B ) ) );
 
     // l = b(u) = (r00, r10, r20)
     // d(A) = h(A) dot abs(r00, r10, r20)
     // d(B) = h(B).x
-    d = XMVector3Dot( t, RX0 );
-    d_A = XMVector3Dot( h_A, ARX0 );
-    d_B = XMVectorSplatX( h_B );
-    NoIntersection = XMVectorOrInt( NoIntersection, 
-                                    XMVectorGreater( XMVectorAbs(d), XMVectorAdd( d_A, d_B ) ) );
+    d = DirectX::XMVector3Dot( t, RX0 );
+    d_A = DirectX::XMVector3Dot( h_A, ARX0 );
+    d_B = DirectX::XMVectorSplatX( h_B );
+    NoIntersection = DirectX::XMVectorOrInt( NoIntersection, 
+                                    DirectX::XMVectorGreater( DirectX::XMVectorAbs(d), DirectX::XMVectorAdd( d_A, d_B ) ) );
 
     // l = b(v) = (r01, r11, r21)
     // d(A) = h(A) dot abs(r01, r11, r21)
     // d(B) = h(B).y
-    d = XMVector3Dot( t, RX1 );
-    d_A = XMVector3Dot( h_A, ARX1 );
-    d_B = XMVectorSplatY( h_B );
-    NoIntersection = XMVectorOrInt( NoIntersection, 
-                                    XMVectorGreater( XMVectorAbs(d), XMVectorAdd( d_A, d_B ) ) );
+    d = DirectX::XMVector3Dot( t, RX1 );
+    d_A = DirectX::XMVector3Dot( h_A, ARX1 );
+    d_B = DirectX::XMVectorSplatY( h_B );
+    NoIntersection = DirectX::XMVectorOrInt( NoIntersection, 
+                                    DirectX::XMVectorGreater( DirectX::XMVectorAbs(d), DirectX::XMVectorAdd( d_A, d_B ) ) );
 
     // l = b(w) = (r02, r12, r22)
     // d(A) = h(A) dot abs(r02, r12, r22)
     // d(B) = h(B).z
-    d = XMVector3Dot( t, RX2 );
-    d_A = XMVector3Dot( h_A, ARX2 );
-    d_B = XMVectorSplatZ( h_B );
-    NoIntersection = XMVectorOrInt( NoIntersection, 
-                                    XMVectorGreater( XMVectorAbs(d), XMVectorAdd( d_A, d_B ) ) );
+    d = DirectX::XMVector3Dot( t, RX2 );
+    d_A = DirectX::XMVector3Dot( h_A, ARX2 );
+    d_B = DirectX::XMVectorSplatZ( h_B );
+    NoIntersection = DirectX::XMVectorOrInt( NoIntersection, 
+                                    DirectX::XMVectorGreater( DirectX::XMVectorAbs(d), DirectX::XMVectorAdd( d_A, d_B ) ) );
 
     // l = a(u) x b(u) = (0, -r20, r10)
     // d(A) = h(A) dot abs(0, r20, r10)
     // d(B) = h(B) dot abs(0, r02, r01)
-    d = XMVector3Dot( t, XMVectorPermute( RX0, -RX0, Permute0W1Z0Y0X ) );
-    d_A = XMVector3Dot( h_A, XMVectorPermute( ARX0, ARX0, PermuteWZYX ) );
-    d_B = XMVector3Dot( h_B, XMVectorPermute( AR0X, AR0X, PermuteWZYX ) );
-    NoIntersection = XMVectorOrInt( NoIntersection, 
-                                    XMVectorGreater( XMVectorAbs(d), XMVectorAdd( d_A, d_B ) ) );
+    d = DirectX::XMVector3Dot( t, DirectX::XMVectorPermute( RX0, -RX0, Permute0W1Z0Y0X ) );
+    d_A = DirectX::XMVector3Dot( h_A, DirectX::XMVectorPermute( ARX0, ARX0, PermuteWZYX ) );
+    d_B = DirectX::XMVector3Dot( h_B, DirectX::XMVectorPermute( AR0X, AR0X, PermuteWZYX ) );
+    NoIntersection = DirectX::XMVectorOrInt( NoIntersection, 
+                                    DirectX::XMVectorGreater( DirectX::XMVectorAbs(d), DirectX::XMVectorAdd( d_A, d_B ) ) );
 
     // l = a(u) x b(v) = (0, -r21, r11)
     // d(A) = h(A) dot abs(0, r21, r11)
     // d(B) = h(B) dot abs(r02, 0, r00)
-    d = XMVector3Dot( t, XMVectorPermute( RX1, -RX1, Permute0W1Z0Y0X ) );
-    d_A = XMVector3Dot( h_A, XMVectorPermute( ARX1, ARX1, PermuteWZYX ) );
-    d_B = XMVector3Dot( h_B, XMVectorPermute( AR0X, AR0X, PermuteZWXY ) );
-    NoIntersection = XMVectorOrInt( NoIntersection, 
-                                    XMVectorGreater( XMVectorAbs(d), XMVectorAdd( d_A, d_B ) ) );
+    d = DirectX::XMVector3Dot( t, DirectX::XMVectorPermute( RX1, -RX1, Permute0W1Z0Y0X ) );
+    d_A = DirectX::XMVector3Dot( h_A, DirectX::XMVectorPermute( ARX1, ARX1, PermuteWZYX ) );
+    d_B = DirectX::XMVector3Dot( h_B, DirectX::XMVectorPermute( AR0X, AR0X, PermuteZWXY ) );
+    NoIntersection = DirectX::XMVectorOrInt( NoIntersection, 
+                                    DirectX::XMVectorGreater( DirectX::XMVectorAbs(d), DirectX::XMVectorAdd( d_A, d_B ) ) );
 
     // l = a(u) x b(w) = (0, -r22, r12)
     // d(A) = h(A) dot abs(0, r22, r12)
     // d(B) = h(B) dot abs(r01, r00, 0)
-    d = XMVector3Dot( t, XMVectorPermute( RX2, -RX2, Permute0W1Z0Y0X ) );
-    d_A = XMVector3Dot( h_A, XMVectorPermute( ARX2, ARX2, PermuteWZYX ) );
-    d_B = XMVector3Dot( h_B, XMVectorPermute( AR0X, AR0X, PermuteYXWZ ) );
-    NoIntersection = XMVectorOrInt( NoIntersection, 
-                                    XMVectorGreater( XMVectorAbs(d), XMVectorAdd( d_A, d_B ) ) );
+    d = DirectX::XMVector3Dot( t, DirectX::XMVectorPermute( RX2, -RX2, Permute0W1Z0Y0X ) );
+    d_A = DirectX::XMVector3Dot( h_A, DirectX::XMVectorPermute( ARX2, ARX2, PermuteWZYX ) );
+    d_B = DirectX::XMVector3Dot( h_B, DirectX::XMVectorPermute( AR0X, AR0X, PermuteYXWZ ) );
+    NoIntersection = DirectX::XMVectorOrInt( NoIntersection, 
+                                    DirectX::XMVectorGreater( DirectX::XMVectorAbs(d), DirectX::XMVectorAdd( d_A, d_B ) ) );
 
     // l = a(v) x b(u) = (r20, 0, -r00)
     // d(A) = h(A) dot abs(r20, 0, r00)
     // d(B) = h(B) dot abs(0, r12, r11)
-    d = XMVector3Dot( t, XMVectorPermute( RX0, -RX0, Permute0Z0W1X0Y ) );
-    d_A = XMVector3Dot( h_A, XMVectorPermute( ARX0, ARX0, PermuteZWXY ) );
-    d_B = XMVector3Dot( h_B, XMVectorPermute( AR1X, AR1X, PermuteWZYX ) );
-    NoIntersection = XMVectorOrInt( NoIntersection, 
-                                    XMVectorGreater( XMVectorAbs(d), XMVectorAdd( d_A, d_B ) ) );
+    d = DirectX::XMVector3Dot( t, DirectX::XMVectorPermute( RX0, -RX0, Permute0Z0W1X0Y ) );
+    d_A = DirectX::XMVector3Dot( h_A, DirectX::XMVectorPermute( ARX0, ARX0, PermuteZWXY ) );
+    d_B = DirectX::XMVector3Dot( h_B, DirectX::XMVectorPermute( AR1X, AR1X, PermuteWZYX ) );
+    NoIntersection = DirectX::XMVectorOrInt( NoIntersection, 
+                                    DirectX::XMVectorGreater( DirectX::XMVectorAbs(d), DirectX::XMVectorAdd( d_A, d_B ) ) );
 
     // l = a(v) x b(v) = (r21, 0, -r01)
     // d(A) = h(A) dot abs(r21, 0, r01)
     // d(B) = h(B) dot abs(r12, 0, r10)
-    d = XMVector3Dot( t, XMVectorPermute( RX1, -RX1, Permute0Z0W1X0Y ) );
-    d_A = XMVector3Dot( h_A, XMVectorPermute( ARX1, ARX1, PermuteZWXY ) );
-    d_B = XMVector3Dot( h_B, XMVectorPermute( AR1X, AR1X, PermuteZWXY ) );
-    NoIntersection = XMVectorOrInt( NoIntersection, 
-                                    XMVectorGreater( XMVectorAbs(d), XMVectorAdd( d_A, d_B ) ) );
+    d = DirectX::XMVector3Dot( t, DirectX::XMVectorPermute( RX1, -RX1, Permute0Z0W1X0Y ) );
+    d_A = DirectX::XMVector3Dot( h_A, DirectX::XMVectorPermute( ARX1, ARX1, PermuteZWXY ) );
+    d_B = DirectX::XMVector3Dot( h_B, DirectX::XMVectorPermute( AR1X, AR1X, PermuteZWXY ) );
+    NoIntersection = DirectX::XMVectorOrInt( NoIntersection, 
+                                    DirectX::XMVectorGreater( DirectX::XMVectorAbs(d), DirectX::XMVectorAdd( d_A, d_B ) ) );
 
     // l = a(v) x b(w) = (r22, 0, -r02)
     // d(A) = h(A) dot abs(r22, 0, r02)
     // d(B) = h(B) dot abs(r11, r10, 0)
-    d = XMVector3Dot( t, XMVectorPermute( RX2, -RX2, Permute0Z0W1X0Y ) );
-    d_A = XMVector3Dot( h_A, XMVectorPermute( ARX2, ARX2, PermuteZWXY ) );
-    d_B = XMVector3Dot( h_B, XMVectorPermute( AR1X, AR1X, PermuteYXWZ ) );
-    NoIntersection = XMVectorOrInt( NoIntersection, 
-                                    XMVectorGreater( XMVectorAbs(d), XMVectorAdd( d_A, d_B ) ) );
+    d = DirectX::XMVector3Dot( t, DirectX::XMVectorPermute( RX2, -RX2, Permute0Z0W1X0Y ) );
+    d_A = DirectX::XMVector3Dot( h_A, DirectX::XMVectorPermute( ARX2, ARX2, PermuteZWXY ) );
+    d_B = DirectX::XMVector3Dot( h_B, DirectX::XMVectorPermute( AR1X, AR1X, PermuteYXWZ ) );
+    NoIntersection = DirectX::XMVectorOrInt( NoIntersection, 
+                                    DirectX::XMVectorGreater( DirectX::XMVectorAbs(d), DirectX::XMVectorAdd( d_A, d_B ) ) );
 
     // l = a(w) x b(u) = (-r10, r00, 0)
     // d(A) = h(A) dot abs(r10, r00, 0)
     // d(B) = h(B) dot abs(0, r22, r21)
-    d = XMVector3Dot( t, XMVectorPermute( RX0, -RX0, Permute1Y0X0W0Z ) );
-    d_A = XMVector3Dot( h_A, XMVectorPermute( ARX0, ARX0, PermuteYXWZ ) );
-    d_B = XMVector3Dot( h_B, XMVectorPermute( AR2X, AR2X, PermuteWZYX ) );
-    NoIntersection = XMVectorOrInt( NoIntersection, 
-                                    XMVectorGreater( XMVectorAbs(d), XMVectorAdd( d_A, d_B ) ) );
+    d = DirectX::XMVector3Dot( t, DirectX::XMVectorPermute( RX0, -RX0, Permute1Y0X0W0Z ) );
+    d_A = DirectX::XMVector3Dot( h_A, DirectX::XMVectorPermute( ARX0, ARX0, PermuteYXWZ ) );
+    d_B = DirectX::XMVector3Dot( h_B, DirectX::XMVectorPermute( AR2X, AR2X, PermuteWZYX ) );
+    NoIntersection = DirectX::XMVectorOrInt( NoIntersection, 
+                                    DirectX::XMVectorGreater( DirectX::XMVectorAbs(d), DirectX::XMVectorAdd( d_A, d_B ) ) );
 
     // l = a(w) x b(v) = (-r11, r01, 0)
     // d(A) = h(A) dot abs(r11, r01, 0)
     // d(B) = h(B) dot abs(r22, 0, r20)
-    d = XMVector3Dot( t, XMVectorPermute( RX1, -RX1, Permute1Y0X0W0Z ) );
-    d_A = XMVector3Dot( h_A, XMVectorPermute( ARX1, ARX1, PermuteYXWZ ) );
-    d_B = XMVector3Dot( h_B, XMVectorPermute( AR2X, AR2X, PermuteZWXY ) );
-    NoIntersection = XMVectorOrInt( NoIntersection, 
-                                    XMVectorGreater( XMVectorAbs(d), XMVectorAdd( d_A, d_B ) ) );
+    d = DirectX::XMVector3Dot( t, DirectX::XMVectorPermute( RX1, -RX1, Permute1Y0X0W0Z ) );
+    d_A = DirectX::XMVector3Dot( h_A, DirectX::XMVectorPermute( ARX1, ARX1, PermuteYXWZ ) );
+    d_B = DirectX::XMVector3Dot( h_B, DirectX::XMVectorPermute( AR2X, AR2X, PermuteZWXY ) );
+    NoIntersection = DirectX::XMVectorOrInt( NoIntersection, 
+                                    DirectX::XMVectorGreater( DirectX::XMVectorAbs(d), DirectX::XMVectorAdd( d_A, d_B ) ) );
 
     // l = a(w) x b(w) = (-r12, r02, 0)
     // d(A) = h(A) dot abs(r12, r02, 0)
     // d(B) = h(B) dot abs(r21, r20, 0)
-    d = XMVector3Dot( t, XMVectorPermute( RX2, -RX2, Permute1Y0X0W0Z ) );
-    d_A = XMVector3Dot( h_A, XMVectorPermute( ARX2, ARX2, PermuteYXWZ ) );
-    d_B = XMVector3Dot( h_B, XMVectorPermute( AR2X, AR2X, PermuteYXWZ ) );
-    NoIntersection = XMVectorOrInt( NoIntersection, 
-                                    XMVectorGreater( XMVectorAbs(d), XMVectorAdd( d_A, d_B ) ) );
+    d = DirectX::XMVector3Dot( t, DirectX::XMVectorPermute( RX2, -RX2, Permute1Y0X0W0Z ) );
+    d_A = DirectX::XMVector3Dot( h_A, DirectX::XMVectorPermute( ARX2, ARX2, PermuteYXWZ ) );
+    d_B = DirectX::XMVector3Dot( h_B, DirectX::XMVectorPermute( AR2X, AR2X, PermuteYXWZ ) );
+    NoIntersection = DirectX::XMVectorOrInt( NoIntersection, 
+                                    DirectX::XMVectorGreater( DirectX::XMVectorAbs(d), DirectX::XMVectorAdd( d_A, d_B ) ) );
 
     // No seperating axis found, boxes must intersect.
-    return XMVector4NotEqualInt( NoIntersection, XMVectorTrueInt() );
+    return DirectX::XMVector4NotEqualInt( NoIntersection, DirectX::XMVectorTrueInt() );
 }
 
 
@@ -2372,71 +2372,71 @@ BOOL IntersectOrientedBoxOrientedBox( const OrientedBox* pVolumeA, const Oriente
 //                1 = intersection, 
 //                2 = triangle is completely inside frustum
 //-----------------------------------------------------------------------------
-INT IntersectTriangleFrustum( FXMVECTOR V0, FXMVECTOR V1, FXMVECTOR V2, const Frustum* pVolume )
+INT IntersectTriangleFrustum( FXMVECTOR V0, DirectX::FXMVECTOR V1, DirectX::FXMVECTOR V2, const Frustum* pVolume )
 {
     XMASSERT( pVolume );
 
     // Build the frustum planes (NOTE: D is negated from the usual).
-    XMVECTOR Planes[6];
-    Planes[0] = XMVectorSet( 0.0f, 0.0f, -1.0f, -pVolume->Near );
-    Planes[1] = XMVectorSet( 0.0f, 0.0f, 1.0f, pVolume->Far );
-    Planes[2] = XMVectorSet( 1.0f, 0.0f, -pVolume->RightSlope, 0.0f );
-    Planes[3] = XMVectorSet( -1.0f, 0.0f, pVolume->LeftSlope, 0.0f );
-    Planes[4] = XMVectorSet( 0.0f, 1.0f, -pVolume->TopSlope, 0.0f );
-    Planes[5] = XMVectorSet( 0.0f, -1.0f, pVolume->BottomSlope, 0.0f );
+    DirectX::XMVECTOR Planes[6];
+    Planes[0] = DirectX::XMVectorSet( 0.0f, 0.0f, -1.0f, -pVolume->Near );
+    Planes[1] = DirectX::XMVectorSet( 0.0f, 0.0f, 1.0f, pVolume->Far );
+    Planes[2] = DirectX::XMVectorSet( 1.0f, 0.0f, -pVolume->RightSlope, 0.0f );
+    Planes[3] = DirectX::XMVectorSet( -1.0f, 0.0f, pVolume->LeftSlope, 0.0f );
+    Planes[4] = DirectX::XMVectorSet( 0.0f, 1.0f, -pVolume->TopSlope, 0.0f );
+    Planes[5] = DirectX::XMVectorSet( 0.0f, -1.0f, pVolume->BottomSlope, 0.0f );
 
     // Load origin and orientation of the frustum.
-    XMVECTOR Origin = XMLoadFloat3( &pVolume->Origin );
-    XMVECTOR Orientation = XMLoadFloat4( &pVolume->Orientation );
+    DirectX::XMVECTOR Origin = XMLoadFloat3( &pVolume->Origin );
+    DirectX::XMVECTOR Orientation = XMLoadFloat4( &pVolume->Orientation );
 
     XMASSERT( XMQuaternionIsUnit( Orientation ) );
 
     // Transform triangle into the local space of frustum.
-    XMVECTOR TV0 = XMVector3InverseRotate( V0 - Origin, Orientation );
-    XMVECTOR TV1 = XMVector3InverseRotate( V1 - Origin, Orientation );
-    XMVECTOR TV2 = XMVector3InverseRotate( V2 - Origin, Orientation );
+    DirectX::XMVECTOR TV0 = DirectX::XMVector3InverseRotate( V0 - Origin, Orientation );
+    DirectX::XMVECTOR TV1 = DirectX::XMVector3InverseRotate( V1 - Origin, Orientation );
+    DirectX::XMVECTOR TV2 = DirectX::XMVector3InverseRotate( V2 - Origin, Orientation );
 
     // Test each vertex of the triangle against the frustum planes.
-    XMVECTOR Outside = XMVectorFalseInt();
-    XMVECTOR InsideAll = XMVectorTrueInt();
+    DirectX::XMVECTOR Outside = DirectX::XMVectorFalseInt();
+    DirectX::XMVECTOR InsideAll = DirectX::XMVectorTrueInt();
 
     for( INT i = 0; i < 6; i++ )
     {
-        XMVECTOR Dist0 = XMVector3Dot( TV0, Planes[i] );
-        XMVECTOR Dist1 = XMVector3Dot( TV1, Planes[i] );
-        XMVECTOR Dist2 = XMVector3Dot( TV2, Planes[i] );
+        DirectX::XMVECTOR Dist0 = DirectX::XMVector3Dot( TV0, Planes[i] );
+        DirectX::XMVECTOR Dist1 = DirectX::XMVector3Dot( TV1, Planes[i] );
+        DirectX::XMVECTOR Dist2 = DirectX::XMVector3Dot( TV2, Planes[i] );
 
-        XMVECTOR MinDist = XMVectorMin( Dist0, Dist1 );
-        MinDist = XMVectorMin( MinDist, Dist2 );
-        XMVECTOR MaxDist = XMVectorMax( Dist0, Dist1 );
-        MaxDist = XMVectorMax( MaxDist, Dist2 );
+        DirectX::XMVECTOR MinDist = DirectX::XMVectorMin( Dist0, Dist1 );
+        MinDist = DirectX::XMVectorMin( MinDist, Dist2 );
+        DirectX::XMVECTOR MaxDist = DirectX::XMVectorMax( Dist0, Dist1 );
+        MaxDist = DirectX::XMVectorMax( MaxDist, Dist2 );
 
-        XMVECTOR PlaneDist = XMVectorSplatW( Planes[i] );
+        DirectX::XMVECTOR PlaneDist = DirectX::XMVectorSplatW( Planes[i] );
 
         // Outside the plane?
-        Outside = XMVectorOrInt( Outside, XMVectorGreater( MinDist, PlaneDist ) );
+        Outside = DirectX::XMVectorOrInt( Outside, DirectX::XMVectorGreater( MinDist, PlaneDist ) );
 
         // Fully inside the plane?
-        InsideAll = XMVectorAndInt( InsideAll, XMVectorLessOrEqual( MaxDist, PlaneDist ) );
+        InsideAll = DirectX::XMVectorAndInt( InsideAll, DirectX::XMVectorLessOrEqual( MaxDist, PlaneDist ) );
     }
 
     // If the triangle is outside any of the planes it is outside. 
-    if ( XMVector4EqualInt( Outside, XMVectorTrueInt() ) )
+    if ( DirectX::XMVector4EqualInt( Outside, DirectX::XMVectorTrueInt() ) )
         return 0;
 
     // If the triangle is inside all planes it is fully inside.
-    if ( XMVector4EqualInt( InsideAll, XMVectorTrueInt() ) )
+    if ( DirectX::XMVector4EqualInt( InsideAll, DirectX::XMVectorTrueInt() ) )
         return 2;
 
     // Build the corners of the frustum.
-    XMVECTOR RightTop = XMVectorSet( pVolume->RightSlope, pVolume->TopSlope, 1.0f, 0.0f );
-    XMVECTOR RightBottom = XMVectorSet( pVolume->RightSlope, pVolume->BottomSlope, 1.0f, 0.0f );
-    XMVECTOR LeftTop = XMVectorSet( pVolume->LeftSlope, pVolume->TopSlope, 1.0f, 0.0f );
-    XMVECTOR LeftBottom = XMVectorSet( pVolume->LeftSlope, pVolume->BottomSlope, 1.0f, 0.0f );
-    XMVECTOR Near = XMVectorReplicatePtr( &pVolume->Near );
-    XMVECTOR Far = XMVectorReplicatePtr( &pVolume->Far );
+    DirectX::XMVECTOR RightTop = DirectX::XMVectorSet( pVolume->RightSlope, pVolume->TopSlope, 1.0f, 0.0f );
+    DirectX::XMVECTOR RightBottom = DirectX::XMVectorSet( pVolume->RightSlope, pVolume->BottomSlope, 1.0f, 0.0f );
+    DirectX::XMVECTOR LeftTop = DirectX::XMVectorSet( pVolume->LeftSlope, pVolume->TopSlope, 1.0f, 0.0f );
+    DirectX::XMVECTOR LeftBottom = DirectX::XMVectorSet( pVolume->LeftSlope, pVolume->BottomSlope, 1.0f, 0.0f );
+    DirectX::XMVECTOR Near = DirectX::XMVectorReplicatePtr( &pVolume->Near );
+    DirectX::XMVECTOR Far = DirectX::XMVectorReplicatePtr( &pVolume->Far );
 
-    XMVECTOR Corners[8];
+    DirectX::XMVECTOR Corners[8];
     Corners[0] = RightTop * Near;
     Corners[1] = RightBottom * Near;
     Corners[2] = LeftTop * Near;
@@ -2447,29 +2447,29 @@ INT IntersectTriangleFrustum( FXMVECTOR V0, FXMVECTOR V1, FXMVECTOR V2, const Fr
     Corners[7] = LeftBottom * Far;
 
     // Test the plane of the triangle.
-    XMVECTOR Normal = XMVector3Cross( V1 - V0, V2 - V0 );
-    XMVECTOR Dist = XMVector3Dot( Normal, V0 );
+    DirectX::XMVECTOR Normal = DirectX::XMVector3Cross( V1 - V0, V2 - V0 );
+    DirectX::XMVECTOR Dist = DirectX::XMVector3Dot( Normal, V0 );
 
-    XMVECTOR MinDist, MaxDist;
-    MinDist = MaxDist = XMVector3Dot( Corners[0], Normal );
+    DirectX::XMVECTOR MinDist, MaxDist;
+    MinDist = MaxDist = DirectX::XMVector3Dot( Corners[0], Normal );
     for( INT i = 1; i < 8; i++ )
     {
-        XMVECTOR Temp = XMVector3Dot( Corners[i], Normal );
-        MinDist = XMVectorMin( MinDist, Temp );
-        MaxDist = XMVectorMax( MaxDist, Temp );
+        DirectX::XMVECTOR Temp = DirectX::XMVector3Dot( Corners[i], Normal );
+        MinDist = DirectX::XMVectorMin( MinDist, Temp );
+        MaxDist = DirectX::XMVectorMax( MaxDist, Temp );
     }
 
-    Outside = XMVectorOrInt( XMVectorGreater( MinDist, Dist ), XMVectorLess( MaxDist, Dist ) );   
-    if ( XMVector4EqualInt( Outside, XMVectorTrueInt() ) )
+    Outside = DirectX::XMVectorOrInt( DirectX::XMVectorGreater( MinDist, Dist ), DirectX::XMVectorLess( MaxDist, Dist ) );   
+    if ( DirectX::XMVector4EqualInt( Outside, DirectX::XMVectorTrueInt() ) )
         return 0;
 
     // Check the edge/edge axes (3*6).
-    XMVECTOR TriangleEdgeAxis[3];
+    DirectX::XMVECTOR TriangleEdgeAxis[3];
     TriangleEdgeAxis[0] = V1 - V0;
     TriangleEdgeAxis[1] = V2 - V1;
     TriangleEdgeAxis[2] = V0 - V2;
 
-    XMVECTOR FrustumEdgeAxis[6];
+    DirectX::XMVECTOR FrustumEdgeAxis[6];
     FrustumEdgeAxis[0] = RightTop;
     FrustumEdgeAxis[1] = RightBottom;
     FrustumEdgeAxis[2] = LeftTop;
@@ -2482,39 +2482,39 @@ INT IntersectTriangleFrustum( FXMVECTOR V0, FXMVECTOR V1, FXMVECTOR V2, const Fr
         for( INT j = 0; j < 6; j++ )
         {
             // Compute the axis we are going to test.
-            XMVECTOR Axis = XMVector3Cross( TriangleEdgeAxis[i], FrustumEdgeAxis[j] );
+            DirectX::XMVECTOR Axis = DirectX::XMVector3Cross( TriangleEdgeAxis[i], FrustumEdgeAxis[j] );
 
             // Find the min/max of the projection of the triangle onto the axis.
-            XMVECTOR MinA, MaxA;
+            DirectX::XMVECTOR MinA, MaxA;
 
-            XMVECTOR Dist0 = XMVector3Dot( V0, Axis );
-            XMVECTOR Dist1 = XMVector3Dot( V1, Axis );
-            XMVECTOR Dist2 = XMVector3Dot( V2, Axis );
+            DirectX::XMVECTOR Dist0 = DirectX::XMVector3Dot( V0, Axis );
+            DirectX::XMVECTOR Dist1 = DirectX::XMVector3Dot( V1, Axis );
+            DirectX::XMVECTOR Dist2 = DirectX::XMVector3Dot( V2, Axis );
 
-            MinA = XMVectorMin( Dist0, Dist1 );
-            MinA = XMVectorMin( MinA, Dist2 );
-            MaxA = XMVectorMax( Dist0, Dist1 );
-            MaxA = XMVectorMax( MaxA, Dist2 );
+            MinA = DirectX::XMVectorMin( Dist0, Dist1 );
+            MinA = DirectX::XMVectorMin( MinA, Dist2 );
+            MaxA = DirectX::XMVectorMax( Dist0, Dist1 );
+            MaxA = DirectX::XMVectorMax( MaxA, Dist2 );
 
             // Find the min/max of the projection of the frustum onto the axis.
-            XMVECTOR MinB, MaxB;
+            DirectX::XMVECTOR MinB, MaxB;
 
-            MinB = MaxB = XMVector3Dot( Axis, Corners[0] );
+            MinB = MaxB = DirectX::XMVector3Dot( Axis, Corners[0] );
 
             for( INT k = 1; k < 8; k++ )
             {
-                XMVECTOR Temp = XMVector3Dot( Axis, Corners[k] );
-                MinB = XMVectorMin( MinB, Temp );
-                MaxB = XMVectorMax( MaxB, Temp );
+                DirectX::XMVECTOR Temp = DirectX::XMVector3Dot( Axis, Corners[k] );
+                MinB = DirectX::XMVectorMin( MinB, Temp );
+                MaxB = DirectX::XMVectorMax( MaxB, Temp );
             }
 
             // if (MinA > MaxB || MinB > MaxA) reject;
-            Outside = XMVectorOrInt( Outside, XMVectorGreater( MinA, MaxB ) );
-            Outside = XMVectorOrInt( Outside, XMVectorGreater( MinB, MaxA ) );
+            Outside = DirectX::XMVectorOrInt( Outside, DirectX::XMVectorGreater( MinA, MaxB ) );
+            Outside = DirectX::XMVectorOrInt( Outside, DirectX::XMVectorGreater( MinB, MaxA ) );
         }
     }
 
-    if ( XMVector4EqualInt( Outside, XMVectorTrueInt() ) )
+    if ( DirectX::XMVector4EqualInt( Outside, DirectX::XMVectorTrueInt() ) )
         return 0;
 
     // If we did not find a separating plane then the triangle must intersect the frustum.
@@ -2538,71 +2538,71 @@ INT IntersectSphereFrustum( const Sphere* pVolumeA, const Frustum* pVolumeB )
     XMASSERT( pVolumeA );
     XMASSERT( pVolumeB );
 
-    XMVECTOR Zero = XMVectorZero();
+    DirectX::XMVECTOR Zero = DirectX::XMVectorZero();
 
     // Build the frustum planes.
-    XMVECTOR Planes[6];
-    Planes[0] = XMVectorSet( 0.0f, 0.0f, -1.0f, pVolumeB->Near );
-    Planes[1] = XMVectorSet( 0.0f, 0.0f, 1.0f, -pVolumeB->Far );
-    Planes[2] = XMVectorSet( 1.0f, 0.0f, -pVolumeB->RightSlope, 0.0f );
-    Planes[3] = XMVectorSet( -1.0f, 0.0f, pVolumeB->LeftSlope, 0.0f );
-    Planes[4] = XMVectorSet( 0.0f, 1.0f, -pVolumeB->TopSlope, 0.0f );
-    Planes[5] = XMVectorSet( 0.0f, -1.0f, pVolumeB->BottomSlope, 0.0f );
+    DirectX::XMVECTOR Planes[6];
+    Planes[0] = DirectX::XMVectorSet( 0.0f, 0.0f, -1.0f, pVolumeB->Near );
+    Planes[1] = DirectX::XMVectorSet( 0.0f, 0.0f, 1.0f, -pVolumeB->Far );
+    Planes[2] = DirectX::XMVectorSet( 1.0f, 0.0f, -pVolumeB->RightSlope, 0.0f );
+    Planes[3] = DirectX::XMVectorSet( -1.0f, 0.0f, pVolumeB->LeftSlope, 0.0f );
+    Planes[4] = DirectX::XMVectorSet( 0.0f, 1.0f, -pVolumeB->TopSlope, 0.0f );
+    Planes[5] = DirectX::XMVectorSet( 0.0f, -1.0f, pVolumeB->BottomSlope, 0.0f );
 
     // Normalize the planes so we can compare to the sphere radius.
-    Planes[2] = XMVector3Normalize( Planes[2] );
-    Planes[3] = XMVector3Normalize( Planes[3] );
-    Planes[4] = XMVector3Normalize( Planes[4] );
-    Planes[5] = XMVector3Normalize( Planes[5] );
+    Planes[2] = DirectX::XMVector3Normalize( Planes[2] );
+    Planes[3] = DirectX::XMVector3Normalize( Planes[3] );
+    Planes[4] = DirectX::XMVector3Normalize( Planes[4] );
+    Planes[5] = DirectX::XMVector3Normalize( Planes[5] );
 
     // Load origin and orientation of the frustum.
-    XMVECTOR Origin = XMLoadFloat3( &pVolumeB->Origin );
-    XMVECTOR Orientation = XMLoadFloat4( &pVolumeB->Orientation );
+    DirectX::XMVECTOR Origin = XMLoadFloat3( &pVolumeB->Origin );
+    DirectX::XMVECTOR Orientation = XMLoadFloat4( &pVolumeB->Orientation );
 
     XMASSERT( XMQuaternionIsUnit( Orientation ) );
 
     // Load the sphere.
-    XMVECTOR Center = XMLoadFloat3( &pVolumeA->Center );
-    XMVECTOR Radius = XMVectorReplicatePtr( &pVolumeA->Radius );
+    DirectX::XMVECTOR Center = XMLoadFloat3( &pVolumeA->Center );
+    DirectX::XMVECTOR Radius = DirectX::XMVectorReplicatePtr( &pVolumeA->Radius );
 
     // Transform the center of the sphere into the local space of frustum.
-    Center = XMVector3InverseRotate( Center - Origin, Orientation );
+    Center = DirectX::XMVector3InverseRotate( Center - Origin, Orientation );
 
     // Set w of the center to one so we can dot4 with the plane.
-    Center = XMVectorInsert( Center, XMVectorSplatOne(), 0, 0, 0, 0, 1);
+    Center = DirectX::XMVectorInsert( Center, DirectX::XMVectorSplatOne(), 0, 0, 0, 0, 1);
 
     // Check against each plane of the frustum.
-    XMVECTOR Outside = XMVectorFalseInt();
-    XMVECTOR InsideAll = XMVectorTrueInt();
-    XMVECTOR CenterInsideAll = XMVectorTrueInt();
+    DirectX::XMVECTOR Outside = DirectX::XMVectorFalseInt();
+    DirectX::XMVECTOR InsideAll = DirectX::XMVectorTrueInt();
+    DirectX::XMVECTOR CenterInsideAll = DirectX::XMVectorTrueInt();
 
-    XMVECTOR Dist[6];
+    DirectX::XMVECTOR Dist[6];
 
     for( INT i = 0; i < 6; i++ )
     {
-        Dist[i] = XMVector4Dot( Center, Planes[i] );
+        Dist[i] = DirectX::XMVector4Dot( Center, Planes[i] );
 
         // Outside the plane?
-        Outside = XMVectorOrInt( Outside, XMVectorGreater( Dist[i], Radius ) );
+        Outside = DirectX::XMVectorOrInt( Outside, DirectX::XMVectorGreater( Dist[i], Radius ) );
 
         // Fully inside the plane?
-        InsideAll = XMVectorAndInt( InsideAll, XMVectorLessOrEqual( Dist[i], -Radius ) );
+        InsideAll = DirectX::XMVectorAndInt( InsideAll, DirectX::XMVectorLessOrEqual( Dist[i], -Radius ) );
 
         // Check if the center is inside the plane.
-        CenterInsideAll = XMVectorAndInt( CenterInsideAll, XMVectorLessOrEqual( Dist[i], Zero ) );
+        CenterInsideAll = DirectX::XMVectorAndInt( CenterInsideAll, DirectX::XMVectorLessOrEqual( Dist[i], Zero ) );
     }
 
     // If the sphere is outside any of the planes it is outside. 
-    if ( XMVector4EqualInt( Outside, XMVectorTrueInt() ) )
+    if ( DirectX::XMVector4EqualInt( Outside, DirectX::XMVectorTrueInt() ) )
         return 0;
 
     // If the sphere is inside all planes it is fully inside.
-    if ( XMVector4EqualInt( InsideAll, XMVectorTrueInt() ) )
+    if ( DirectX::XMVector4EqualInt( InsideAll, DirectX::XMVectorTrueInt() ) )
         return 2;
 
     // If the center of the sphere is inside all planes and the sphere intersects 
     // one or more planes then it must intersect.
-    if ( XMVector4EqualInt( CenterInsideAll, XMVectorTrueInt() ) )
+    if ( DirectX::XMVector4EqualInt( CenterInsideAll, DirectX::XMVectorTrueInt() ) )
         return 1;
 
     // The sphere may be outside the frustum or intersecting the frustum.
@@ -2620,47 +2620,47 @@ INT IntersectSphereFrustum( const Sphere* pVolumeA, const Frustum* pVolumeB )
         { 0, 1, 2, 3 }
     };  // 5
 
-    XMVECTOR Intersects = XMVectorFalseInt();
+    DirectX::XMVECTOR Intersects = DirectX::XMVectorFalseInt();
 
     // Check to see if the nearest feature is one of the planes.
     for( INT i = 0; i < 6; i++ )
     {
         // Find the nearest point on the plane to the center of the sphere.
-        XMVECTOR Point = Center - (Planes[i] * Dist[i]);
+        DirectX::XMVECTOR Point = Center - (Planes[i] * Dist[i]);
 
         // Set w of the point to one.
-        Point = XMVectorInsert( Point, XMVectorSplatOne(), 0, 0, 0, 0, 1 );
+        Point = DirectX::XMVectorInsert( Point, DirectX::XMVectorSplatOne(), 0, 0, 0, 0, 1 );
         
         // If the point is inside the face (inside the adjacent planes) then
         // this plane is the nearest feature.
-        XMVECTOR InsideFace = XMVectorTrueInt();
+        DirectX::XMVECTOR InsideFace = DirectX::XMVectorTrueInt();
         
         for ( INT j = 0; j < 4; j++ )
         {
             INT plane_index = adjacent_faces[i][j];
 
-            InsideFace = XMVectorAndInt( InsideFace,
-                           XMVectorLessOrEqual( XMVector4Dot( Point, Planes[plane_index] ), Zero ) );
+            InsideFace = DirectX::XMVectorAndInt( InsideFace,
+                           DirectX::XMVectorLessOrEqual( DirectX::XMVector4Dot( Point, Planes[plane_index] ), Zero ) );
         }
      
         // Since we have already checked distance from the plane we know that the
         // sphere must intersect if this plane is the nearest feature.
-        Intersects = XMVectorOrInt( Intersects, 
-                                    XMVectorAndInt( XMVectorGreater( Dist[i], Zero ), InsideFace ) );
+        Intersects = DirectX::XMVectorOrInt( Intersects, 
+                                    DirectX::XMVectorAndInt( DirectX::XMVectorGreater( Dist[i], Zero ), InsideFace ) );
     }
 
-    if ( XMVector4EqualInt( Intersects, XMVectorTrueInt() ) )
+    if ( DirectX::XMVector4EqualInt( Intersects, DirectX::XMVectorTrueInt() ) )
         return 1;
 
     // Build the corners of the frustum.
-    XMVECTOR RightTop = XMVectorSet( pVolumeB->RightSlope, pVolumeB->TopSlope, 1.0f, 0.0f );
-    XMVECTOR RightBottom = XMVectorSet( pVolumeB->RightSlope, pVolumeB->BottomSlope, 1.0f, 0.0f );
-    XMVECTOR LeftTop = XMVectorSet( pVolumeB->LeftSlope, pVolumeB->TopSlope, 1.0f, 0.0f );
-    XMVECTOR LeftBottom = XMVectorSet( pVolumeB->LeftSlope, pVolumeB->BottomSlope, 1.0f, 0.0f );
-    XMVECTOR Near = XMVectorReplicatePtr( &pVolumeB->Near );
-    XMVECTOR Far = XMVectorReplicatePtr( &pVolumeB->Far );
+    DirectX::XMVECTOR RightTop = DirectX::XMVectorSet( pVolumeB->RightSlope, pVolumeB->TopSlope, 1.0f, 0.0f );
+    DirectX::XMVECTOR RightBottom = DirectX::XMVectorSet( pVolumeB->RightSlope, pVolumeB->BottomSlope, 1.0f, 0.0f );
+    DirectX::XMVECTOR LeftTop = DirectX::XMVectorSet( pVolumeB->LeftSlope, pVolumeB->TopSlope, 1.0f, 0.0f );
+    DirectX::XMVECTOR LeftBottom = DirectX::XMVectorSet( pVolumeB->LeftSlope, pVolumeB->BottomSlope, 1.0f, 0.0f );
+    DirectX::XMVECTOR Near = DirectX::XMVectorReplicatePtr( &pVolumeB->Near );
+    DirectX::XMVECTOR Far = DirectX::XMVectorReplicatePtr( &pVolumeB->Far );
 
-    XMVECTOR Corners[8];
+    DirectX::XMVECTOR Corners[8];
     Corners[0] = RightTop * Near;
     Corners[1] = RightBottom * Near;
     Corners[2] = LeftTop * Near;
@@ -2678,7 +2678,7 @@ INT IntersectSphereFrustum( const Sphere* pVolumeA, const Frustum* pVolumeB )
         { 0, 4 }, { 1, 5 }, { 2, 6 }, { 3, 7 },
     }; // Near to far
 
-    XMVECTOR RadiusSq = Radius * Radius;
+    DirectX::XMVECTOR RadiusSq = Radius * Radius;
 
     // Check to see if the nearest feature is one of the edges (or corners).
     for( INT i = 0; i < 12; i++ )
@@ -2688,18 +2688,18 @@ INT IntersectSphereFrustum( const Sphere* pVolumeA, const Frustum* pVolumeB )
 
         // Find the nearest point on the edge to the center of the sphere.
         // The corners of the frustum are included as the endpoints of the edges.
-        XMVECTOR Point = PointOnLineSegmentNearestPoint( Corners[ei0], Corners[ei1], Center );
+        DirectX::XMVECTOR Point = PointOnLineSegmentNearestPoint( Corners[ei0], Corners[ei1], Center );
 
-        XMVECTOR Delta = Center - Point;
+        DirectX::XMVECTOR Delta = Center - Point;
 
-        XMVECTOR DistSq = XMVector3Dot( Delta, Delta );
+        DirectX::XMVECTOR DistSq = DirectX::XMVector3Dot( Delta, Delta );
 
         // If the distance to the center of the sphere to the point is less than 
         // the radius of the sphere then it must intersect.
-        Intersects = XMVectorOrInt( Intersects, XMVectorLessOrEqual( DistSq, RadiusSq ) );
+        Intersects = DirectX::XMVectorOrInt( Intersects, DirectX::XMVectorLessOrEqual( DistSq, RadiusSq ) );
     }
 
-    if ( XMVector4EqualInt( Intersects, XMVectorTrueInt() ) )
+    if ( DirectX::XMVector4EqualInt( Intersects, DirectX::XMVectorTrueInt() ) )
         return 1;
 
     // The sphere must be outside the frustum.
@@ -2748,100 +2748,100 @@ INT IntersectOrientedBoxFrustum( const OrientedBox* pVolumeA, const Frustum* pVo
 
     static const XMVECTORI32 SelectY =
     {
-        XM_SELECT_0, XM_SELECT_1, XM_SELECT_0, XM_SELECT_0
+        DirectX::XM_SELECT_0, DirectX::XM_SELECT_1, DirectX::XM_SELECT_0, DirectX::XM_SELECT_0
     };
     static const XMVECTORI32 SelectZ =
     {
-        XM_SELECT_0, XM_SELECT_0, XM_SELECT_1, XM_SELECT_0
+        DirectX::XM_SELECT_0, DirectX::XM_SELECT_0, DirectX::XM_SELECT_1, DirectX::XM_SELECT_0
     };
 
-    XMVECTOR Zero = XMVectorZero();
+    DirectX::XMVECTOR Zero = DirectX::XMVectorZero();
 
     // Build the frustum planes.
-    XMVECTOR Planes[6];
-    Planes[0] = XMVectorSet( 0.0f, 0.0f, -1.0f, pVolumeB->Near );
-    Planes[1] = XMVectorSet( 0.0f, 0.0f, 1.0f, -pVolumeB->Far );
-    Planes[2] = XMVectorSet( 1.0f, 0.0f, -pVolumeB->RightSlope, 0.0f );
-    Planes[3] = XMVectorSet( -1.0f, 0.0f, pVolumeB->LeftSlope, 0.0f );
-    Planes[4] = XMVectorSet( 0.0f, 1.0f, -pVolumeB->TopSlope, 0.0f );
-    Planes[5] = XMVectorSet( 0.0f, -1.0f, pVolumeB->BottomSlope, 0.0f );
+    DirectX::XMVECTOR Planes[6];
+    Planes[0] = DirectX::XMVectorSet( 0.0f, 0.0f, -1.0f, pVolumeB->Near );
+    Planes[1] = DirectX::XMVectorSet( 0.0f, 0.0f, 1.0f, -pVolumeB->Far );
+    Planes[2] = DirectX::XMVectorSet( 1.0f, 0.0f, -pVolumeB->RightSlope, 0.0f );
+    Planes[3] = DirectX::XMVectorSet( -1.0f, 0.0f, pVolumeB->LeftSlope, 0.0f );
+    Planes[4] = DirectX::XMVectorSet( 0.0f, 1.0f, -pVolumeB->TopSlope, 0.0f );
+    Planes[5] = DirectX::XMVectorSet( 0.0f, -1.0f, pVolumeB->BottomSlope, 0.0f );
 
     // Load origin and orientation of the frustum.
-    XMVECTOR Origin = XMLoadFloat3( &pVolumeB->Origin );
-    XMVECTOR FrustumOrientation = XMLoadFloat4( &pVolumeB->Orientation );
+    DirectX::XMVECTOR Origin = XMLoadFloat3( &pVolumeB->Origin );
+    DirectX::XMVECTOR FrustumOrientation = XMLoadFloat4( &pVolumeB->Orientation );
 
     XMASSERT( XMQuaternionIsUnit( FrustumOrientation ) );
 
     // Load the box.
-    XMVECTOR Center = XMLoadFloat3( &pVolumeA->Center );
-    XMVECTOR Extents = XMLoadFloat3( &pVolumeA->Extents );
-    XMVECTOR BoxOrientation = XMLoadFloat4( &pVolumeA->Orientation );
+    DirectX::XMVECTOR Center = XMLoadFloat3( &pVolumeA->Center );
+    DirectX::XMVECTOR Extents = XMLoadFloat3( &pVolumeA->Extents );
+    DirectX::XMVECTOR BoxOrientation = XMLoadFloat4( &pVolumeA->Orientation );
 
     XMASSERT( XMQuaternionIsUnit( BoxOrientation ) );
 
     // Transform the oriented box into the space of the frustum in order to 
     // minimize the number of transforms we have to do.
-    Center = XMVector3InverseRotate( Center - Origin, FrustumOrientation );
+    Center = DirectX::XMVector3InverseRotate( Center - Origin, FrustumOrientation );
     BoxOrientation = XMQuaternionMultiply( BoxOrientation, XMQuaternionConjugate( FrustumOrientation ) );
 
     // Set w of the center to one so we can dot4 with the plane.
-    Center = XMVectorInsert( Center, XMVectorSplatOne(), 0, 0, 0, 0, 1);
+    Center = DirectX::XMVectorInsert( Center, DirectX::XMVectorSplatOne(), 0, 0, 0, 0, 1);
 
     // Build the 3x3 rotation matrix that defines the box axes.
-    XMMATRIX R = XMMatrixRotationQuaternion( BoxOrientation );
+    DirectX::XMMATRIX R = DirectX::XMMatrixRotationQuaternion( BoxOrientation );
 
     // Check against each plane of the frustum.
-    XMVECTOR Outside = XMVectorFalseInt();
-    XMVECTOR InsideAll = XMVectorTrueInt();
-    XMVECTOR CenterInsideAll = XMVectorTrueInt();
+    DirectX::XMVECTOR Outside = DirectX::XMVectorFalseInt();
+    DirectX::XMVECTOR InsideAll = DirectX::XMVectorTrueInt();
+    DirectX::XMVECTOR CenterInsideAll = DirectX::XMVectorTrueInt();
 
     for( INT i = 0; i < 6; i++ )
     {
         // Compute the distance to the center of the box.
-        XMVECTOR Dist = XMVector4Dot( Center, Planes[i] );
+        DirectX::XMVECTOR Dist = DirectX::XMVector4Dot( Center, Planes[i] );
 
         // Project the axes of the box onto the normal of the plane.  Half the
         // length of the projection (sometime called the "radius") is equal to
         // h(u) * abs(n dot b(u))) + h(v) * abs(n dot b(v)) + h(w) * abs(n dot b(w))
         // where h(i) are extents of the box, n is the plane normal, and b(i) are the 
         // axes of the box.
-        XMVECTOR Radius = XMVector3Dot( Planes[i], R.r[0] );
-        Radius = XMVectorSelect( Radius, XMVector3Dot( Planes[i], R.r[1] ), SelectY );
-        Radius = XMVectorSelect( Radius, XMVector3Dot( Planes[i], R.r[2] ), SelectZ );
-        Radius = XMVector3Dot( Extents, XMVectorAbs( Radius ) );
+        DirectX::XMVECTOR Radius = DirectX::XMVector3Dot( Planes[i], R.r[0] );
+        Radius = DirectX::XMVectorSelect( Radius, DirectX::XMVector3Dot( Planes[i], R.r[1] ), SelectY );
+        Radius = DirectX::XMVectorSelect( Radius, DirectX::XMVector3Dot( Planes[i], R.r[2] ), SelectZ );
+        Radius = DirectX::XMVector3Dot( Extents, DirectX::XMVectorAbs( Radius ) );
 
         // Outside the plane?
-        Outside = XMVectorOrInt( Outside, XMVectorGreater( Dist, Radius ) );
+        Outside = DirectX::XMVectorOrInt( Outside, DirectX::XMVectorGreater( Dist, Radius ) );
 
         // Fully inside the plane?
-        InsideAll = XMVectorAndInt( InsideAll, XMVectorLessOrEqual( Dist, -Radius ) );
+        InsideAll = DirectX::XMVectorAndInt( InsideAll, DirectX::XMVectorLessOrEqual( Dist, -Radius ) );
 
         // Check if the center is inside the plane.
-        CenterInsideAll = XMVectorAndInt( CenterInsideAll, XMVectorLessOrEqual( Dist, Zero ) );
+        CenterInsideAll = DirectX::XMVectorAndInt( CenterInsideAll, DirectX::XMVectorLessOrEqual( Dist, Zero ) );
     }
 
     // If the box is outside any of the planes it is outside. 
-    if ( XMVector4EqualInt( Outside, XMVectorTrueInt() ) )
+    if ( DirectX::XMVector4EqualInt( Outside, DirectX::XMVectorTrueInt() ) )
         return 0;
 
     // If the box is inside all planes it is fully inside.
-    if ( XMVector4EqualInt( InsideAll, XMVectorTrueInt() ) )
+    if ( DirectX::XMVector4EqualInt( InsideAll, DirectX::XMVectorTrueInt() ) )
         return 2;
 
     // If the center of the box is inside all planes and the box intersects 
     // one or more planes then it must intersect.
-    if ( XMVector4EqualInt( CenterInsideAll, XMVectorTrueInt() ) )
+    if ( DirectX::XMVector4EqualInt( CenterInsideAll, DirectX::XMVectorTrueInt() ) )
         return 1;
 
     // Build the corners of the frustum.
-    XMVECTOR RightTop = XMVectorSet( pVolumeB->RightSlope, pVolumeB->TopSlope, 1.0f, 0.0f );
-    XMVECTOR RightBottom = XMVectorSet( pVolumeB->RightSlope, pVolumeB->BottomSlope, 1.0f, 0.0f );
-    XMVECTOR LeftTop = XMVectorSet( pVolumeB->LeftSlope, pVolumeB->TopSlope, 1.0f, 0.0f );
-    XMVECTOR LeftBottom = XMVectorSet( pVolumeB->LeftSlope, pVolumeB->BottomSlope, 1.0f, 0.0f );
-    XMVECTOR Near = XMVectorReplicatePtr( &pVolumeB->Near );
-    XMVECTOR Far = XMVectorReplicatePtr( &pVolumeB->Far );
+    DirectX::XMVECTOR RightTop = DirectX::XMVectorSet( pVolumeB->RightSlope, pVolumeB->TopSlope, 1.0f, 0.0f );
+    DirectX::XMVECTOR RightBottom = DirectX::XMVectorSet( pVolumeB->RightSlope, pVolumeB->BottomSlope, 1.0f, 0.0f );
+    DirectX::XMVECTOR LeftTop = DirectX::XMVectorSet( pVolumeB->LeftSlope, pVolumeB->TopSlope, 1.0f, 0.0f );
+    DirectX::XMVECTOR LeftBottom = DirectX::XMVectorSet( pVolumeB->LeftSlope, pVolumeB->BottomSlope, 1.0f, 0.0f );
+    DirectX::XMVECTOR Near = DirectX::XMVectorReplicatePtr( &pVolumeB->Near );
+    DirectX::XMVECTOR Far = DirectX::XMVectorReplicatePtr( &pVolumeB->Far );
 
-    XMVECTOR Corners[8];
+    DirectX::XMVECTOR Corners[8];
     Corners[0] = RightTop * Near;
     Corners[1] = RightBottom * Near;
     Corners[2] = LeftTop * Near;
@@ -2854,39 +2854,39 @@ INT IntersectOrientedBoxFrustum( const OrientedBox* pVolumeA, const Frustum* pVo
     // Test against box axes (3)
     {
         // Find the min/max values of the projection of the frustum onto each axis.
-        XMVECTOR FrustumMin, FrustumMax;
+        DirectX::XMVECTOR FrustumMin, FrustumMax;
 
-        FrustumMin = XMVector3Dot( Corners[0], R.r[0] );
-        FrustumMin = XMVectorSelect( FrustumMin, XMVector3Dot( Corners[0], R.r[1] ), SelectY );
-        FrustumMin = XMVectorSelect( FrustumMin, XMVector3Dot( Corners[0], R.r[2] ), SelectZ );
+        FrustumMin = DirectX::XMVector3Dot( Corners[0], R.r[0] );
+        FrustumMin = DirectX::XMVectorSelect( FrustumMin, DirectX::XMVector3Dot( Corners[0], R.r[1] ), SelectY );
+        FrustumMin = DirectX::XMVectorSelect( FrustumMin, DirectX::XMVector3Dot( Corners[0], R.r[2] ), SelectZ );
         FrustumMax = FrustumMin;
 
         for( INT i = 1; i < 8; i++ )
         {
-            XMVECTOR Temp = XMVector3Dot( Corners[i], R.r[0] );
-            Temp = XMVectorSelect( Temp, XMVector3Dot( Corners[i], R.r[1] ), SelectY );
-            Temp = XMVectorSelect( Temp, XMVector3Dot( Corners[i], R.r[2] ), SelectZ );
+            DirectX::XMVECTOR Temp = DirectX::XMVector3Dot( Corners[i], R.r[0] );
+            Temp = DirectX::XMVectorSelect( Temp, DirectX::XMVector3Dot( Corners[i], R.r[1] ), SelectY );
+            Temp = DirectX::XMVectorSelect( Temp, DirectX::XMVector3Dot( Corners[i], R.r[2] ), SelectZ );
 
-            FrustumMin = XMVectorMin( FrustumMin, Temp );
-            FrustumMax = XMVectorMax( FrustumMax, Temp );
+            FrustumMin = DirectX::XMVectorMin( FrustumMin, Temp );
+            FrustumMax = DirectX::XMVectorMax( FrustumMax, Temp );
         }
 
         // Project the center of the box onto the axes.
-        XMVECTOR BoxDist = XMVector3Dot( Center, R.r[0] );
-        BoxDist = XMVectorSelect( BoxDist, XMVector3Dot( Center, R.r[1] ), SelectY );
-        BoxDist = XMVectorSelect( BoxDist, XMVector3Dot( Center, R.r[2] ), SelectZ );
+        DirectX::XMVECTOR BoxDist = DirectX::XMVector3Dot( Center, R.r[0] );
+        BoxDist = DirectX::XMVectorSelect( BoxDist, DirectX::XMVector3Dot( Center, R.r[1] ), SelectY );
+        BoxDist = DirectX::XMVectorSelect( BoxDist, DirectX::XMVector3Dot( Center, R.r[2] ), SelectZ );
 
         // The projection of the box onto the axis is just its Center and Extents.
         // if (min > box_max || max < box_min) reject;
-        XMVECTOR Result = XMVectorOrInt( XMVectorGreater( FrustumMin, BoxDist + Extents ),
-                                          XMVectorLess( FrustumMax, BoxDist - Extents ) );
+        DirectX::XMVECTOR Result = DirectX::XMVectorOrInt( DirectX::XMVectorGreater( FrustumMin, BoxDist + Extents ),
+                                          DirectX::XMVectorLess( FrustumMax, BoxDist - Extents ) );
 
-        if( XMVector3AnyTrue( Result ) )
+        if( DirectX::XMVector3AnyTrue( Result ) )
             return 0;
     }
 
     // Test against edge/edge axes (3*6).
-    XMVECTOR FrustumEdgeAxis[6];
+    DirectX::XMVECTOR FrustumEdgeAxis[6];
 
     FrustumEdgeAxis[0] = RightTop;
     FrustumEdgeAxis[1] = RightBottom;
@@ -2900,36 +2900,36 @@ INT IntersectOrientedBoxFrustum( const OrientedBox* pVolumeA, const Frustum* pVo
         for( INT j = 0; j < 6; j++ )
         {
             // Compute the axis we are going to test.
-            XMVECTOR Axis = XMVector3Cross( R.r[i], FrustumEdgeAxis[j] );
+            DirectX::XMVECTOR Axis = DirectX::XMVector3Cross( R.r[i], FrustumEdgeAxis[j] );
 
             // Find the min/max values of the projection of the frustum onto the axis.
-            XMVECTOR FrustumMin, FrustumMax;
+            DirectX::XMVECTOR FrustumMin, FrustumMax;
 
-            FrustumMin = FrustumMax = XMVector3Dot( Axis, Corners[0] );
+            FrustumMin = FrustumMax = DirectX::XMVector3Dot( Axis, Corners[0] );
 
             for( INT k = 1; k < 8; k++ )
             {
-                XMVECTOR Temp = XMVector3Dot( Axis, Corners[k] );
-                FrustumMin = XMVectorMin( FrustumMin, Temp );
-                FrustumMax = XMVectorMax( FrustumMax, Temp );
+                DirectX::XMVECTOR Temp = DirectX::XMVector3Dot( Axis, Corners[k] );
+                FrustumMin = DirectX::XMVectorMin( FrustumMin, Temp );
+                FrustumMax = DirectX::XMVectorMax( FrustumMax, Temp );
             }
 
             // Project the center of the box onto the axis.
-            XMVECTOR Dist = XMVector3Dot( Center, Axis );
+            DirectX::XMVECTOR Dist = DirectX::XMVector3Dot( Center, Axis );
 
             // Project the axes of the box onto the axis to find the "radius" of the box.
-            XMVECTOR Radius = XMVector3Dot( Axis, R.r[0] );
-            Radius = XMVectorSelect( Radius, XMVector3Dot( Axis, R.r[1] ), SelectY );
-            Radius = XMVectorSelect( Radius, XMVector3Dot( Axis, R.r[2] ), SelectZ );
-            Radius = XMVector3Dot( Extents, XMVectorAbs( Radius ) );
+            DirectX::XMVECTOR Radius = DirectX::XMVector3Dot( Axis, R.r[0] );
+            Radius = DirectX::XMVectorSelect( Radius, DirectX::XMVector3Dot( Axis, R.r[1] ), SelectY );
+            Radius = DirectX::XMVectorSelect( Radius, DirectX::XMVector3Dot( Axis, R.r[2] ), SelectZ );
+            Radius = DirectX::XMVector3Dot( Extents, DirectX::XMVectorAbs( Radius ) );
 
             // if (center > max + radius || center < min - radius) reject;
-            Outside = XMVectorOrInt( Outside, XMVectorGreater( Dist, FrustumMax + Radius ) );
-            Outside = XMVectorOrInt( Outside, XMVectorLess( Dist, FrustumMin - Radius ) );
+            Outside = DirectX::XMVectorOrInt( Outside, DirectX::XMVectorGreater( Dist, FrustumMax + Radius ) );
+            Outside = DirectX::XMVectorOrInt( Outside, DirectX::XMVectorLess( Dist, FrustumMin - Radius ) );
         }
     }
 
-    if ( XMVector4EqualInt( Outside, XMVectorTrueInt() ) )
+    if ( DirectX::XMVector4EqualInt( Outside, DirectX::XMVectorTrueInt() ) )
         return 0;
 
     // If we did not find a separating plane then the box must intersect the frustum.
@@ -2950,53 +2950,53 @@ INT IntersectFrustumFrustum( const Frustum* pVolumeA, const Frustum* pVolumeB )
     XMASSERT( pVolumeB );
 
     // Load origin and orientation of frustum B.
-    XMVECTOR OriginB = XMLoadFloat3( &pVolumeB->Origin );
-    XMVECTOR OrientationB = XMLoadFloat4( &pVolumeB->Orientation );
+    DirectX::XMVECTOR OriginB = XMLoadFloat3( &pVolumeB->Origin );
+    DirectX::XMVECTOR OrientationB = XMLoadFloat4( &pVolumeB->Orientation );
 
     XMASSERT( XMQuaternionIsUnit( OrientationB ) );
 
     // Build the planes of frustum B.
-    XMVECTOR AxisB[6];
-    AxisB[0] = XMVectorSet( 0.0f, 0.0f, -1.0f, 0.0f );
-    AxisB[1] = XMVectorSet( 0.0f, 0.0f, 1.0f, 0.0f );
-    AxisB[2] = XMVectorSet( 1.0f, 0.0f, -pVolumeB->RightSlope, 0.0f );
-    AxisB[3] = XMVectorSet( -1.0f, 0.0f, pVolumeB->LeftSlope, 0.0f );
-    AxisB[4] = XMVectorSet( 0.0f, 1.0f, -pVolumeB->TopSlope, 0.0f );
-    AxisB[5] = XMVectorSet( 0.0f, -1.0f, pVolumeB->BottomSlope, 0.0f );
+    DirectX::XMVECTOR AxisB[6];
+    AxisB[0] = DirectX::XMVectorSet( 0.0f, 0.0f, -1.0f, 0.0f );
+    AxisB[1] = DirectX::XMVectorSet( 0.0f, 0.0f, 1.0f, 0.0f );
+    AxisB[2] = DirectX::XMVectorSet( 1.0f, 0.0f, -pVolumeB->RightSlope, 0.0f );
+    AxisB[3] = DirectX::XMVectorSet( -1.0f, 0.0f, pVolumeB->LeftSlope, 0.0f );
+    AxisB[4] = DirectX::XMVectorSet( 0.0f, 1.0f, -pVolumeB->TopSlope, 0.0f );
+    AxisB[5] = DirectX::XMVectorSet( 0.0f, -1.0f, pVolumeB->BottomSlope, 0.0f );
 
-    XMVECTOR PlaneDistB[6];
-    PlaneDistB[0] = -XMVectorReplicatePtr( &pVolumeB->Near );
-    PlaneDistB[1] = XMVectorReplicatePtr( &pVolumeB->Far );
-    PlaneDistB[2] = XMVectorZero();
-    PlaneDistB[3] = XMVectorZero();
-    PlaneDistB[4] = XMVectorZero();
-    PlaneDistB[5] = XMVectorZero();
+    DirectX::XMVECTOR PlaneDistB[6];
+    PlaneDistB[0] = -DirectX::XMVectorReplicatePtr( &pVolumeB->Near );
+    PlaneDistB[1] = DirectX::XMVectorReplicatePtr( &pVolumeB->Far );
+    PlaneDistB[2] = DirectX::XMVectorZero();
+    PlaneDistB[3] = DirectX::XMVectorZero();
+    PlaneDistB[4] = DirectX::XMVectorZero();
+    PlaneDistB[5] = DirectX::XMVectorZero();
 
     // Load origin and orientation of frustum A.
-    XMVECTOR OriginA = XMLoadFloat3( &pVolumeA->Origin );
-    XMVECTOR OrientationA = XMLoadFloat4( &pVolumeA->Orientation );
+    DirectX::XMVECTOR OriginA = XMLoadFloat3( &pVolumeA->Origin );
+    DirectX::XMVECTOR OrientationA = XMLoadFloat4( &pVolumeA->Orientation );
 
     XMASSERT( XMQuaternionIsUnit( OrientationA ) );
 
     // Transform frustum A into the space of the frustum B in order to 
     // minimize the number of transforms we have to do.
-    OriginA = XMVector3InverseRotate( OriginA - OriginB, OrientationB );
+    OriginA = DirectX::XMVector3InverseRotate( OriginA - OriginB, OrientationB );
     OrientationA = XMQuaternionMultiply( OrientationA, XMQuaternionConjugate( OrientationB ) );
 
     // Build the corners of frustum A (in the local space of B).
-    XMVECTOR RightTopA = XMVectorSet( pVolumeA->RightSlope, pVolumeA->TopSlope, 1.0f, 0.0f );
-    XMVECTOR RightBottomA = XMVectorSet( pVolumeA->RightSlope, pVolumeA->BottomSlope, 1.0f, 0.0f );
-    XMVECTOR LeftTopA = XMVectorSet( pVolumeA->LeftSlope, pVolumeA->TopSlope, 1.0f, 0.0f );
-    XMVECTOR LeftBottomA = XMVectorSet( pVolumeA->LeftSlope, pVolumeA->BottomSlope, 1.0f, 0.0f );
-    XMVECTOR NearA = XMVectorReplicatePtr( &pVolumeA->Near );
-    XMVECTOR FarA = XMVectorReplicatePtr( &pVolumeA->Far );
+    DirectX::XMVECTOR RightTopA = DirectX::XMVectorSet( pVolumeA->RightSlope, pVolumeA->TopSlope, 1.0f, 0.0f );
+    DirectX::XMVECTOR RightBottomA = DirectX::XMVectorSet( pVolumeA->RightSlope, pVolumeA->BottomSlope, 1.0f, 0.0f );
+    DirectX::XMVECTOR LeftTopA = DirectX::XMVectorSet( pVolumeA->LeftSlope, pVolumeA->TopSlope, 1.0f, 0.0f );
+    DirectX::XMVECTOR LeftBottomA = DirectX::XMVectorSet( pVolumeA->LeftSlope, pVolumeA->BottomSlope, 1.0f, 0.0f );
+    DirectX::XMVECTOR NearA = DirectX::XMVectorReplicatePtr( &pVolumeA->Near );
+    DirectX::XMVECTOR FarA = DirectX::XMVectorReplicatePtr( &pVolumeA->Far );
 
-    RightTopA = XMVector3Rotate( RightTopA, OrientationA );
-    RightBottomA = XMVector3Rotate( RightBottomA, OrientationA );
-    LeftTopA = XMVector3Rotate( LeftTopA, OrientationA );
-    LeftBottomA = XMVector3Rotate( LeftBottomA, OrientationA );
+    RightTopA = DirectX::XMVector3Rotate( RightTopA, OrientationA );
+    RightBottomA = DirectX::XMVector3Rotate( RightBottomA, OrientationA );
+    LeftTopA = DirectX::XMVector3Rotate( LeftTopA, OrientationA );
+    LeftBottomA = DirectX::XMVector3Rotate( LeftBottomA, OrientationA );
 
-    XMVECTOR CornersA[8];
+    DirectX::XMVECTOR CornersA[8];
     CornersA[0] = OriginA + RightTopA * NearA;
     CornersA[1] = OriginA + RightBottomA * NearA;
     CornersA[2] = OriginA + LeftTopA * NearA;
@@ -3007,47 +3007,47 @@ INT IntersectFrustumFrustum( const Frustum* pVolumeA, const Frustum* pVolumeB )
     CornersA[7] = OriginA + LeftBottomA * FarA;
 
     // Check frustum A against each plane of frustum B.
-    XMVECTOR Outside = XMVectorFalseInt();
-    XMVECTOR InsideAll = XMVectorTrueInt();
+    DirectX::XMVECTOR Outside = DirectX::XMVectorFalseInt();
+    DirectX::XMVECTOR InsideAll = DirectX::XMVectorTrueInt();
 
     for( INT i = 0; i < 6; i++ )
     {
         // Find the min/max projection of the frustum onto the plane normal.
-        XMVECTOR Min, Max;
+        DirectX::XMVECTOR Min, Max;
 
-        Min = Max = XMVector3Dot( AxisB[i], CornersA[0] );
+        Min = Max = DirectX::XMVector3Dot( AxisB[i], CornersA[0] );
 
         for( INT j = 1; j < 8; j++ )
         {
-            XMVECTOR Temp = XMVector3Dot( AxisB[i], CornersA[j] );
-            Min = XMVectorMin( Min, Temp );
-            Max = XMVectorMax( Max, Temp );
+            DirectX::XMVECTOR Temp = DirectX::XMVector3Dot( AxisB[i], CornersA[j] );
+            Min = DirectX::XMVectorMin( Min, Temp );
+            Max = DirectX::XMVectorMax( Max, Temp );
         }
 
         // Outside the plane?
-        Outside = XMVectorOrInt( Outside, XMVectorGreater( Min, PlaneDistB[i] ) );
+        Outside = DirectX::XMVectorOrInt( Outside, DirectX::XMVectorGreater( Min, PlaneDistB[i] ) );
 
         // Fully inside the plane?
-        InsideAll = XMVectorAndInt( InsideAll, XMVectorLessOrEqual( Max, PlaneDistB[i] ) );
+        InsideAll = DirectX::XMVectorAndInt( InsideAll, DirectX::XMVectorLessOrEqual( Max, PlaneDistB[i] ) );
     }
 
     // If the frustum A is outside any of the planes of frustum B it is outside. 
-    if ( XMVector4EqualInt( Outside, XMVectorTrueInt() ) )
+    if ( DirectX::XMVector4EqualInt( Outside, DirectX::XMVectorTrueInt() ) )
         return 0;
 
     // If frustum A is inside all planes of frustum B it is fully inside.
-    if ( XMVector4EqualInt( InsideAll, XMVectorTrueInt() ) )
+    if ( DirectX::XMVector4EqualInt( InsideAll, DirectX::XMVectorTrueInt() ) )
         return 2;
 
     // Build the corners of frustum B.
-    XMVECTOR RightTopB = XMVectorSet( pVolumeB->RightSlope, pVolumeB->TopSlope, 1.0f, 0.0f );
-    XMVECTOR RightBottomB = XMVectorSet( pVolumeB->RightSlope, pVolumeB->BottomSlope, 1.0f, 0.0f );
-    XMVECTOR LeftTopB = XMVectorSet( pVolumeB->LeftSlope, pVolumeB->TopSlope, 1.0f, 0.0f );
-    XMVECTOR LeftBottomB = XMVectorSet( pVolumeB->LeftSlope, pVolumeB->BottomSlope, 1.0f, 0.0f );
-    XMVECTOR NearB = XMVectorReplicatePtr( &pVolumeB->Near );
-    XMVECTOR FarB = XMVectorReplicatePtr( &pVolumeB->Far );
+    DirectX::XMVECTOR RightTopB = DirectX::XMVectorSet( pVolumeB->RightSlope, pVolumeB->TopSlope, 1.0f, 0.0f );
+    DirectX::XMVECTOR RightBottomB = DirectX::XMVectorSet( pVolumeB->RightSlope, pVolumeB->BottomSlope, 1.0f, 0.0f );
+    DirectX::XMVECTOR LeftTopB = DirectX::XMVectorSet( pVolumeB->LeftSlope, pVolumeB->TopSlope, 1.0f, 0.0f );
+    DirectX::XMVECTOR LeftBottomB = DirectX::XMVectorSet( pVolumeB->LeftSlope, pVolumeB->BottomSlope, 1.0f, 0.0f );
+    DirectX::XMVECTOR NearB = DirectX::XMVectorReplicatePtr( &pVolumeB->Near );
+    DirectX::XMVECTOR FarB = DirectX::XMVectorReplicatePtr( &pVolumeB->Far );
 
-    XMVECTOR CornersB[8];
+    DirectX::XMVECTOR CornersB[8];
     CornersB[0] = RightTopB * NearB;
     CornersB[1] = RightBottomB * NearB;
     CornersB[2] = LeftTopB * NearB;
@@ -3058,54 +3058,54 @@ INT IntersectFrustumFrustum( const Frustum* pVolumeA, const Frustum* pVolumeB )
     CornersB[7] = LeftBottomB * FarB;
 
     // Build the planes of frustum A (in the local space of B).
-    XMVECTOR AxisA[6];
-    XMVECTOR PlaneDistA[6];
+    DirectX::XMVECTOR AxisA[6];
+    DirectX::XMVECTOR PlaneDistA[6];
 
-    AxisA[0] = XMVectorSet( 0.0f, 0.0f, -1.0f, 0.0f );
-    AxisA[1] = XMVectorSet( 0.0f, 0.0f, 1.0f, 0.0f );
-    AxisA[2] = XMVectorSet( 1.0f, 0.0f, -pVolumeA->RightSlope, 0.0f );
-    AxisA[3] = XMVectorSet( -1.0f, 0.0f, pVolumeA->LeftSlope, 0.0f );
-    AxisA[4] = XMVectorSet( 0.0f, 1.0f, -pVolumeA->TopSlope, 0.0f );
-    AxisA[5] = XMVectorSet( 0.0f, -1.0f, pVolumeA->BottomSlope, 0.0f );
+    AxisA[0] = DirectX::XMVectorSet( 0.0f, 0.0f, -1.0f, 0.0f );
+    AxisA[1] = DirectX::XMVectorSet( 0.0f, 0.0f, 1.0f, 0.0f );
+    AxisA[2] = DirectX::XMVectorSet( 1.0f, 0.0f, -pVolumeA->RightSlope, 0.0f );
+    AxisA[3] = DirectX::XMVectorSet( -1.0f, 0.0f, pVolumeA->LeftSlope, 0.0f );
+    AxisA[4] = DirectX::XMVectorSet( 0.0f, 1.0f, -pVolumeA->TopSlope, 0.0f );
+    AxisA[5] = DirectX::XMVectorSet( 0.0f, -1.0f, pVolumeA->BottomSlope, 0.0f );
 
-    AxisA[0] = XMVector3Rotate( AxisA[0], OrientationA );
+    AxisA[0] = DirectX::XMVector3Rotate( AxisA[0], OrientationA );
     AxisA[1] = -AxisA[0];
-    AxisA[2] = XMVector3Rotate( AxisA[2], OrientationA );
-    AxisA[3] = XMVector3Rotate( AxisA[3], OrientationA );
-    AxisA[4] = XMVector3Rotate( AxisA[4], OrientationA );
-    AxisA[5] = XMVector3Rotate( AxisA[5], OrientationA );
+    AxisA[2] = DirectX::XMVector3Rotate( AxisA[2], OrientationA );
+    AxisA[3] = DirectX::XMVector3Rotate( AxisA[3], OrientationA );
+    AxisA[4] = DirectX::XMVector3Rotate( AxisA[4], OrientationA );
+    AxisA[5] = DirectX::XMVector3Rotate( AxisA[5], OrientationA );
 
-    PlaneDistA[0] = XMVector3Dot( AxisA[0], CornersA[0] );  // Re-use corner on near plane.
-    PlaneDistA[1] = XMVector3Dot( AxisA[1], CornersA[4] );  // Re-use corner on far plane.
-    PlaneDistA[2] = XMVector3Dot( AxisA[2], OriginA );
-    PlaneDistA[3] = XMVector3Dot( AxisA[3], OriginA );
-    PlaneDistA[4] = XMVector3Dot( AxisA[4], OriginA );
-    PlaneDistA[5] = XMVector3Dot( AxisA[5], OriginA );
+    PlaneDistA[0] = DirectX::XMVector3Dot( AxisA[0], CornersA[0] );  // Re-use corner on near plane.
+    PlaneDistA[1] = DirectX::XMVector3Dot( AxisA[1], CornersA[4] );  // Re-use corner on far plane.
+    PlaneDistA[2] = DirectX::XMVector3Dot( AxisA[2], OriginA );
+    PlaneDistA[3] = DirectX::XMVector3Dot( AxisA[3], OriginA );
+    PlaneDistA[4] = DirectX::XMVector3Dot( AxisA[4], OriginA );
+    PlaneDistA[5] = DirectX::XMVector3Dot( AxisA[5], OriginA );
 
     // Check each axis of frustum A for a seperating plane (5).
     for( INT i = 0; i < 6; i++ )
     {
         // Find the minimum projection of the frustum onto the plane normal.
-        XMVECTOR Min;
+        DirectX::XMVECTOR Min;
 
-        Min = XMVector3Dot( AxisA[i], CornersB[0] );
+        Min = DirectX::XMVector3Dot( AxisA[i], CornersB[0] );
 
         for( INT j = 1; j < 8; j++ )
         {
-            XMVECTOR Temp = XMVector3Dot( AxisA[i], CornersB[j] );
-            Min = XMVectorMin( Min, Temp );
+            DirectX::XMVECTOR Temp = DirectX::XMVector3Dot( AxisA[i], CornersB[j] );
+            Min = DirectX::XMVectorMin( Min, Temp );
         }
 
         // Outside the plane?
-        Outside = XMVectorOrInt( Outside, XMVectorGreater( Min, PlaneDistA[i] ) );
+        Outside = DirectX::XMVectorOrInt( Outside, DirectX::XMVectorGreater( Min, PlaneDistA[i] ) );
     }
 
     // If the frustum B is outside any of the planes of frustum A it is outside. 
-    if ( XMVector4EqualInt( Outside, XMVectorTrueInt() ) )
+    if ( DirectX::XMVector4EqualInt( Outside, DirectX::XMVectorTrueInt() ) )
         return 0;
 
     // Check edge/edge axes (6 * 6).
-    XMVECTOR FrustumEdgeAxisA[6];
+    DirectX::XMVECTOR FrustumEdgeAxisA[6];
     FrustumEdgeAxisA[0] = RightTopA;
     FrustumEdgeAxisA[1] = RightBottomA;
     FrustumEdgeAxisA[2] = LeftTopA;
@@ -3113,7 +3113,7 @@ INT IntersectFrustumFrustum( const Frustum* pVolumeA, const Frustum* pVolumeB )
     FrustumEdgeAxisA[4] = RightTopA - LeftTopA;
     FrustumEdgeAxisA[5] = LeftBottomA - LeftTopA;
 
-    XMVECTOR FrustumEdgeAxisB[6];
+    DirectX::XMVECTOR FrustumEdgeAxisB[6];
     FrustumEdgeAxisB[0] = RightTopB;
     FrustumEdgeAxisB[1] = RightBottomB;
     FrustumEdgeAxisB[2] = LeftTopB;
@@ -3126,34 +3126,34 @@ INT IntersectFrustumFrustum( const Frustum* pVolumeA, const Frustum* pVolumeB )
         for( INT j = 0; j < 6; j++ )
         {
             // Compute the axis we are going to test.
-            XMVECTOR Axis = XMVector3Cross( FrustumEdgeAxisA[i], FrustumEdgeAxisB[j] );
+            DirectX::XMVECTOR Axis = DirectX::XMVector3Cross( FrustumEdgeAxisA[i], FrustumEdgeAxisB[j] );
 
             // Find the min/max values of the projection of both frustums onto the axis.
-            XMVECTOR MinA, MaxA;
-            XMVECTOR MinB, MaxB;
+            DirectX::XMVECTOR MinA, MaxA;
+            DirectX::XMVECTOR MinB, MaxB;
 
-            MinA = MaxA = XMVector3Dot( Axis, CornersA[0] );
-            MinB = MaxB = XMVector3Dot( Axis, CornersB[0] );
+            MinA = MaxA = DirectX::XMVector3Dot( Axis, CornersA[0] );
+            MinB = MaxB = DirectX::XMVector3Dot( Axis, CornersB[0] );
 
             for( INT k = 1; k < 8; k++ )
             {
-                XMVECTOR TempA = XMVector3Dot( Axis, CornersA[k] );
-                MinA = XMVectorMin( MinA, TempA );
-                MaxA = XMVectorMax( MaxA, TempA );
+                DirectX::XMVECTOR TempA = DirectX::XMVector3Dot( Axis, CornersA[k] );
+                MinA = DirectX::XMVectorMin( MinA, TempA );
+                MaxA = DirectX::XMVectorMax( MaxA, TempA );
 
-                XMVECTOR TempB = XMVector3Dot( Axis, CornersB[k] );
-                MinB = XMVectorMin( MinB, TempB );
-                MaxB = XMVectorMax( MaxB, TempB );
+                DirectX::XMVECTOR TempB = DirectX::XMVector3Dot( Axis, CornersB[k] );
+                MinB = DirectX::XMVectorMin( MinB, TempB );
+                MaxB = DirectX::XMVectorMax( MaxB, TempB );
             }
 
             // if (MinA > MaxB || MinB > MaxA) reject
-            Outside = XMVectorOrInt( Outside, XMVectorGreater( MinA, MaxB ) );
-            Outside = XMVectorOrInt( Outside, XMVectorGreater( MinB, MaxA ) );
+            Outside = DirectX::XMVectorOrInt( Outside, DirectX::XMVectorGreater( MinA, MaxB ) );
+            Outside = DirectX::XMVectorOrInt( Outside, DirectX::XMVectorGreater( MinB, MaxA ) );
         }
     }
 
     // If there is a seperating plane, then the frustums do not intersect.
-    if ( XMVector4EqualInt( Outside, XMVectorTrueInt() ) )
+    if ( DirectX::XMVector4EqualInt( Outside, DirectX::XMVectorTrueInt() ) )
         return 0;
 
     // If we did not find a separating plane then the frustums intersect.
@@ -3163,27 +3163,27 @@ INT IntersectFrustumFrustum( const Frustum* pVolumeA, const Frustum* pVolumeB )
 
 
 //-----------------------------------------------------------------------------
-static inline void FastIntersectTrianglePlane( FXMVECTOR V0, FXMVECTOR V1, FXMVECTOR V2, CXMVECTOR Plane,
-                                        XMVECTOR& Outside, XMVECTOR& Inside )
+static inline void FastIntersectTrianglePlane( FXMVECTOR V0, DirectX::FXMVECTOR V1, DirectX::FXMVECTOR V2, CXMVECTOR Plane,
+                                        DirectX::XMVECTOR& Outside, DirectX::XMVECTOR& Inside )
 {
     // Plane0
-    XMVECTOR Dist0 = XMVector4Dot( V0, Plane );
-    XMVECTOR Dist1 = XMVector4Dot( V1, Plane );
-    XMVECTOR Dist2 = XMVector4Dot( V2, Plane );
+    DirectX::XMVECTOR Dist0 = DirectX::XMVector4Dot( V0, Plane );
+    DirectX::XMVECTOR Dist1 = DirectX::XMVector4Dot( V1, Plane );
+    DirectX::XMVECTOR Dist2 = DirectX::XMVector4Dot( V2, Plane );
 
-    XMVECTOR MinDist = XMVectorMin( Dist0, Dist1 );
-    MinDist = XMVectorMin( MinDist, Dist2 );
+    DirectX::XMVECTOR MinDist = DirectX::XMVectorMin( Dist0, Dist1 );
+    MinDist = DirectX::XMVectorMin( MinDist, Dist2 );
 
-    XMVECTOR MaxDist = XMVectorMax( Dist0, Dist1 );
-    MaxDist = XMVectorMax( MaxDist, Dist2 );
+    DirectX::XMVECTOR MaxDist = DirectX::XMVectorMax( Dist0, Dist1 );
+    MaxDist = DirectX::XMVectorMax( MaxDist, Dist2 );
 
-    XMVECTOR Zero = XMVectorZero();
+    DirectX::XMVECTOR Zero = DirectX::XMVectorZero();
 
     // Outside the plane?
-    Outside = XMVectorGreater( MinDist, Zero );
+    Outside = DirectX::XMVectorGreater( MinDist, Zero );
 
     // Fully inside the plane?
-    Inside = XMVectorLess( MaxDist, Zero );
+    Inside = DirectX::XMVectorLess( MaxDist, Zero );
 }
 
 
@@ -3194,50 +3194,50 @@ static inline void FastIntersectTrianglePlane( FXMVECTOR V0, FXMVECTOR V1, FXMVE
 //                1 = may be intersecting, 
 //                2 = triangle is inside all planes
 //-----------------------------------------------------------------------------
-INT IntersectTriangle6Planes( FXMVECTOR V0, FXMVECTOR V1, FXMVECTOR V2, CXMVECTOR Plane0, CXMVECTOR Plane1,
+INT IntersectTriangle6Planes( FXMVECTOR V0, DirectX::FXMVECTOR V1, DirectX::FXMVECTOR V2, CXMVECTOR Plane0, CXMVECTOR Plane1,
                               CXMVECTOR Plane2, CXMVECTOR Plane3, CXMVECTOR Plane4, CXMVECTOR Plane5 )
 {
-    XMVECTOR One = XMVectorSplatOne();
+    DirectX::XMVECTOR One = DirectX::XMVectorSplatOne();
 
     // Set w of the points to one so we can dot4 with a plane.
-    XMVECTOR TV0 = XMVectorInsert(V0, One, 0, 0, 0, 0, 1);
-    XMVECTOR TV1 = XMVectorInsert(V1, One, 0, 0, 0, 0, 1);
-    XMVECTOR TV2 = XMVectorInsert(V2, One, 0, 0, 0, 0, 1);
+    DirectX::XMVECTOR TV0 = DirectX::XMVectorInsert(V0, One, 0, 0, 0, 0, 1);
+    DirectX::XMVECTOR TV1 = DirectX::XMVectorInsert(V1, One, 0, 0, 0, 0, 1);
+    DirectX::XMVECTOR TV2 = DirectX::XMVectorInsert(V2, One, 0, 0, 0, 0, 1);
 
-    XMVECTOR Outside, Inside;
+    DirectX::XMVECTOR Outside, Inside;
 
     // Test against each plane.
     FastIntersectTrianglePlane( TV0, TV1, TV2, Plane0, Outside, Inside );
 
-    XMVECTOR AnyOutside = Outside;
-    XMVECTOR AllInside = Inside;
+    DirectX::XMVECTOR AnyOutside = Outside;
+    DirectX::XMVECTOR AllInside = Inside;
 
     FastIntersectTrianglePlane( TV0, TV1, TV2, Plane1, Outside, Inside );
-    AnyOutside = XMVectorOrInt( AnyOutside, Outside );
-    AllInside = XMVectorAndInt( AllInside, Inside );
+    AnyOutside = DirectX::XMVectorOrInt( AnyOutside, Outside );
+    AllInside = DirectX::XMVectorAndInt( AllInside, Inside );
 
     FastIntersectTrianglePlane( TV0, TV1, TV2, Plane2, Outside, Inside );
-    AnyOutside = XMVectorOrInt( AnyOutside, Outside );
-    AllInside = XMVectorAndInt( AllInside, Inside );
+    AnyOutside = DirectX::XMVectorOrInt( AnyOutside, Outside );
+    AllInside = DirectX::XMVectorAndInt( AllInside, Inside );
 
     FastIntersectTrianglePlane( TV0, TV1, TV2, Plane3, Outside, Inside );
-    AnyOutside = XMVectorOrInt( AnyOutside, Outside );
-    AllInside = XMVectorAndInt( AllInside, Inside );
+    AnyOutside = DirectX::XMVectorOrInt( AnyOutside, Outside );
+    AllInside = DirectX::XMVectorAndInt( AllInside, Inside );
 
     FastIntersectTrianglePlane( TV0, TV1, TV2, Plane4, Outside, Inside );
-    AnyOutside = XMVectorOrInt( AnyOutside, Outside );
-    AllInside = XMVectorAndInt( AllInside, Inside );
+    AnyOutside = DirectX::XMVectorOrInt( AnyOutside, Outside );
+    AllInside = DirectX::XMVectorAndInt( AllInside, Inside );
 
     FastIntersectTrianglePlane( TV0, TV1, TV2, Plane5, Outside, Inside );
-    AnyOutside = XMVectorOrInt( AnyOutside, Outside );
-    AllInside = XMVectorAndInt( AllInside, Inside );
+    AnyOutside = DirectX::XMVectorOrInt( AnyOutside, Outside );
+    AllInside = DirectX::XMVectorAndInt( AllInside, Inside );
 
     // If the triangle is outside any plane it is outside.
-    if ( XMVector4EqualInt( AnyOutside, XMVectorTrueInt() ) )
+    if ( DirectX::XMVector4EqualInt( AnyOutside, DirectX::XMVectorTrueInt() ) )
         return 0;
 
     // If the triangle is inside all planes it is inside.
-    if ( XMVector4EqualInt( AllInside, XMVectorTrueInt() ) )
+    if ( DirectX::XMVector4EqualInt( AllInside, DirectX::XMVectorTrueInt() ) )
         return 2;
 
     // The triangle is not inside all planes or outside a plane, it may intersect.
@@ -3247,16 +3247,16 @@ INT IntersectTriangle6Planes( FXMVECTOR V0, FXMVECTOR V1, FXMVECTOR V2, CXMVECTO
 
 
 //-----------------------------------------------------------------------------
-static inline void FastIntersectSpherePlane( FXMVECTOR Center, FXMVECTOR Radius, FXMVECTOR Plane,
-                                      XMVECTOR& Outside, XMVECTOR& Inside )
+static inline void FastIntersectSpherePlane( FXMVECTOR Center, DirectX::FXMVECTOR Radius, DirectX::FXMVECTOR Plane,
+                                      DirectX::XMVECTOR& Outside, DirectX::XMVECTOR& Inside )
 {
-    XMVECTOR Dist = XMVector4Dot( Center, Plane );
+    DirectX::XMVECTOR Dist = DirectX::XMVector4Dot( Center, Plane );
 
     // Outside the plane?
-    Outside = XMVectorGreater( Dist, Radius );
+    Outside = DirectX::XMVectorGreater( Dist, Radius );
 
     // Fully inside the plane?
-    Inside = XMVectorLess( Dist, -Radius );
+    Inside = DirectX::XMVectorLess( Dist, -Radius );
 }
 
 
@@ -3267,52 +3267,52 @@ static inline void FastIntersectSpherePlane( FXMVECTOR Center, FXMVECTOR Radius,
 //                1 = may be intersecting, 
 //                2 = sphere is inside all planes
 //-----------------------------------------------------------------------------
-INT IntersectSphere6Planes( const Sphere* pVolume, FXMVECTOR Plane0, FXMVECTOR Plane1, FXMVECTOR Plane2,
+INT IntersectSphere6Planes( const Sphere* pVolume, DirectX::FXMVECTOR Plane0, DirectX::FXMVECTOR Plane1, DirectX::FXMVECTOR Plane2,
                             CXMVECTOR Plane3, CXMVECTOR Plane4, CXMVECTOR Plane5 )
 {
     XMASSERT( pVolume );
 
     // Load the sphere.
-    XMVECTOR Center = XMLoadFloat3( &pVolume->Center );
-    XMVECTOR Radius = XMVectorReplicatePtr( &pVolume->Radius );
+    DirectX::XMVECTOR Center = XMLoadFloat3( &pVolume->Center );
+    DirectX::XMVECTOR Radius = DirectX::XMVectorReplicatePtr( &pVolume->Radius );
 
     // Set w of the center to one so we can dot4 with a plane.
-    Center = XMVectorInsert( Center, XMVectorSplatOne(), 0, 0, 0, 0, 1);
+    Center = DirectX::XMVectorInsert( Center, DirectX::XMVectorSplatOne(), 0, 0, 0, 0, 1);
 
-    XMVECTOR Outside, Inside;
+    DirectX::XMVECTOR Outside, Inside;
 
     // Test against each plane.
     FastIntersectSpherePlane( Center, Radius, Plane0, Outside, Inside );
 
-    XMVECTOR AnyOutside = Outside;
-    XMVECTOR AllInside = Inside;
+    DirectX::XMVECTOR AnyOutside = Outside;
+    DirectX::XMVECTOR AllInside = Inside;
 
     FastIntersectSpherePlane( Center, Radius, Plane1, Outside, Inside );
-    AnyOutside = XMVectorOrInt( AnyOutside, Outside );
-    AllInside = XMVectorAndInt( AllInside, Inside );
+    AnyOutside = DirectX::XMVectorOrInt( AnyOutside, Outside );
+    AllInside = DirectX::XMVectorAndInt( AllInside, Inside );
 
     FastIntersectSpherePlane( Center, Radius, Plane2, Outside, Inside );
-    AnyOutside = XMVectorOrInt( AnyOutside, Outside );
-    AllInside = XMVectorAndInt( AllInside, Inside );
+    AnyOutside = DirectX::XMVectorOrInt( AnyOutside, Outside );
+    AllInside = DirectX::XMVectorAndInt( AllInside, Inside );
 
     FastIntersectSpherePlane( Center, Radius, Plane3, Outside, Inside );
-    AnyOutside = XMVectorOrInt( AnyOutside, Outside );
-    AllInside = XMVectorAndInt( AllInside, Inside );
+    AnyOutside = DirectX::XMVectorOrInt( AnyOutside, Outside );
+    AllInside = DirectX::XMVectorAndInt( AllInside, Inside );
 
     FastIntersectSpherePlane( Center, Radius, Plane4, Outside, Inside );
-    AnyOutside = XMVectorOrInt( AnyOutside, Outside );
-    AllInside = XMVectorAndInt( AllInside, Inside );
+    AnyOutside = DirectX::XMVectorOrInt( AnyOutside, Outside );
+    AllInside = DirectX::XMVectorAndInt( AllInside, Inside );
 
     FastIntersectSpherePlane( Center, Radius, Plane5, Outside, Inside );
-    AnyOutside = XMVectorOrInt( AnyOutside, Outside );
-    AllInside = XMVectorAndInt( AllInside, Inside );
+    AnyOutside = DirectX::XMVectorOrInt( AnyOutside, Outside );
+    AllInside = DirectX::XMVectorAndInt( AllInside, Inside );
 
     // If the sphere is outside any plane it is outside.
-    if ( XMVector4EqualInt( AnyOutside, XMVectorTrueInt() ) )
+    if ( DirectX::XMVector4EqualInt( AnyOutside, DirectX::XMVectorTrueInt() ) )
         return 0;
 
     // If the sphere is inside all planes it is inside.
-    if ( XMVector4EqualInt( AllInside, XMVectorTrueInt() ) )
+    if ( DirectX::XMVector4EqualInt( AllInside, DirectX::XMVectorTrueInt() ) )
         return 2;
 
     // The sphere is not inside all planes or outside a plane, it may intersect.
@@ -3322,24 +3322,24 @@ INT IntersectSphere6Planes( const Sphere* pVolume, FXMVECTOR Plane0, FXMVECTOR P
 
 
 //-----------------------------------------------------------------------------
-static inline void FastIntersectAxisAlignedBoxPlane( FXMVECTOR Center, FXMVECTOR Extents, FXMVECTOR Plane,
-                                              XMVECTOR& Outside, XMVECTOR& Inside )
+static inline void FastIntersectAxisAlignedBoxPlane( FXMVECTOR Center, DirectX::FXMVECTOR Extents, DirectX::FXMVECTOR Plane,
+                                              DirectX::XMVECTOR& Outside, DirectX::XMVECTOR& Inside )
 {
     // Compute the distance to the center of the box.
-    XMVECTOR Dist = XMVector4Dot( Center, Plane );
+    DirectX::XMVECTOR Dist = DirectX::XMVector4Dot( Center, Plane );
 
     // Project the axes of the box onto the normal of the plane.  Half the
     // length of the projection (sometime called the "radius") is equal to
     // h(u) * abs(n dot b(u))) + h(v) * abs(n dot b(v)) + h(w) * abs(n dot b(w))
     // where h(i) are extents of the box, n is the plane normal, and b(i) are the 
     // axes of the box. In this case b(i) = [(1,0,0), (0,1,0), (0,0,1)].
-    XMVECTOR Radius = XMVector3Dot( Extents, XMVectorAbs( Plane ) );
+    DirectX::XMVECTOR Radius = DirectX::XMVector3Dot( Extents, DirectX::XMVectorAbs( Plane ) );
 
     // Outside the plane?
-    Outside = XMVectorGreater( Dist, Radius );
+    Outside = DirectX::XMVectorGreater( Dist, Radius );
 
     // Fully inside the plane?
-    Inside = XMVectorLess( Dist, -Radius );
+    Inside = DirectX::XMVectorLess( Dist, -Radius );
 }
 
 
@@ -3350,52 +3350,52 @@ static inline void FastIntersectAxisAlignedBoxPlane( FXMVECTOR Center, FXMVECTOR
 //                1 = may be intersecting, 
 //                2 = box is inside all planes
 //-----------------------------------------------------------------------------
-INT IntersectAxisAlignedBox6Planes( const AxisAlignedBox* pVolume, FXMVECTOR Plane0, FXMVECTOR Plane1,
+INT IntersectAxisAlignedBox6Planes( const AxisAlignedBox* pVolume, DirectX::FXMVECTOR Plane0, DirectX::FXMVECTOR Plane1,
                                     FXMVECTOR Plane2, CXMVECTOR Plane3, CXMVECTOR Plane4, CXMVECTOR Plane5 )
 {
     XMASSERT( pVolume );
 
     // Load the box.
-    XMVECTOR Center = XMLoadFloat3( &pVolume->Center );
-    XMVECTOR Extents = XMLoadFloat3( &pVolume->Extents );
+    DirectX::XMVECTOR Center = XMLoadFloat3( &pVolume->Center );
+    DirectX::XMVECTOR Extents = XMLoadFloat3( &pVolume->Extents );
 
     // Set w of the center to one so we can dot4 with a plane.
-    Center = XMVectorInsert( Center, XMVectorSplatOne(), 0, 0, 0, 0, 1 );
+    Center = DirectX::XMVectorInsert( Center, DirectX::XMVectorSplatOne(), 0, 0, 0, 0, 1 );
 
-    XMVECTOR Outside, Inside;
+    DirectX::XMVECTOR Outside, Inside;
 
     // Test against each plane.
     FastIntersectAxisAlignedBoxPlane( Center, Extents, Plane0, Outside, Inside );
 
-    XMVECTOR AnyOutside = Outside;
-    XMVECTOR AllInside = Inside;
+    DirectX::XMVECTOR AnyOutside = Outside;
+    DirectX::XMVECTOR AllInside = Inside;
 
     FastIntersectAxisAlignedBoxPlane( Center, Extents, Plane1, Outside, Inside );
-    AnyOutside = XMVectorOrInt( AnyOutside, Outside );
-    AllInside = XMVectorAndInt( AllInside, Inside );
+    AnyOutside = DirectX::XMVectorOrInt( AnyOutside, Outside );
+    AllInside = DirectX::XMVectorAndInt( AllInside, Inside );
 
     FastIntersectAxisAlignedBoxPlane( Center, Extents, Plane2, Outside, Inside );
-    AnyOutside = XMVectorOrInt( AnyOutside, Outside );
-    AllInside = XMVectorAndInt( AllInside, Inside );
+    AnyOutside = DirectX::XMVectorOrInt( AnyOutside, Outside );
+    AllInside = DirectX::XMVectorAndInt( AllInside, Inside );
 
     FastIntersectAxisAlignedBoxPlane( Center, Extents, Plane3, Outside, Inside );
-    AnyOutside = XMVectorOrInt( AnyOutside, Outside );
-    AllInside = XMVectorAndInt( AllInside, Inside );
+    AnyOutside = DirectX::XMVectorOrInt( AnyOutside, Outside );
+    AllInside = DirectX::XMVectorAndInt( AllInside, Inside );
 
     FastIntersectAxisAlignedBoxPlane( Center, Extents, Plane4, Outside, Inside );
-    AnyOutside = XMVectorOrInt( AnyOutside, Outside );
-    AllInside = XMVectorAndInt( AllInside, Inside );
+    AnyOutside = DirectX::XMVectorOrInt( AnyOutside, Outside );
+    AllInside = DirectX::XMVectorAndInt( AllInside, Inside );
 
     FastIntersectAxisAlignedBoxPlane( Center, Extents, Plane5, Outside, Inside );
-    AnyOutside = XMVectorOrInt( AnyOutside, Outside );
-    AllInside = XMVectorAndInt( AllInside, Inside );
+    AnyOutside = DirectX::XMVectorOrInt( AnyOutside, Outside );
+    AllInside = DirectX::XMVectorAndInt( AllInside, Inside );
 
     // If the box is outside any plane it is outside.
-    if ( XMVector4EqualInt( AnyOutside, XMVectorTrueInt() ) )
+    if ( DirectX::XMVector4EqualInt( AnyOutside, DirectX::XMVectorTrueInt() ) )
         return 0;
 
     // If the box is inside all planes it is inside.
-    if ( XMVector4EqualInt( AllInside, XMVectorTrueInt() ) )
+    if ( DirectX::XMVector4EqualInt( AllInside, DirectX::XMVectorTrueInt() ) )
         return 2;
 
     // The box is not inside all planes or outside a plane, it may intersect.
@@ -3405,27 +3405,27 @@ INT IntersectAxisAlignedBox6Planes( const AxisAlignedBox* pVolume, FXMVECTOR Pla
 
 
 //-----------------------------------------------------------------------------
-static inline void FastIntersectOrientedBoxPlane( FXMVECTOR Center, FXMVECTOR Extents, FXMVECTOR Axis0, CXMVECTOR Axis1,
-                                          CXMVECTOR Axis2, CXMVECTOR Plane, XMVECTOR& Outside, XMVECTOR& Inside )
+static inline void FastIntersectOrientedBoxPlane( FXMVECTOR Center, DirectX::FXMVECTOR Extents, DirectX::FXMVECTOR Axis0, CXMVECTOR Axis1,
+                                          CXMVECTOR Axis2, CXMVECTOR Plane, DirectX::XMVECTOR& Outside, DirectX::XMVECTOR& Inside )
 {
     // Compute the distance to the center of the box.
-    XMVECTOR Dist = XMVector4Dot( Center, Plane );
+    DirectX::XMVECTOR Dist = DirectX::XMVector4Dot( Center, Plane );
 
     // Project the axes of the box onto the normal of the plane.  Half the
     // length of the projection (sometime called the "radius") is equal to
     // h(u) * abs(n dot b(u))) + h(v) * abs(n dot b(v)) + h(w) * abs(n dot b(w))
     // where h(i) are extents of the box, n is the plane normal, and b(i) are the 
     // axes of the box.
-    XMVECTOR Radius = XMVector3Dot( Plane, Axis0 );
-    Radius = XMVectorInsert( Radius, XMVector3Dot( Plane, Axis1 ), 0, 0, 1, 0, 0 );
-    Radius = XMVectorInsert( Radius, XMVector3Dot( Plane, Axis2 ), 0, 0, 0, 1, 0 );
-    Radius = XMVector3Dot( Extents, XMVectorAbs( Radius ) );
+    DirectX::XMVECTOR Radius = DirectX::XMVector3Dot( Plane, Axis0 );
+    Radius = DirectX::XMVectorInsert( Radius, DirectX::XMVector3Dot( Plane, Axis1 ), 0, 0, 1, 0, 0 );
+    Radius = DirectX::XMVectorInsert( Radius, DirectX::XMVector3Dot( Plane, Axis2 ), 0, 0, 0, 1, 0 );
+    Radius = DirectX::XMVector3Dot( Extents, DirectX::XMVectorAbs( Radius ) );
 
     // Outside the plane?
-    Outside = XMVectorGreater( Dist, Radius );
+    Outside = DirectX::XMVectorGreater( Dist, Radius );
 
     // Fully inside the plane?
-    Inside = XMVectorLess( Dist, -Radius );
+    Inside = DirectX::XMVectorLess( Dist, -Radius );
 }
 
 
@@ -3436,58 +3436,58 @@ static inline void FastIntersectOrientedBoxPlane( FXMVECTOR Center, FXMVECTOR Ex
 //                1 = may be intersecting, 
 //                2 = box is inside all planes
 //-----------------------------------------------------------------------------
-INT IntersectOrientedBox6Planes( const OrientedBox* pVolume, FXMVECTOR Plane0, FXMVECTOR Plane1, FXMVECTOR Plane2,
+INT IntersectOrientedBox6Planes( const OrientedBox* pVolume, DirectX::FXMVECTOR Plane0, DirectX::FXMVECTOR Plane1, DirectX::FXMVECTOR Plane2,
                                  CXMVECTOR Plane3, CXMVECTOR Plane4, CXMVECTOR Plane5 )
 {
     XMASSERT( pVolume );
 
     // Load the box.
-    XMVECTOR Center = XMLoadFloat3( &pVolume->Center );
-    XMVECTOR Extents = XMLoadFloat3( &pVolume->Extents );
-    XMVECTOR BoxOrientation = XMLoadFloat4( &pVolume->Orientation );
+    DirectX::XMVECTOR Center = XMLoadFloat3( &pVolume->Center );
+    DirectX::XMVECTOR Extents = XMLoadFloat3( &pVolume->Extents );
+    DirectX::XMVECTOR BoxOrientation = XMLoadFloat4( &pVolume->Orientation );
 
     XMASSERT( XMQuaternionIsUnit( BoxOrientation ) );
 
     // Set w of the center to one so we can dot4 with a plane.
-    Center = XMVectorInsert( Center, XMVectorSplatOne(), 0, 0, 0, 0, 1 );
+    Center = DirectX::XMVectorInsert( Center, DirectX::XMVectorSplatOne(), 0, 0, 0, 0, 1 );
 
     // Build the 3x3 rotation matrix that defines the box axes.
-    XMMATRIX R = XMMatrixRotationQuaternion( BoxOrientation );
+    DirectX::XMMATRIX R = DirectX::XMMatrixRotationQuaternion( BoxOrientation );
 
-    XMVECTOR Outside, Inside;
+    DirectX::XMVECTOR Outside, Inside;
 
     // Test against each plane.
     FastIntersectOrientedBoxPlane( Center, Extents, R.r[0], R.r[1], R.r[2], Plane0, Outside, Inside );
 
-    XMVECTOR AnyOutside = Outside;
-    XMVECTOR AllInside = Inside;
+    DirectX::XMVECTOR AnyOutside = Outside;
+    DirectX::XMVECTOR AllInside = Inside;
 
     FastIntersectOrientedBoxPlane( Center, Extents, R.r[0], R.r[1], R.r[2], Plane1, Outside, Inside );
-    AnyOutside = XMVectorOrInt( AnyOutside, Outside );
-    AllInside = XMVectorAndInt( AllInside, Inside );
+    AnyOutside = DirectX::XMVectorOrInt( AnyOutside, Outside );
+    AllInside = DirectX::XMVectorAndInt( AllInside, Inside );
 
     FastIntersectOrientedBoxPlane( Center, Extents, R.r[0], R.r[1], R.r[2], Plane2, Outside, Inside );
-    AnyOutside = XMVectorOrInt( AnyOutside, Outside );
-    AllInside = XMVectorAndInt( AllInside, Inside );
+    AnyOutside = DirectX::XMVectorOrInt( AnyOutside, Outside );
+    AllInside = DirectX::XMVectorAndInt( AllInside, Inside );
 
     FastIntersectOrientedBoxPlane( Center, Extents, R.r[0], R.r[1], R.r[2], Plane3, Outside, Inside );
-    AnyOutside = XMVectorOrInt( AnyOutside, Outside );
-    AllInside = XMVectorAndInt( AllInside, Inside );
+    AnyOutside = DirectX::XMVectorOrInt( AnyOutside, Outside );
+    AllInside = DirectX::XMVectorAndInt( AllInside, Inside );
 
     FastIntersectOrientedBoxPlane( Center, Extents, R.r[0], R.r[1], R.r[2], Plane4, Outside, Inside );
-    AnyOutside = XMVectorOrInt( AnyOutside, Outside );
-    AllInside = XMVectorAndInt( AllInside, Inside );
+    AnyOutside = DirectX::XMVectorOrInt( AnyOutside, Outside );
+    AllInside = DirectX::XMVectorAndInt( AllInside, Inside );
 
     FastIntersectOrientedBoxPlane( Center, Extents, R.r[0], R.r[1], R.r[2], Plane5, Outside, Inside );
-    AnyOutside = XMVectorOrInt( AnyOutside, Outside );
-    AllInside = XMVectorAndInt( AllInside, Inside );
+    AnyOutside = DirectX::XMVectorOrInt( AnyOutside, Outside );
+    AllInside = DirectX::XMVectorAndInt( AllInside, Inside );
 
     // If the box is outside any plane it is outside.
-    if ( XMVector4EqualInt( AnyOutside, XMVectorTrueInt() ) )
+    if ( DirectX::XMVector4EqualInt( AnyOutside, DirectX::XMVectorTrueInt() ) )
         return 0;
 
     // If the box is inside all planes it is inside.
-    if ( XMVector4EqualInt( AllInside, XMVectorTrueInt() ) )
+    if ( DirectX::XMVector4EqualInt( AllInside, DirectX::XMVectorTrueInt() ) )
         return 2;
 
     // The box is not inside all planes or outside a plane, it may intersect.
@@ -3497,50 +3497,50 @@ INT IntersectOrientedBox6Planes( const OrientedBox* pVolume, FXMVECTOR Plane0, F
 
 
 //-----------------------------------------------------------------------------
-static inline void FastIntersectFrustumPlane( FXMVECTOR Point0, FXMVECTOR Point1, FXMVECTOR Point2, CXMVECTOR Point3,
+static inline void FastIntersectFrustumPlane( FXMVECTOR Point0, DirectX::FXMVECTOR Point1, DirectX::FXMVECTOR Point2, CXMVECTOR Point3,
                                       CXMVECTOR Point4, CXMVECTOR Point5, CXMVECTOR Point6, CXMVECTOR Point7,
-                                      CXMVECTOR Plane, XMVECTOR& Outside, XMVECTOR& Inside )
+                                      CXMVECTOR Plane, DirectX::XMVECTOR& Outside, DirectX::XMVECTOR& Inside )
 {
     // Find the min/max projection of the frustum onto the plane normal.
-    XMVECTOR Min, Max, Dist;
+    DirectX::XMVECTOR Min, Max, Dist;
 
-    Min = Max = XMVector3Dot( Plane, Point0 );
+    Min = Max = DirectX::XMVector3Dot( Plane, Point0 );
 
-    Dist = XMVector3Dot( Plane, Point1 );
-    Min = XMVectorMin( Min, Dist );
-    Max = XMVectorMax( Max, Dist );
+    Dist = DirectX::XMVector3Dot( Plane, Point1 );
+    Min = DirectX::XMVectorMin( Min, Dist );
+    Max = DirectX::XMVectorMax( Max, Dist );
 
-    Dist = XMVector3Dot( Plane, Point2 );
-    Min = XMVectorMin( Min, Dist );
-    Max = XMVectorMax( Max, Dist );
+    Dist = DirectX::XMVector3Dot( Plane, Point2 );
+    Min = DirectX::XMVectorMin( Min, Dist );
+    Max = DirectX::XMVectorMax( Max, Dist );
 
-    Dist = XMVector3Dot( Plane, Point3 );
-    Min = XMVectorMin( Min, Dist );
-    Max = XMVectorMax( Max, Dist );
+    Dist = DirectX::XMVector3Dot( Plane, Point3 );
+    Min = DirectX::XMVectorMin( Min, Dist );
+    Max = DirectX::XMVectorMax( Max, Dist );
 
-    Dist = XMVector3Dot( Plane, Point4 );
-    Min = XMVectorMin( Min, Dist );
-    Max = XMVectorMax( Max, Dist );
+    Dist = DirectX::XMVector3Dot( Plane, Point4 );
+    Min = DirectX::XMVectorMin( Min, Dist );
+    Max = DirectX::XMVectorMax( Max, Dist );
 
-    Dist = XMVector3Dot( Plane, Point5 );
-    Min = XMVectorMin( Min, Dist );
-    Max = XMVectorMax( Max, Dist );
+    Dist = DirectX::XMVector3Dot( Plane, Point5 );
+    Min = DirectX::XMVectorMin( Min, Dist );
+    Max = DirectX::XMVectorMax( Max, Dist );
 
-    Dist = XMVector3Dot( Plane, Point6 );
-    Min = XMVectorMin( Min, Dist );
-    Max = XMVectorMax( Max, Dist );
+    Dist = DirectX::XMVector3Dot( Plane, Point6 );
+    Min = DirectX::XMVectorMin( Min, Dist );
+    Max = DirectX::XMVectorMax( Max, Dist );
 
-    Dist = XMVector3Dot( Plane, Point7 );
-    Min = XMVectorMin( Min, Dist );
-    Max = XMVectorMax( Max, Dist );
+    Dist = DirectX::XMVector3Dot( Plane, Point7 );
+    Min = DirectX::XMVectorMin( Min, Dist );
+    Max = DirectX::XMVectorMax( Max, Dist );
 
-    XMVECTOR PlaneDist = -XMVectorSplatW( Plane );
+    DirectX::XMVECTOR PlaneDist = -DirectX::XMVectorSplatW( Plane );
 
     // Outside the plane?
-    Outside = XMVectorGreater( Min, PlaneDist );
+    Outside = DirectX::XMVectorGreater( Min, PlaneDist );
 
     // Fully inside the plane?
-    Inside = XMVectorLess( Max, PlaneDist );
+    Inside = DirectX::XMVectorLess( Max, PlaneDist );
 }
 
 
@@ -3551,93 +3551,93 @@ static inline void FastIntersectFrustumPlane( FXMVECTOR Point0, FXMVECTOR Point1
 //                1 = may be intersecting, 
 //                2 = frustum is inside all planes
 //-----------------------------------------------------------------------------
-INT IntersectFrustum6Planes( const Frustum* pVolume, FXMVECTOR Plane0, FXMVECTOR Plane1, FXMVECTOR Plane2,
+INT IntersectFrustum6Planes( const Frustum* pVolume, DirectX::FXMVECTOR Plane0, DirectX::FXMVECTOR Plane1, DirectX::FXMVECTOR Plane2,
                              CXMVECTOR Plane3, CXMVECTOR Plane4, CXMVECTOR Plane5 )
 {
     XMASSERT( pVolume );
 
     // Load origin and orientation of the frustum.
-    XMVECTOR Origin = XMLoadFloat3( &pVolume->Origin );
-    XMVECTOR Orientation = XMLoadFloat4( &pVolume->Orientation );
+    DirectX::XMVECTOR Origin = XMLoadFloat3( &pVolume->Origin );
+    DirectX::XMVECTOR Orientation = XMLoadFloat4( &pVolume->Orientation );
 
     XMASSERT( XMQuaternionIsUnit( Orientation ) );
 
     // Set w of the origin to one so we can dot4 with a plane.
-    Origin = XMVectorInsert( Origin, XMVectorSplatOne(), 0, 0, 0, 0, 1 );
+    Origin = DirectX::XMVectorInsert( Origin, DirectX::XMVectorSplatOne(), 0, 0, 0, 0, 1 );
 
     // Build the corners of the frustum (in world space).
-    XMVECTOR RightTop = XMVectorSet( pVolume->RightSlope, pVolume->TopSlope, 1.0f, 0.0f );
-    XMVECTOR RightBottom = XMVectorSet( pVolume->RightSlope, pVolume->BottomSlope, 1.0f, 0.0f );
-    XMVECTOR LeftTop = XMVectorSet( pVolume->LeftSlope, pVolume->TopSlope, 1.0f, 0.0f );
-    XMVECTOR LeftBottom = XMVectorSet( pVolume->LeftSlope, pVolume->BottomSlope, 1.0f, 0.0f );
-    XMVECTOR Near = XMVectorSet( pVolume->Near, pVolume->Near, pVolume->Near, 0.0f );
-    XMVECTOR Far = XMVectorSet( pVolume->Far, pVolume->Far, pVolume->Far, 0.0f );
+    DirectX::XMVECTOR RightTop = DirectX::XMVectorSet( pVolume->RightSlope, pVolume->TopSlope, 1.0f, 0.0f );
+    DirectX::XMVECTOR RightBottom = DirectX::XMVectorSet( pVolume->RightSlope, pVolume->BottomSlope, 1.0f, 0.0f );
+    DirectX::XMVECTOR LeftTop = DirectX::XMVectorSet( pVolume->LeftSlope, pVolume->TopSlope, 1.0f, 0.0f );
+    DirectX::XMVECTOR LeftBottom = DirectX::XMVectorSet( pVolume->LeftSlope, pVolume->BottomSlope, 1.0f, 0.0f );
+    DirectX::XMVECTOR Near = DirectX::XMVectorSet( pVolume->Near, pVolume->Near, pVolume->Near, 0.0f );
+    DirectX::XMVECTOR Far = DirectX::XMVectorSet( pVolume->Far, pVolume->Far, pVolume->Far, 0.0f );
 
-    RightTop = XMVector3Rotate( RightTop, Orientation );
-    RightBottom = XMVector3Rotate( RightBottom, Orientation );
-    LeftTop = XMVector3Rotate( LeftTop, Orientation );
-    LeftBottom = XMVector3Rotate( LeftBottom, Orientation );
+    RightTop = DirectX::XMVector3Rotate( RightTop, Orientation );
+    RightBottom = DirectX::XMVector3Rotate( RightBottom, Orientation );
+    LeftTop = DirectX::XMVector3Rotate( LeftTop, Orientation );
+    LeftBottom = DirectX::XMVector3Rotate( LeftBottom, Orientation );
 
-    XMVECTOR Corners0 = Origin + RightTop * Near;
-    XMVECTOR Corners1 = Origin + RightBottom * Near;
-    XMVECTOR Corners2 = Origin + LeftTop * Near;
-    XMVECTOR Corners3 = Origin + LeftBottom * Near;
-    XMVECTOR Corners4 = Origin + RightTop * Far;
-    XMVECTOR Corners5 = Origin + RightBottom * Far;
-    XMVECTOR Corners6 = Origin + LeftTop * Far;
-    XMVECTOR Corners7 = Origin + LeftBottom * Far;
+    DirectX::XMVECTOR Corners0 = Origin + RightTop * Near;
+    DirectX::XMVECTOR Corners1 = Origin + RightBottom * Near;
+    DirectX::XMVECTOR Corners2 = Origin + LeftTop * Near;
+    DirectX::XMVECTOR Corners3 = Origin + LeftBottom * Near;
+    DirectX::XMVECTOR Corners4 = Origin + RightTop * Far;
+    DirectX::XMVECTOR Corners5 = Origin + RightBottom * Far;
+    DirectX::XMVECTOR Corners6 = Origin + LeftTop * Far;
+    DirectX::XMVECTOR Corners7 = Origin + LeftBottom * Far;
 
-    XMVECTOR Outside, Inside;
+    DirectX::XMVECTOR Outside, Inside;
 
     // Test against each plane.
     FastIntersectFrustumPlane( Corners0, Corners1, Corners2, Corners3, 
                                Corners4, Corners5, Corners6, Corners7, 
                                Plane0, Outside, Inside );
 
-    XMVECTOR AnyOutside = Outside;
-    XMVECTOR AllInside = Inside;
+    DirectX::XMVECTOR AnyOutside = Outside;
+    DirectX::XMVECTOR AllInside = Inside;
 
     FastIntersectFrustumPlane( Corners0, Corners1, Corners2, Corners3, 
                                Corners4, Corners5, Corners6, Corners7, 
                                Plane1, Outside, Inside );
 
-    AnyOutside = XMVectorOrInt( AnyOutside, Outside );
-    AllInside = XMVectorAndInt( AllInside, Inside );
+    AnyOutside = DirectX::XMVectorOrInt( AnyOutside, Outside );
+    AllInside = DirectX::XMVectorAndInt( AllInside, Inside );
 
     FastIntersectFrustumPlane( Corners0, Corners1, Corners2, Corners3, 
                                Corners4, Corners5, Corners6, Corners7, 
                                Plane2, Outside, Inside );
 
-    AnyOutside = XMVectorOrInt( AnyOutside, Outside );
-    AllInside = XMVectorAndInt( AllInside, Inside );
+    AnyOutside = DirectX::XMVectorOrInt( AnyOutside, Outside );
+    AllInside = DirectX::XMVectorAndInt( AllInside, Inside );
 
     FastIntersectFrustumPlane( Corners0, Corners1, Corners2, Corners3, 
                                Corners4, Corners5, Corners6, Corners7, 
                                Plane3, Outside, Inside );
 
-    AnyOutside = XMVectorOrInt( AnyOutside, Outside );
-    AllInside = XMVectorAndInt( AllInside, Inside );
+    AnyOutside = DirectX::XMVectorOrInt( AnyOutside, Outside );
+    AllInside = DirectX::XMVectorAndInt( AllInside, Inside );
 
     FastIntersectFrustumPlane( Corners0, Corners1, Corners2, Corners3, 
                                Corners4, Corners5, Corners6, Corners7, 
                                Plane4, Outside, Inside );
 
-    AnyOutside = XMVectorOrInt( AnyOutside, Outside );
-    AllInside = XMVectorAndInt( AllInside, Inside );
+    AnyOutside = DirectX::XMVectorOrInt( AnyOutside, Outside );
+    AllInside = DirectX::XMVectorAndInt( AllInside, Inside );
 
     FastIntersectFrustumPlane( Corners0, Corners1, Corners2, Corners3, 
                                Corners4, Corners5, Corners6, Corners7, 
                                Plane5, Outside, Inside );
 
-    AnyOutside = XMVectorOrInt( AnyOutside, Outside );
-    AllInside = XMVectorAndInt( AllInside, Inside );
+    AnyOutside = DirectX::XMVectorOrInt( AnyOutside, Outside );
+    AllInside = DirectX::XMVectorAndInt( AllInside, Inside );
 
     // If the frustum is outside any plane it is outside.
-    if ( XMVector4EqualInt( AnyOutside, XMVectorTrueInt() ) )
+    if ( DirectX::XMVector4EqualInt( AnyOutside, DirectX::XMVectorTrueInt() ) )
         return 0;
 
     // If the frustum is inside all planes it is inside.
-    if ( XMVector4EqualInt( AllInside, XMVectorTrueInt() ) )
+    if ( DirectX::XMVector4EqualInt( AllInside, DirectX::XMVectorTrueInt() ) )
         return 2;
 
     // The frustum is not inside all planes or outside a plane, it may intersect.
@@ -3647,26 +3647,26 @@ INT IntersectFrustum6Planes( const Frustum* pVolume, FXMVECTOR Plane0, FXMVECTOR
 
 
 //-----------------------------------------------------------------------------
-INT IntersectTrianglePlane( FXMVECTOR V0, FXMVECTOR V1, FXMVECTOR V2, CXMVECTOR Plane )
+INT IntersectTrianglePlane( FXMVECTOR V0, DirectX::FXMVECTOR V1, DirectX::FXMVECTOR V2, CXMVECTOR Plane )
 {
-    XMVECTOR One = XMVectorSplatOne();
+    DirectX::XMVECTOR One = DirectX::XMVectorSplatOne();
 
     XMASSERT( XMPlaneIsUnit( Plane ) );
 
     // Set w of the points to one so we can dot4 with a plane.
-    XMVECTOR TV0 = XMVectorInsert(V0, One, 0, 0, 0, 0, 1);
-    XMVECTOR TV1 = XMVectorInsert(V1, One, 0, 0, 0, 0, 1);
-    XMVECTOR TV2 = XMVectorInsert(V2, One, 0, 0, 0, 0, 1);
+    DirectX::XMVECTOR TV0 = DirectX::XMVectorInsert(V0, One, 0, 0, 0, 0, 1);
+    DirectX::XMVECTOR TV1 = DirectX::XMVectorInsert(V1, One, 0, 0, 0, 0, 1);
+    DirectX::XMVECTOR TV2 = DirectX::XMVectorInsert(V2, One, 0, 0, 0, 0, 1);
 
-    XMVECTOR Outside, Inside;
+    DirectX::XMVECTOR Outside, Inside;
     FastIntersectTrianglePlane( TV0, TV1, TV2, Plane, Outside, Inside );
 
     // If the triangle is outside any plane it is outside.
-    if ( XMVector4EqualInt( Outside, XMVectorTrueInt() ) )
+    if ( DirectX::XMVector4EqualInt( Outside, DirectX::XMVectorTrueInt() ) )
         return 0;
 
     // If the triangle is inside all planes it is inside.
-    if ( XMVector4EqualInt( Inside, XMVectorTrueInt() ) )
+    if ( DirectX::XMVector4EqualInt( Inside, DirectX::XMVectorTrueInt() ) )
         return 2;
 
     // The triangle is not inside all planes or outside a plane it intersects.
@@ -3676,27 +3676,27 @@ INT IntersectTrianglePlane( FXMVECTOR V0, FXMVECTOR V1, FXMVECTOR V2, CXMVECTOR 
 
 
 //-----------------------------------------------------------------------------
-INT IntersectSpherePlane( const Sphere* pVolume, FXMVECTOR Plane )
+INT IntersectSpherePlane( const Sphere* pVolume, DirectX::FXMVECTOR Plane )
 {
     XMASSERT( pVolume );
     XMASSERT( XMPlaneIsUnit( Plane ) );
 
     // Load the sphere.
-    XMVECTOR Center = XMLoadFloat3( &pVolume->Center );
-    XMVECTOR Radius = XMVectorReplicatePtr( &pVolume->Radius );
+    DirectX::XMVECTOR Center = XMLoadFloat3( &pVolume->Center );
+    DirectX::XMVECTOR Radius = DirectX::XMVectorReplicatePtr( &pVolume->Radius );
 
     // Set w of the center to one so we can dot4 with a plane.
-    Center = XMVectorInsert( Center, XMVectorSplatOne(), 0, 0, 0, 0, 1 );
+    Center = DirectX::XMVectorInsert( Center, DirectX::XMVectorSplatOne(), 0, 0, 0, 0, 1 );
 
-    XMVECTOR Outside, Inside;
+    DirectX::XMVECTOR Outside, Inside;
     FastIntersectSpherePlane( Center, Radius, Plane, Outside, Inside );
 
     // If the sphere is outside any plane it is outside.
-    if ( XMVector4EqualInt( Outside, XMVectorTrueInt() ) )
+    if ( DirectX::XMVector4EqualInt( Outside, DirectX::XMVectorTrueInt() ) )
         return 0;
 
     // If the sphere is inside all planes it is inside.
-    if ( XMVector4EqualInt( Inside, XMVectorTrueInt() ) )
+    if ( DirectX::XMVector4EqualInt( Inside, DirectX::XMVectorTrueInt() ) )
         return 2;
 
     // The sphere is not inside all planes or outside a plane it intersects.
@@ -3706,27 +3706,27 @@ INT IntersectSpherePlane( const Sphere* pVolume, FXMVECTOR Plane )
 
 
 //-----------------------------------------------------------------------------
-INT IntersectAxisAlignedBoxPlane( const AxisAlignedBox* pVolume, FXMVECTOR Plane )
+INT IntersectAxisAlignedBoxPlane( const AxisAlignedBox* pVolume, DirectX::FXMVECTOR Plane )
 {
     XMASSERT( pVolume );
     XMASSERT( XMPlaneIsUnit( Plane ) );
 
     // Load the box.
-    XMVECTOR Center = XMLoadFloat3( &pVolume->Center );
-    XMVECTOR Extents = XMLoadFloat3( &pVolume->Extents );
+    DirectX::XMVECTOR Center = XMLoadFloat3( &pVolume->Center );
+    DirectX::XMVECTOR Extents = XMLoadFloat3( &pVolume->Extents );
 
     // Set w of the center to one so we can dot4 with a plane.
-    Center = XMVectorInsert( Center, XMVectorSplatOne(), 0, 0, 0, 0, 1);
+    Center = DirectX::XMVectorInsert( Center, DirectX::XMVectorSplatOne(), 0, 0, 0, 0, 1);
 
-    XMVECTOR Outside, Inside;
+    DirectX::XMVECTOR Outside, Inside;
     FastIntersectAxisAlignedBoxPlane( Center, Extents, Plane, Outside, Inside );
 
     // If the box is outside any plane it is outside.
-    if ( XMVector4EqualInt( Outside, XMVectorTrueInt() ) )
+    if ( DirectX::XMVector4EqualInt( Outside, DirectX::XMVectorTrueInt() ) )
         return 0;
 
     // If the box is inside all planes it is inside.
-    if ( XMVector4EqualInt( Inside, XMVectorTrueInt() ) )
+    if ( DirectX::XMVector4EqualInt( Inside, DirectX::XMVectorTrueInt() ) )
         return 2;
 
     // The box is not inside all planes or outside a plane it intersects.
@@ -3736,33 +3736,33 @@ INT IntersectAxisAlignedBoxPlane( const AxisAlignedBox* pVolume, FXMVECTOR Plane
 
 
 //-----------------------------------------------------------------------------
-INT IntersectOrientedBoxPlane( const OrientedBox* pVolume, FXMVECTOR Plane )
+INT IntersectOrientedBoxPlane( const OrientedBox* pVolume, DirectX::FXMVECTOR Plane )
 {
     XMASSERT( pVolume );
     XMASSERT( XMPlaneIsUnit( Plane ) );
 
     // Load the box.
-    XMVECTOR Center = XMLoadFloat3( &pVolume->Center );
-    XMVECTOR Extents = XMLoadFloat3( &pVolume->Extents );
-    XMVECTOR BoxOrientation = XMLoadFloat4( &pVolume->Orientation );
+    DirectX::XMVECTOR Center = XMLoadFloat3( &pVolume->Center );
+    DirectX::XMVECTOR Extents = XMLoadFloat3( &pVolume->Extents );
+    DirectX::XMVECTOR BoxOrientation = XMLoadFloat4( &pVolume->Orientation );
 
     XMASSERT( XMQuaternionIsUnit( BoxOrientation ) );
 
     // Set w of the center to one so we can dot4 with a plane.
-    Center = XMVectorInsert( Center, XMVectorSplatOne(), 0, 0, 0, 0, 1);
+    Center = DirectX::XMVectorInsert( Center, DirectX::XMVectorSplatOne(), 0, 0, 0, 0, 1);
 
     // Build the 3x3 rotation matrix that defines the box axes.
-    XMMATRIX R = XMMatrixRotationQuaternion( BoxOrientation );
+    DirectX::XMMATRIX R = DirectX::XMMatrixRotationQuaternion( BoxOrientation );
 
-    XMVECTOR Outside, Inside;
+    DirectX::XMVECTOR Outside, Inside;
     FastIntersectOrientedBoxPlane( Center, Extents, R.r[0], R.r[1], R.r[2], Plane, Outside, Inside );
 
     // If the box is outside any plane it is outside.
-    if ( XMVector4EqualInt( Outside, XMVectorTrueInt() ) )
+    if ( DirectX::XMVector4EqualInt( Outside, DirectX::XMVectorTrueInt() ) )
         return 0;
 
     // If the box is inside all planes it is inside.
-    if ( XMVector4EqualInt( Inside, XMVectorTrueInt() ) )
+    if ( DirectX::XMVector4EqualInt( Inside, DirectX::XMVectorTrueInt() ) )
         return 2;
 
     // The box is not inside all planes or outside a plane it intersects.
@@ -3772,53 +3772,53 @@ INT IntersectOrientedBoxPlane( const OrientedBox* pVolume, FXMVECTOR Plane )
 
 
 //-----------------------------------------------------------------------------
-INT IntersectFrustumPlane( const Frustum* pVolume, FXMVECTOR Plane )
+INT IntersectFrustumPlane( const Frustum* pVolume, DirectX::FXMVECTOR Plane )
 {
     XMASSERT( pVolume );
     XMASSERT( XMPlaneIsUnit( Plane ) );
 
     // Load origin and orientation of the frustum.
-    XMVECTOR Origin = XMLoadFloat3( &pVolume->Origin );
-    XMVECTOR Orientation = XMLoadFloat4( &pVolume->Orientation );
+    DirectX::XMVECTOR Origin = XMLoadFloat3( &pVolume->Origin );
+    DirectX::XMVECTOR Orientation = XMLoadFloat4( &pVolume->Orientation );
 
     XMASSERT( XMQuaternionIsUnit( Orientation ) );
 
     // Set w of the origin to one so we can dot4 with a plane.
-    Origin = XMVectorInsert( Origin, XMVectorSplatOne(), 0, 0, 0, 0, 1);
+    Origin = DirectX::XMVectorInsert( Origin, DirectX::XMVectorSplatOne(), 0, 0, 0, 0, 1);
 
     // Build the corners of the frustum (in world space).
-    XMVECTOR RightTop = XMVectorSet( pVolume->RightSlope, pVolume->TopSlope, 1.0f, 0.0f );
-    XMVECTOR RightBottom = XMVectorSet( pVolume->RightSlope, pVolume->BottomSlope, 1.0f, 0.0f );
-    XMVECTOR LeftTop = XMVectorSet( pVolume->LeftSlope, pVolume->TopSlope, 1.0f, 0.0f );
-    XMVECTOR LeftBottom = XMVectorSet( pVolume->LeftSlope, pVolume->BottomSlope, 1.0f, 0.0f );
-    XMVECTOR Near = XMVectorSet( pVolume->Near, pVolume->Near, pVolume->Near, 0.0f );
-    XMVECTOR Far = XMVectorSet( pVolume->Far, pVolume->Far, pVolume->Far, 0.0f );
+    DirectX::XMVECTOR RightTop = DirectX::XMVectorSet( pVolume->RightSlope, pVolume->TopSlope, 1.0f, 0.0f );
+    DirectX::XMVECTOR RightBottom = DirectX::XMVectorSet( pVolume->RightSlope, pVolume->BottomSlope, 1.0f, 0.0f );
+    DirectX::XMVECTOR LeftTop = DirectX::XMVectorSet( pVolume->LeftSlope, pVolume->TopSlope, 1.0f, 0.0f );
+    DirectX::XMVECTOR LeftBottom = DirectX::XMVectorSet( pVolume->LeftSlope, pVolume->BottomSlope, 1.0f, 0.0f );
+    DirectX::XMVECTOR Near = DirectX::XMVectorSet( pVolume->Near, pVolume->Near, pVolume->Near, 0.0f );
+    DirectX::XMVECTOR Far = DirectX::XMVectorSet( pVolume->Far, pVolume->Far, pVolume->Far, 0.0f );
 
-    RightTop = XMVector3Rotate( RightTop, Orientation );
-    RightBottom = XMVector3Rotate( RightBottom, Orientation );
-    LeftTop = XMVector3Rotate( LeftTop, Orientation );
-    LeftBottom = XMVector3Rotate( LeftBottom, Orientation );
+    RightTop = DirectX::XMVector3Rotate( RightTop, Orientation );
+    RightBottom = DirectX::XMVector3Rotate( RightBottom, Orientation );
+    LeftTop = DirectX::XMVector3Rotate( LeftTop, Orientation );
+    LeftBottom = DirectX::XMVector3Rotate( LeftBottom, Orientation );
 
-    XMVECTOR Corners0 = Origin + RightTop * Near;
-    XMVECTOR Corners1 = Origin + RightBottom * Near;
-    XMVECTOR Corners2 = Origin + LeftTop * Near;
-    XMVECTOR Corners3 = Origin + LeftBottom * Near;
-    XMVECTOR Corners4 = Origin + RightTop * Far;
-    XMVECTOR Corners5 = Origin + RightBottom * Far;
-    XMVECTOR Corners6 = Origin + LeftTop * Far;
-    XMVECTOR Corners7 = Origin + LeftBottom * Far;
+    DirectX::XMVECTOR Corners0 = Origin + RightTop * Near;
+    DirectX::XMVECTOR Corners1 = Origin + RightBottom * Near;
+    DirectX::XMVECTOR Corners2 = Origin + LeftTop * Near;
+    DirectX::XMVECTOR Corners3 = Origin + LeftBottom * Near;
+    DirectX::XMVECTOR Corners4 = Origin + RightTop * Far;
+    DirectX::XMVECTOR Corners5 = Origin + RightBottom * Far;
+    DirectX::XMVECTOR Corners6 = Origin + LeftTop * Far;
+    DirectX::XMVECTOR Corners7 = Origin + LeftBottom * Far;
 
-    XMVECTOR Outside, Inside;
+    DirectX::XMVECTOR Outside, Inside;
     FastIntersectFrustumPlane( Corners0, Corners1, Corners2, Corners3, 
                                Corners4, Corners5, Corners6, Corners7, 
                                Plane, Outside, Inside );
 
     // If the frustum is outside any plane it is outside.
-    if ( XMVector4EqualInt( Outside, XMVectorTrueInt() ) )
+    if ( DirectX::XMVector4EqualInt( Outside, DirectX::XMVectorTrueInt() ) )
         return 0;
 
     // If the frustum is inside all planes it is inside.
-    if ( XMVector4EqualInt( Inside, XMVectorTrueInt() ) )
+    if ( DirectX::XMVector4EqualInt( Inside, DirectX::XMVectorTrueInt() ) )
         return 2;
 
     // The frustum is not inside all planes or outside a plane it intersects.

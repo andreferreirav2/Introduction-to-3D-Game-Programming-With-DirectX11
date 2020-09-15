@@ -46,7 +46,7 @@ private:
 	ID3D11Buffer* mSkullVB;
 	ID3D11Buffer* mSkullIB;
 
-	XMFLOAT4X4 mSkullWorld;
+	DirectX::XMFLOAT4X4 mSkullWorld;
 
 	UINT mSkullIndexCount;
 
@@ -82,13 +82,13 @@ AmbientOcclusionApp::AmbientOcclusionApp(HINSTANCE hInstance)
 
 	mCam.SetPosition(0.0f, 5.0f, -5.0f);
 	mCam.LookAt(
-		XMFLOAT3(-4.0f, 4.0f, -4.0f),
-		XMFLOAT3(0.0f, 2.2f, 0.0f),
-		XMFLOAT3(0.0f, 1.0f, 0.0f));
+		DirectX::XMFLOAT3(-4.0f, 4.0f, -4.0f),
+		DirectX::XMFLOAT3(0.0f, 2.2f, 0.0f),
+		DirectX::XMFLOAT3(0.0f, 1.0f, 0.0f));
 
-	XMMATRIX skullScale = XMMatrixScaling(0.5f, 0.5f, 0.5f);
-	XMMATRIX skullOffset = XMMatrixTranslation(0.0f, 1.0f, 0.0f);
-	XMStoreFloat4x4(&mSkullWorld, XMMatrixMultiply(skullScale, skullOffset));
+	DirectX::XMMATRIX skullScale = DirectX::XMMatrixScaling(0.5f, 0.5f, 0.5f);
+	DirectX::XMMATRIX skullOffset = DirectX::XMMatrixTranslation(0.0f, 1.0f, 0.0f);
+	XMStoreFloat4x4(&mSkullWorld, DirectX::XMMatrixMultiply(skullScale, skullOffset));
 }
 
 AmbientOcclusionApp::~AmbientOcclusionApp()
@@ -152,9 +152,9 @@ void AmbientOcclusionApp::DrawScene()
 
 	mCam.UpdateViewMatrix();
  
-	XMMATRIX view     = mCam.View();
-	XMMATRIX proj     = mCam.Proj();
-	XMMATRIX viewProj = mCam.ViewProj();
+	DirectX::XMMATRIX view     = mCam.View();
+	DirectX::XMMATRIX proj     = mCam.Proj();
+	DirectX::XMMATRIX viewProj = mCam.ViewProj();
 
  
 	ID3DX11EffectTechnique* activeSkullTech = Effects::AmbientOcclusionFX->AmbientOcclusionTech;
@@ -168,9 +168,9 @@ void AmbientOcclusionApp::DrawScene()
 		md3dImmediateContext->IASetVertexBuffers(0, 1, &mSkullVB, &stride, &offset);
 		md3dImmediateContext->IASetIndexBuffer(mSkullIB, DXGI_FORMAT_R32_UINT, 0);
 
-		XMMATRIX world = XMLoadFloat4x4(&mSkullWorld);
-		XMMATRIX worldInvTranspose = MathHelper::InverseTranspose(world);
-		XMMATRIX worldViewProj = world*view*proj;
+		DirectX::XMMATRIX world = XMLoadFloat4x4(&mSkullWorld);
+		DirectX::XMMATRIX worldInvTranspose = MathHelper::InverseTranspose(world);
+		DirectX::XMMATRIX worldViewProj = world*view*proj;
 
 		Effects::AmbientOcclusionFX->SetWorldViewProj(worldViewProj);
 
@@ -199,8 +199,8 @@ void AmbientOcclusionApp::OnMouseMove(WPARAM btnState, int x, int y)
 	if( (btnState & MK_LBUTTON) != 0 )
 	{
 		// Make each pixel correspond to a quarter of a degree.
-		float dx = XMConvertToRadians(0.25f*static_cast<float>(x - mLastMousePos.x));
-		float dy = XMConvertToRadians(0.25f*static_cast<float>(y - mLastMousePos.y));
+		float dx = DirectX::XMConvertToRadians(0.25f*static_cast<float>(x - mLastMousePos.x));
+		float dy = DirectX::XMConvertToRadians(0.25f*static_cast<float>(y - mLastMousePos.y));
 
 		mCam.Pitch(dy);
 		mCam.RotateY(dx);
@@ -217,7 +217,7 @@ void AmbientOcclusionApp::BuildVertexAmbientOcclusion(
 	UINT vcount = vertices.size();
 	UINT tcount = indices.size()/3;
 
-	std::vector<XMFLOAT3> positions(vcount);
+	std::vector<DirectX::XMFLOAT3> positions(vcount);
 	for(UINT i = 0; i < vcount; ++i)
 		positions[i] = vertices[i].Pos;
 
@@ -232,16 +232,16 @@ void AmbientOcclusionApp::BuildVertexAmbientOcclusion(
 		UINT i1 = indices[i*3+1];
 		UINT i2 = indices[i*3+2];
 
-		XMVECTOR v0 = XMLoadFloat3(&vertices[i0].Pos);
-		XMVECTOR v1 = XMLoadFloat3(&vertices[i1].Pos);
-		XMVECTOR v2 = XMLoadFloat3(&vertices[i2].Pos);
+		DirectX::XMVECTOR v0 = XMLoadFloat3(&vertices[i0].Pos);
+		DirectX::XMVECTOR v1 = XMLoadFloat3(&vertices[i1].Pos);
+		DirectX::XMVECTOR v2 = XMLoadFloat3(&vertices[i2].Pos);
 
-		XMVECTOR edge0 = v1 - v0;
-		XMVECTOR edge1 = v2 - v0;
+		DirectX::XMVECTOR edge0 = v1 - v0;
+		DirectX::XMVECTOR edge1 = v2 - v0;
 
-		XMVECTOR normal = XMVector3Normalize(XMVector3Cross(edge0, edge1));
+		DirectX::XMVECTOR normal = DirectX::XMVector3Normalize(DirectX::XMVector3Cross(edge0, edge1));
 
-		XMVECTOR centroid = (v0 + v1 + v2)/3.0f;
+		DirectX::XMVECTOR centroid = (v0 + v1 + v2)/3.0f;
 
 		// Offset to avoid self intersection.
 		centroid += 0.001f*normal;
@@ -250,7 +250,7 @@ void AmbientOcclusionApp::BuildVertexAmbientOcclusion(
 		float numUnoccluded = 0;
 		for(int j = 0; j < NumSampleRays; ++j)
 		{
-			XMVECTOR randomDir = MathHelper::RandHemisphereUnitVec3(normal);
+			DirectX::XMVECTOR randomDir = MathHelper::RandHemisphereUnitVec3(normal);
 
 			// TODO: Technically we should not count intersections that are far 
 			// away as occluding the triangle, but this is OK for demo.

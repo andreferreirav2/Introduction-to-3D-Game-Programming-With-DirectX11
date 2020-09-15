@@ -75,10 +75,10 @@ void Waves::Init(UINT m, UINT n, float dx, float dt, float speed, float damping)
 	delete[] mNormals;
 	delete[] mTangentX;
 
-	mPrevSolution = new XMFLOAT3[m*n];
-	mCurrSolution = new XMFLOAT3[m*n];
-	mNormals      = new XMFLOAT3[m*n];
-	mTangentX     = new XMFLOAT3[m*n];
+	mPrevSolution = new DirectX::XMFLOAT3[m*n];
+	mCurrSolution = new DirectX::XMFLOAT3[m*n];
+	mNormals      = new DirectX::XMFLOAT3[m*n];
+	mTangentX     = new DirectX::XMFLOAT3[m*n];
 
 	// Generate grid vertices in system memory.
 
@@ -91,10 +91,10 @@ void Waves::Init(UINT m, UINT n, float dx, float dt, float speed, float damping)
 		{
 			float x = -halfWidth + j*dx;
 
-			mPrevSolution[i*n+j] = XMFLOAT3(x, 0.0f, z);
-			mCurrSolution[i*n+j] = XMFLOAT3(x, 0.0f, z);
-			mNormals[i*n+j]      = XMFLOAT3(0.0f, 1.0f, 0.0f);
-			mTangentX[i*n+j]     = XMFLOAT3(1.0f, 0.0f, 0.0f);
+			mPrevSolution[i*n+j] = DirectX::XMFLOAT3(x, 0.0f, z);
+			mCurrSolution[i*n+j] = DirectX::XMFLOAT3(x, 0.0f, z);
+			mNormals[i*n+j]      = DirectX::XMFLOAT3(0.0f, 1.0f, 0.0f);
+			mTangentX[i*n+j]     = DirectX::XMFLOAT3(1.0f, 0.0f, 0.0f);
 		}
 	}
 }
@@ -155,11 +155,11 @@ void Waves::Update(float dt)
 				mNormals[i*mNumCols+j].y = 2.0f*mSpatialStep;
 				mNormals[i*mNumCols+j].z = b-t;
 
-				XMVECTOR n = XMVector3Normalize(XMLoadFloat3(&mNormals[i*mNumCols+j]));
+				DirectX::XMVECTOR n = DirectX::XMVector3Normalize(XMLoadFloat3(&mNormals[i*mNumCols+j]));
 				XMStoreFloat3(&mNormals[i*mNumCols+j], n);
 
-				mTangentX[i*mNumCols+j] = XMFLOAT3(2.0f*mSpatialStep, r-l, 0.0f);
-				XMVECTOR T = XMVector3Normalize(XMLoadFloat3(&mTangentX[i*mNumCols+j]));
+				mTangentX[i*mNumCols+j] = DirectX::XMFLOAT3(2.0f*mSpatialStep, r-l, 0.0f);
+				DirectX::XMVECTOR T = DirectX::XMVector3Normalize(XMLoadFloat3(&mTangentX[i*mNumCols+j]));
 				XMStoreFloat3(&mTangentX[i*mNumCols+j], T);
 			}
 		}
